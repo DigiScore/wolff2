@@ -118,4 +118,3 @@ class Listener:
         self.stream.stop_stream()
         self.stream.close()
         self.p.terminate()
-

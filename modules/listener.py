@@ -9,7 +9,6 @@ from time import time
 import config
 from nebula.hivemind import DataBorg
 
-
 def buffer_scaler(in_feature, mins, maxs):
     in_feature = np.array(in_feature)
     mins = np.array(mins)[:, np.newaxis]
@@ -17,7 +16,6 @@ def buffer_scaler(in_feature, mins, maxs):
     in_feature = (in_feature - mins) / (maxs - mins)
     in_feature = in_feature.clip(0, 1)
     return in_feature
-
 
 class Listener:
     def __init__(self):

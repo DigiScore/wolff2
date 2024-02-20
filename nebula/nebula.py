@@ -6,7 +6,7 @@ emissions data packaged as a dictionary, and is gestural over time. This, when
 plugged into a responding script (such as a sound generator, or QT graphics)
 gives the feeling of the AI creating in-the-moment with the human in-the-loop.
 
-© Craig Vear 2022-23
+© Craig Vear 2022-24
 craig.vear@nottingham.ac.uk
 
 Dedicated to Fabrizio Poltronieri

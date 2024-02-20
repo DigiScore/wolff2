@@ -8,12 +8,12 @@ import config
 from nebula.hivemind import DataBorg
 
 
-class RobotMode(Enum):
-    Continuous = 0
-    Modification = 1
-    Inspiration = 2
-    Repetition = 3
-    OffPage = 4
+# class RobotMode(Enum):
+#     Continuous = 0
+#     Modification = 1
+#     Inspiration = 2
+#     Repetition = 3
+#     OffPage = 4
 
 
 class Conducter:
@@ -22,19 +22,19 @@ class Conducter:
     """
     def __init__(self, speed: int = 5):
 
-        self.DOBOT_CONNECTED = config.dobot_connected
-        verbose = config.dobot_verbose
+        # self.DOBOT_CONNECTED = config.dobot_connected
+        # verbose = config.dobot_verbose
 
         self.XARM_CONNECTED = config.xarm_connected
 
         # Start robot communication,  may need `sudo chmod 666 /dev/ttyACM0`
-        if self.DOBOT_CONNECTED:
-            from modules.draw_dobot import Drawbot
+        # if self.DOBOT_CONNECTED:
+        #     from modules.draw_dobot import Drawbot
+        #
+        #     port = config.dobot1_port
+        #     self.drawbot = Drawbot(port=port, verbose=verbose)
 
-            port = config.dobot1_port
-            self.drawbot = Drawbot(port=port, verbose=verbose)
-
-        elif self.XARM_CONNECTED:
+        if self.XARM_CONNECTED:
             from modules.draw_xarm import Drawbot
 
             port = config.xarm1_port
@@ -52,17 +52,18 @@ class Conducter:
         self.continuous_mode = 0     # mode for continuous module. 0 == on page, 1 == above page
         self.continuous_source = 0   # source of data used for continous movement. 0 == random, 1 == NN, 2 == peak
         self.global_speed = speed
+        self.mic_in_prediction = config.mic_in_prediction
 
         # Get the baseline temperature from config
         self.temperature = config.temperature
 
         if self.drawbot:
             self.drawbot.home()
-            input('Remove pen, then press ENTER')
-            print('Going to draw position...')
-            self.drawbot.go_position_draw()
-            input('Adjust pen height, then press ENTER')
-            self.drawbot.go_position_one_two()
+            input('To start press ENTER')
+            # print('Going to draw position...')
+            # self.drawbot.go_position_draw()
+            # input('Adjust pen height, then press ENTER')
+            # self.drawbot.go_position_one_two()
             self.drawbot.go_position_ready()
 
     def main_loop(self):
@@ -81,9 +82,9 @@ class Conducter:
         """
         Listens to the realtime incoming signal and calculates an affectual
         response based on general boundaries:
-            HIGH   - if input stream is LOUD (0.7+) then emit, smash a random
+            HIGH   - if input stream is LOUD (0.8+) then emit, smash a random
                      fill and break out to Daddy cycle.
-            MEDIUM - if input energy is 0.1-0.7 then emit, a jump out of child
+            MEDIUM - if input energy is 0.1-0.8 then emit, a jump out of child
                      loop.
             LOW    - nothing happens, continues with cycles.
         """
@@ -121,7 +122,7 @@ class Conducter:
             # Randomly pick an input stream for this cycle
             # (either mic_in or stream in config.stream_list)
             ###################################################################
-            if random() < 0.36:
+            if random() < self.mic_in_prediction:
                 rnd_stream = 'mic_in'
             else:
                 rnd = randrange(stream_list_len)
@@ -129,13 +130,6 @@ class Conducter:
 
             self.hivemind.thought_train_stream = rnd_stream
             print(f"Random stream = {self.hivemind.thought_train_stream}")
-
-            # Define robot mode for this phase length
-            # Set random mode and data source for continuous mode
-            robot_mode = RobotMode(randrange(4))
-            if robot_mode == RobotMode.Continuous:  # randomise continuous settings
-                self.continuous_mode = randrange(2)    # 0 == on page, 1 == above page
-                self.continuous_source = randrange(2)  # 0 == random, 1 == NN
 
             while time() < phrase_loop_end:
                 ###############################################################
@@ -157,7 +151,7 @@ class Conducter:
 
                 # Speed for this phrase
                 arm_speed = randrange(30, 500)
-                if self.DOBOT_CONNECTED or self.XARM_CONNECTED:
+                if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 
                 while time() < rhythm_loop_end_time:
@@ -179,7 +173,7 @@ class Conducter:
                     # Makes a response to chosen thought stream
                     ###########################################################
                     # [HIGH response]
-                    if thought_train > 0.7 or self.hivemind.interrupted:
+                    if thought_train > 0.8 or self.hivemind.interrupted:
                         print('Interrupt > !!! HIGH !!!')
 
                         # A - Refill dict with random
@@ -202,132 +196,97 @@ class Conducter:
                         print('Interrupt < LOW : no response')
                         if self.drawbot:
                             if random() < 0.36:
-                                self.continuous(thought_train)
+                                self.design_move(thought_train)
 
                     # [MEDIUM response]
                     else:
                         if self.drawbot:
-                            match robot_mode:  # determined at gesture loop point
-                                case RobotMode.Continuous:
-                                    # move continuously using data streams from EMD, borg
-                                    print("Continuous Mode")
-                                    self.continuous(thought_train)
+                            self.design_move(thought_train)
 
-                                case RobotMode.Modification:
-                                    # random shapes inspired by Cardews "Treatise"
-                                    print("Modification/ Cardew Mode")
-                                    self.cardew_inspiration(thought_train)
-
-                                case RobotMode.Inspiration:
-                                    # random shapes inspired by Wolff's 1, 2, 3
-                                    print("Inspiration/ Wolff Mode")
-                                    self.wolff_inspiration(thought_train)
-
-                                case RobotMode.Repetition:
-                                    # large repeating gestures
-                                    print("Repetition Mode")
-                                    self.repetition(thought_train)
+                            #
+                            # match robot_mode:  # determined at gesture loop point
+                            #     case RobotMode.Continuous:
+                            #         # move continuously using data streams from EMD, borg
+                            #         print("Continuous Mode")
+                            #         self.continuous(thought_train)
+                            #
+                            #     case RobotMode.Modification:
+                            #         # random shapes inspired by Cardews "Treatise"
+                            #         print("Modification/ Cardew Mode")
+                            #         self.cardew_inspiration(thought_train)
+                            #
+                            #     case RobotMode.Inspiration:
+                            #         # random shapes inspired by Wolff's 1, 2, 3
+                            #         print("Inspiration/ Wolff Mode")
+                            #         self.wolff_inspiration(thought_train)
+                            #
+                            #     case RobotMode.Repetition:
+                            #         # large repeating gestures
+                            #         print("Repetition Mode")
+                            #         self.repetition(thought_train)
 
                     sleep(0.1)
 
-        logging.info('quitting dobot director thread')
+        logging.info('quitting director thread')
         self.terminate()
 
-    def repetition(self, peak):
-        """
-        Create a shape group and repeat it a random number of times.
-        """
-        self.drawbot.go_random_jump()
-        self.drawbot.create_shape_group()
-        for _ in range(randrange(1, 2)):
-            logging.debug("repetition of shape")
-            self.drawbot.repeat_shape_group()
 
-    def continuous(self, peak):
+    def design_move(self, thought_train):
         """
-        Performs continuous movement in 2 different modes and from 3 different
-        data sources, all randomised when the mode is randomised.
-        Modes:
-            0 == on page drawing (xy)
-            1 == above page (xyz)
-        Data sources:
-            1 = random data
-            2 = NN data
-            3 = peak (mic input)
+        Takes a thought train value and maps it to one of 10 functions, salvaged from Jess+ belief module.
+        Due to the high energy interrupt in gesture manager this range is: 0.0 - 0.8
         """
-        logging.info("Drawing continuous")
-        if self.DOBOT_CONNECTED:
-            move_x = uniform(-self.joint_inc, self.joint_inc)
-            move_y = uniform(-self.joint_inc, self.joint_inc)
-            move_z = randrange(self.joint_inc)
-            self.drawbot.position_move_by(move_x, move_y, move_z, wait=True)
-        if self.XARM_CONNECTED:
-            self.drawbot.go_random_3d()
 
-    def wolff_inspiration(self, peak):
-        """
-        Jumps to a random spot and makes a mark inspired by Wolff.
-        """
+        # get current position
         x, y = self.drawbot.get_pose()[:2]
-        self.drawbot.go_random_jump()
+        arc_range = thought_train * 10
 
+        # make a random choice (for now)
+        # todo - maybe map these across the range of input thought-trains
         randchoice = randrange(6)
-        logging.debug(f'Random Wolff choice: {randchoice}')
+        logging.debug(f'Random choice: {randchoice}')
 
         match randchoice:
             case 0:
-                logging.info('Wolff: draw line')
-                self.drawbot.go_draw(x + self.rnd(peak*10),
-                                     y + self.rnd(peak*10),
+                logging.info('draw line')
+                self.drawbot.go_draw(x + self.rnd(thought_train*10),
+                                     y + self.rnd(thought_train*10),
                                      False)
 
             case 1:
-                logging.info('Wolff: random character')
-                self.drawbot.draw_random_char(peak * randrange(10, 20))
+                logging.info('random character')
+                self.drawbot.draw_random_char(thought_train * randrange(10, 20))
 
             case 2:
-                logging.info('Wolff: dot')
+                logging.info('dot')
                 self.drawbot.dot()
 
             case 3:
-                logging.info('Wolff: note head')
+                logging.info('note head')
                 note_size = randrange(1, 10)
-                # note_shape = randrange(20)
                 self.drawbot.note_head(size=note_size)
 
             case 4:
-                logging.info('Wolff: note head and line')
+                logging.info('note head and line')
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
-                self.drawbot.position_move_by(self.rnd(peak*10),
-                                              self.rnd(peak*10),
+                self.drawbot.position_move_by(self.rnd(thought_train*10),
+                                              self.rnd(thought_train*10),
                                               0, wait=True)
 
             case 5:
-                logging.info('Wolff: dot')
-                self.drawbot.dot()
+                logging.info('random jump')
+                self.drawbot.go_random_jump()
 
-    def cardew_inspiration(self, peak):
-        """
-        Randomly draws a shape inspired by Cardew.
-        """
-        x, y = self.drawbot.get_pose()[:2]
-        self.drawbot.go_random_draw()
-
-        randchoice = randrange(6)
-        logging.debug(f'Random Cardew choice == {randchoice}')
-
-        arc_range = peak * 10
-        match randchoice:
-            case 0:
-                logging.info('Cardew: draw arc')
+            case 6:
+                logging.info('draw arc')
                 self.drawbot.arc2D(x + self.rnd(arc_range),
                                    y + self.rnd(arc_range),
                                    x + self.rnd(arc_range),
                                    y + self.rnd(arc_range))
 
-            case 1:
-                logging.info('Cardew: small squiggle')
+            case 7:
+                logging.info('small squiggle')
                 squiggle_list = []
                 for _ in range(randrange(3, 9)):
                     squiggle_list.append((self.rnd(arc_range),
@@ -335,34 +294,35 @@ class Conducter:
                                           self.rnd(arc_range)))
                 self.drawbot.squiggle(squiggle_list)
 
-            case 2:
-                logging.info('Cardew: draw circle')
+            case 8:
+                logging.info('draw circle')
                 side = randrange(2)
                 self.drawbot.draw_circle(int(arc_range), side)
 
-            case 3:
-                logging.info('Cardew: line')
+            case 9:
+                logging.info('arc')
                 self.drawbot.go_draw(x + self.rnd(arc_range),
                                      y + self.rnd(arc_range))
 
-            case 4:
-                logging.info('Cardew: return to coord')
+            case 10:
+                logging.info('return to coord')
                 self.drawbot.return_to_coord()
 
-            case 5:
-                logging.info('Cardew: small squiggle')
-                squiggle_list = []
-                for _ in range(randrange(3, 9)):
-                    squiggle_list.append((self.rnd(arc_range),
-                                          self.rnd(arc_range),
-                                          self.rnd(arc_range)))
-                self.drawbot.squiggle(squiggle_list)
+            case 11:
+                logging.info('random shape group')
+                self.drawbot.create_shape_group()
+                # self.drawbot.repeat_shape_group()
+
 
     def high_energy_response(self):
         """
         Clear commands to interupt current gesture and moves on to new ones.
         """
-        self.drawbot.clear_commands()
+        # self.drawbot.clear_commands()
+        # self.drawbot.go_random_jump()
+        logging.info("Drawing High Energy random 3D")
+        if self.XARM_CONNECTED:
+            self.drawbot.go_random_3d()
 
     def terminate(self):
         """
@@ -374,9 +334,9 @@ class Conducter:
             self.drawbot.go_position_one_two()
             self.drawbot.home()
             self.drawbot.clear_commands()
-            if self.DOBOT_CONNECTED:
-                self.drawbot.close()
-            elif self.XARM_CONNECTED:
+            # if self.DOBOT_CONNECTED:
+            #     self.drawbot.close()
+            if self.XARM_CONNECTED:
                 self.drawbot.set_fence_mode(False)
                 self.drawbot.disconnect()
 

@@ -7,8 +7,14 @@ from time import sleep
 from nebula.hivemind import DataBorg
 from nebula.models.pt_models import Hourglass
 
+"""
+adding pytorch to poetry:
 
-class NNetRework:
+poetry source add -p explicit pytorch https://download.pytorch.org/whl/cpu
+poetry add --source pytorch torch torchvision
+"""
+
+class NNetRAMI:
     def __init__(self,
                  name: str,
                  model: str,
@@ -60,7 +66,7 @@ class NNetRework:
         logging.debug(f"NNet {self.name} in: {in_val} predicted {individual_val}")
 
 
-class AIFactoryRework:
+class AIFactoryRAMI:
     def __init__(self, speed: float = 1):
         """
         Builds the individual neural nets that constitute the AI factory.
@@ -72,36 +78,36 @@ class AIFactoryRework:
         self.global_speed = speed
 
         # Instantiate nets as objects and make models
-        logging.info('NNetRework1 - EEG to flow initialization')
-        self.eeg2flow = NNetRework(name="eeg2flow",
-                                   model='nebula/models/eeg2flow.pt',
-                                   in_feature='eeg_buffer')
-        logging.info('NNetRework2 - Flow to core initialization')
-        self.flow2core = NNetRework(name="flow2core",
-                                    model='nebula/models/flow2core.pt',
-                                    in_feature='eeg2flow_2d')
-        logging.info('NNetRework3 - Core to flow initialization')
-        self.core2flow = NNetRework(name="core2flow",
-                                    model='nebula/models/core2flow.pt',
-                                    in_feature='current_robot_x_y')
-        logging.info('NNetRework4 - Audio to core initialization')
-        self.audio2core = NNetRework(name="audio2core",
-                                     model='nebula/models/audio2core.pt',
-                                     in_feature='audio_buffer')
-        logging.info('NNetRework5 - Audio to flow initialization')
-        self.audio2flow = NNetRework(name="audio2flow",
-                                     model='nebula/models/audio2flow.pt',
-                                     in_feature='audio_buffer')
-        logging.info('NNetRework6 - Flow to audio initialization')
-        self.flow2audio = NNetRework(name="flow2audio",
-                                     model='nebula/models/flow2audio.pt',
-                                     in_feature='eeg2flow_2d')
-        logging.info('NNetRework7 - EDA to flow initialization')
-        self.eda2flow = NNetRework(name="eda2flow",
-                                   model='nebula/models/eda2flow.pt',
-                                   in_feature='eda_buffer')
+        logging.info('NNetRAMI - EEG to flow initialization')
+        self.eeg2flow = NNetRAMI(name="eeg2flow",
+                                 model='nebula/models/eeg2flow.pt',
+                                 in_feature='eeg_buffer')
+        logging.info('NNetRAMI - Flow to core initialization')
+        self.flow2core = NNetRAMI(name="flow2core",
+                                  model='nebula/models/flow2core.pt',
+                                  in_feature='eeg2flow_2d')
+        logging.info('NNetRAMI - Core to flow initialization')
+        self.core2flow = NNetRAMI(name="core2flow",
+                                  model='nebula/models/core2flow.pt',
+                                  in_feature='current_robot_x_y')
+        logging.info('NNetRAMI - Audio to core initialization')
+        self.audio2core = NNetRAMI(name="audio2core",
+                                   model='nebula/models/audio2core.pt',
+                                   in_feature='audio_buffer')
+        logging.info('NNetRAMI - Audio to flow initialization')
+        self.audio2flow = NNetRAMI(name="audio2flow",
+                                   model='nebula/models/audio2flow.pt',
+                                   in_feature='audio_buffer')
+        logging.info('NNetRAMI - Flow to audio initialization')
+        self.flow2audio = NNetRAMI(name="flow2audio",
+                                   model='nebula/models/flow2audio.pt',
+                                   in_feature='eeg2flow_2d')
+        logging.info('NNetRAMI - EDA to flow initialization')
+        self.eda2flow = NNetRAMI(name="eda2flow",
+                                 model='nebula/models/eda2flow.pt',
+                                 in_feature='eda_buffer')
 
-        self.netlist = [self.eeg2flow,
+        self.netlist = [  # self.eeg2flow,
                         self.flow2core,
                         self.core2flow,
                         self.audio2core,
@@ -143,7 +149,7 @@ class AIFactoryRework:
 
 if __name__ == "__main__":
     from hivemind import DataBorg
-    test = AIFactoryRework()
+    test = AIFactoryRAMI()
     print(test.hivemind.eeg2flow)
     test.make_data()
     print(test.hivemind.eeg2flow)

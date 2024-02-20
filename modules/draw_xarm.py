@@ -59,6 +59,14 @@ class Drawbot(XArmAPI):
         self.speed = 150
         self.mvacc = 150
 
+        #
+        # https://github.com/xArm-Developer/xArm-Python-SDK/blob/master/example/wrapper/common/1010-cartesian_online_trajectory_planning.py
+        # set mode: cartesian online trajectory planning mode
+        # the running command will be interrupted when the next command is received
+        self.set_mode(7)
+        self.set_state(0)
+        sleep(1)
+
         # Roll and pitch with pens
         self.compass = [[180, 15],  # north
                         [180, -15],  # south
@@ -193,17 +201,17 @@ class Drawbot(XArmAPI):
         return_pose = (x, y, z)
         return return_pose
 
-    def rnd(self, power_of_command: int) -> int:
-        """
-        Return a randomly generated positive or negative integer, influenced by
-        the incoming power factor.
-        """
-        pos = 1
-        if getrandbits(1):
-            pos = -1
-        result = (uniform(1, 10) + randrange(power_of_command)) * pos
-        logging.debug(f'Rnd result = {result}')
-        return result
+    # def rnd(self, power_of_command: int) -> int:
+    #     """
+    #     Return a randomly generated positive or negative float, influenced by
+    #     the incoming power factor.
+    #     """
+    #     pos = 1
+    #     if getrandbits(1):
+    #         pos = -1
+    #     result = (uniform(1, 10) + randrange(power_of_command)) * pos
+    #     logging.debug(f'Rnd result = {result}')
+    #     return result
 
     def clear_alarms(self) -> None:
         """
@@ -216,6 +224,7 @@ class Drawbot(XArmAPI):
             self.clean_error()
             self.motion_enable(enable=True)
             self.set_state(state=0)
+            self.set_state(state=7)
 
     def clear_commands(self):
         """
@@ -224,13 +233,14 @@ class Drawbot(XArmAPI):
         self.set_state(4)
         sleep(0.1)
         self.set_state(0)
+        self.set_state(state=7)
 
-    def force_queued_stop(self):
-        """
-        Emergency stop (set_state(4) -> motion_enable(True) -> set_state(0))
-        and return to ZERO.
-        """
-        self.emergency_stop()
+    # def force_queued_stop(self):
+    #     """
+    #     Emergency stop (set_state(4) -> motion_enable(True) -> set_state(0))
+    #     and return to ZERO.
+    #     """
+    #     self.emergency_stop()
 
     def get_pose(self):
         """

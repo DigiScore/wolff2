@@ -40,6 +40,8 @@ class Listener:
                                   input=True,
                                   frames_per_buffer=self.CHUNK)
 
+        self.mic_sensitivity = config.mic_sensitivity
+
         # Plug into the hive mind data borg
         self.hivemind = DataBorg()
 
@@ -63,20 +65,20 @@ class Listener:
                 exception_on_overflow=False),
                 dtype=np.int16)
 
-            # Make audio envelope buffer
+            # Make audio envelope buffer for nets
             data_buffer = np.append(data_buffer, data)
             self.hivemind.audio_buffer_raw = np.append(
                 self.hivemind.audio_buffer_raw, data)
             if len(data_buffer) > self.RATE*5:  # 5 sec buffer
                 data_buffer = data_buffer[-(self.RATE*5):]
                 hb_data = signal.hilbert(data_buffer)
-                envolope = np.abs(hb_data)
-                num = int(len(envolope)/self.RATE*10.0)
-                envolope = signal.resample(envolope, num)[np.newaxis, :]
-                envolope_norm = buffer_scaler(envolope,
+                envelope = np.abs(hb_data)
+                num = int(len(envelope)/self.RATE*10.0)
+                envelope = signal.resample(envelope, num)[np.newaxis, :]
+                envelope_norm = buffer_scaler(envelope,
                                               self.hivemind.audio_mins,
                                               self.hivemind.audio_maxs)
-                self.hivemind.audio_buffer = envolope_norm
+                self.hivemind.audio_buffer = envelope_norm
 
             peak = np.average(np.abs(data)) * 2
 
@@ -88,7 +90,7 @@ class Listener:
                 silence_timer = time() + 5   # 5 seconds ahead
 
             # Normalise it for range 0.0 - 1.0
-            normalised_peak = peak / 10000
+            normalised_peak = ((peak - 0) / (self.mic_sensitivity - 0)) * (1 - 0) + 0  # peak / self.mic_sensitivity
             if normalised_peak > 1.0:
                 normalised_peak = 1.0
 
@@ -96,7 +98,7 @@ class Listener:
             self.hivemind.mic_in = normalised_peak
 
             # If loud sound then 63% affect gesture manager
-            if normalised_peak > 0.7:
+            if normalised_peak > 0.8:
                 if random() > 0.63:
                     self.hivemind.interrupted = True
                     self.hivemind.randomiser()

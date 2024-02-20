@@ -20,9 +20,9 @@ from time import sleep, time
 
 import config
 from modules.bitalino import BITalino
-from modules.brainbit import BrainbitReader
+# from modules.brainbit import BrainbitReader
 from modules.listener import Listener
-from nebula.ai_factory import AIFactoryRework
+from nebula.ai_factory import AIFactoryRAMI
 
 
 def scaler(in_feature, mins, maxs):
@@ -43,7 +43,7 @@ def scaler(in_feature, mins, maxs):
     return norm_feature
 
 
-class Nebula(Listener, AIFactoryRework):
+class Nebula(Listener, AIFactoryRAMI):
     """
     Nebula is the core "director" of an AI factory. It generates data in
     response to incoming percepts from human-in-the-loop interactions, and
@@ -74,17 +74,17 @@ class Nebula(Listener, AIFactoryRework):
         self.hivemind.running = True
 
         # Build the AI factory and pass it the data dict
-        AIFactoryRework.__init__(self, speed)
-        self.BRAINBIT_CONNECTED = config.eeg_live
+        AIFactoryRAMI.__init__(self, speed)
+        # self.BRAINBIT_CONNECTED = config.eeg_live
         self.BITALINO_CONNECTED = config.eda_live
 
-        # Init brainbit reader
-        if self.BRAINBIT_CONNECTED:
-            logging.info("Starting EEG connection")
-            self.eeg_board = BrainbitReader()
-            self.eeg_board.start()
-            first_brain_data = self.eeg_board.read(1)
-            logging.info(f'Data from brainbit = {first_brain_data}')
+        # # Init brainbit reader
+        # if self.BRAINBIT_CONNECTED:
+        #     logging.info("Starting EEG connection")
+        #     self.eeg_board = BrainbitReader()
+        #     self.eeg_board.start()
+        #     first_brain_data = self.eeg_board.read(1)
+        #     logging.info(f'Data from brainbit = {first_brain_data}')
 
         # Init bitalino
         if self.BITALINO_CONNECTED:

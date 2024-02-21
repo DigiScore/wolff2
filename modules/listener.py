@@ -24,7 +24,7 @@ class Listener:
         """
         print("Starting listener")
 
-        self.running = True
+        # self.running = True
         self.connected = False
         self.logging = False
 
@@ -79,13 +79,12 @@ class Listener:
                 self.hivemind.audio_buffer = envelope_norm
 
             peak = np.average(np.abs(data)) * 2
-
             if peak > 1000:
                 bars = "#" * int(50 * peak / 2 ** 16)
                 logging.debug(f"MIC LISTENER: {peak} {bars}")
 
-                # Reset the silence listener
-                silence_timer = time() + 5   # 5 seconds ahead
+            # Reset the silence listener
+            silence_timer = time() + 5   # 5 seconds ahead
 
             # Normalise it for range 0.0 - 1.0
             normalised_peak = ((peak - 0) / (self.mic_sensitivity - 0)) * (1 - 0) + 0  # peak / self.mic_sensitivity
@@ -116,3 +115,4 @@ class Listener:
         self.stream.stop_stream()
         self.stream.close()
         self.p.terminate()
+

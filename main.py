@@ -142,7 +142,7 @@ class Main:
         self.hivemind = DataBorg()
 
         # Logging for all modules
-        logging.basicConfig(level=logging.WARNING)
+        logging.basicConfig(level=logging.INFO)
 
         # Init the AI factory (inherits AIFactory, Listener)
         nebula = Nebula(speed=config.speed)
@@ -151,14 +151,16 @@ class Main:
         robot = Conducter(speed=config.speed)
 
         # Init data writer
-        dw = DataWriter()
+        if config.data_writer:
+            dw = DataWriter()
 
         # Start Nebula AI Factory after conducter starts data moving
         nebula.endtime = time.time() + config.duration_of_piece
         self.hivemind.running = True
         robot.main_loop()
         nebula.main_loop()
-        dw.main_loop()
+        if config.data_writer:
+            dw.main_loop()
 
         # # Visualiser
         # if config.viz:

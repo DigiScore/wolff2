@@ -20,7 +20,7 @@ xarm_irregular_shape_extents = 50
 xarm_fenced = True
 
 # [SOUND IN]
-mic_sensitivity = 20000
+mic_sensitivity = 10000
 mic_in_prediction = 0.36
 
 

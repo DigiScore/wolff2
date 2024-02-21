@@ -147,7 +147,7 @@ class Main:
         # Init the AI factory (inherits AIFactory, Listener)
         nebula = Nebula(speed=config.speed)
 
-        # Init Conducter & Gesture management (controls Drawbot)
+        # Init Conducter & Gesture management (controls XArm)
         robot = Conducter(speed=config.speed)
 
         # Init data writer

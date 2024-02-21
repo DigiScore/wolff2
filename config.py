@@ -1,30 +1,16 @@
 # [HARDWARE]
-# dobot_connected = True
 xarm_connected = False
-# eeg_live = False
 eda_live = False
 
 # [PLAY PARAMS]
 silence_listener = False
 duration_of_piece = 2000000  # in sec
-# continuous_line = False  # set to `True` to not jump between points
 speed = 5  # dynamic tempo of the all processes: 1 = slow, 10 = fast
-# staves = 0
 temperature = 0
-# viz = False
-
-# # [DOBOT]
-# dobot1_port = "/dev/cu.usbmodem14601" # "'COM4'  # 'COM4' or 'COM10' (Windows), '/dev/ttyACM0' (Linux)
-# dobot_verbose = False
-# x_extents = [160, 350]
-# y_extents = [-150, 150]
-# z_extents = [0, 150]
-# irregular_shape_extents = 50
 
 # [XARM]
 xarm1_port = '192.168.1.222'
-# xarm2_port = '192.168.1.223'
-xarm_x_extents = [-400, 400]  # cartesian coords in mm 
+xarm_x_extents = [-400, 400]  # cartesian coords in mm
 xarm_y_extents = [-400, 400]
 xarm_z_extents = [155, 1000]
 # xarm_ballet_x_extents = [400, 400]
@@ -32,7 +18,6 @@ xarm_z_extents = [155, 1000]
 # xarm_ballet_z_extents = [150, 400]
 xarm_irregular_shape_extents = 50
 xarm_fenced = True
-# xarm_multi_pen = True
 
 # [SOUND IN]
 mic_sensitivity = 20000
@@ -46,7 +31,6 @@ mac_address = "98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 
 # [STREAMING]
 stream_list = ['rnd_poetry',
-               'eeg2flow',
                'flow2core',
                'core2flow',
                'audio2core',
@@ -57,6 +41,8 @@ stream_list = ['rnd_poetry',
 # [DEBUG]
 # debug = logging.INFO
 
+# [DATAWRITER]
+data_writer = False
 
 """
 Notes:

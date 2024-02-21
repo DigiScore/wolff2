@@ -12,3 +12,5 @@ while True:
     data = bb.read(255)
     print(data)
     sleep(1)
+
+

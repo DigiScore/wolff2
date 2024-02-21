@@ -19,8 +19,8 @@ class DataBorg:
             ######################
             # Outputs from NNets in AI Factory rework
             ######################
-            self.eeg2flow: float = random()
-            self.eeg2flow_2d: np.array = np.random.uniform(size=(1, 50))
+            # self.eeg2flow: float = random()
+            # self.eeg2flow_2d: np.array = np.random.uniform(size=(1, 50))
 
             self.flow2core: float = random()
             self.flow2core_2d: np.array = np.random.uniform(size=(2, 50))
@@ -54,11 +54,11 @@ class DataBorg:
             self.audio_buffer_raw = np.empty(0)
             self.audio_buffer: np.array = np.random.uniform(size=(1, 50))
 
-            self.eeg_buffer_raw: np.array = np.random.uniform(size=(4, 50))
-            """Live 5 sec buffered raw data from brainbit"""
-
-            self.eeg_buffer: np.array = np.random.uniform(size=(4, 50))
-            """Live 5 sec buffered normalised data from brainbit"""
+            # self.eeg_buffer_raw: np.array = np.random.uniform(size=(4, 50))
+            # """Live 5 sec buffered raw data from brainbit"""
+            #
+            # self.eeg_buffer: np.array = np.random.uniform(size=(4, 50))
+            # """Live 5 sec buffered normalised data from brainbit"""
 
             self.eda_buffer_raw: np.array = np.random.uniform(size=(1, 50))
             """Live 5 sec buffered raw data from bitalino"""
@@ -118,8 +118,8 @@ class DataBorg:
         # self.eda_buffer = np.random.uniform(size=(1, 50))
         # self.audio_buffer = np.random.uniform(size=(1, 50))
 
-        self.eeg2flow = random()
-        self.eeg2flow_2d = np.random.uniform(size=(1, 50))
+        # self.eeg2flow = random()
+        # self.eeg2flow_2d = np.random.uniform(size=(1, 50))
 
         self.flow2core = random()
         self.flow2core_2d = np.random.uniform(size=(2, 50))

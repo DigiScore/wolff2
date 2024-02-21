@@ -7,13 +7,6 @@ from time import sleep
 from nebula.hivemind import DataBorg
 from nebula.models.pt_models import Hourglass
 
-"""
-adding pytorch to poetry:
-
-poetry source add -p explicit pytorch https://download.pytorch.org/whl/cpu
-poetry add --source pytorch torch torchvision
-"""
-
 class NNetRAMI:
     def __init__(self,
                  name: str,
@@ -70,6 +63,18 @@ class AIFactoryRAMI:
     def __init__(self, speed: float = 1):
         """
         Builds the individual neural nets that constitute the AI factory.
+
+        1. Predicted flow from EDA -> core (for current_nnet_x_y_z into current_robot_x_y_z)
+
+        2. Robot position (current_robot_x_y) -> predicted flow
+
+        3. Live sound (amplitude of envelope) -> core (for current_nnet_x_y_z into current_robot_x_y_z)
+
+        4. Live sound (amplitude of envelope) -> predicted flow
+
+        5. Predicted flow from EDA -> sound (amplitude of envelope)
+
+        6. Live EDA -> predicted flow
         """
         print('Building the AI Factory...')
 
@@ -78,30 +83,36 @@ class AIFactoryRAMI:
         self.global_speed = speed
 
         # Instantiate nets as objects and make models
-        logging.info('NNetRAMI - EEG to flow initialization')
-        self.eeg2flow = NNetRAMI(name="eeg2flow",
-                                 model='nebula/models/eeg2flow.pt',
-                                 in_feature='eeg_buffer')
+        # logging.info('NNetRAMI - EEG to flow initialization')
+        # self.eeg2flow = NNetRAMI(name="eeg2flow",
+        #                          model='nebula/models/eeg2flow.pt',
+        #                          in_feature='eeg_buffer')
+
         logging.info('NNetRAMI - Flow to core initialization')
         self.flow2core = NNetRAMI(name="flow2core",
                                   model='nebula/models/flow2core.pt',
-                                  in_feature='eeg2flow_2d')
+                                  in_feature='eda2flow')
+
         logging.info('NNetRAMI - Core to flow initialization')
         self.core2flow = NNetRAMI(name="core2flow",
                                   model='nebula/models/core2flow.pt',
                                   in_feature='current_robot_x_y')
+
         logging.info('NNetRAMI - Audio to core initialization')
         self.audio2core = NNetRAMI(name="audio2core",
                                    model='nebula/models/audio2core.pt',
                                    in_feature='audio_buffer')
+
         logging.info('NNetRAMI - Audio to flow initialization')
         self.audio2flow = NNetRAMI(name="audio2flow",
                                    model='nebula/models/audio2flow.pt',
                                    in_feature='audio_buffer')
+
         logging.info('NNetRAMI - Flow to audio initialization')
         self.flow2audio = NNetRAMI(name="flow2audio",
                                    model='nebula/models/flow2audio.pt',
-                                   in_feature='eeg2flow_2d')
+                                   in_feature='eda2flow')
+
         logging.info('NNetRAMI - EDA to flow initialization')
         self.eda2flow = NNetRAMI(name="eda2flow",
                                  model='nebula/models/eda2flow.pt',
@@ -150,21 +161,6 @@ class AIFactoryRAMI:
 if __name__ == "__main__":
     from hivemind import DataBorg
     test = AIFactoryRAMI()
-    print(test.hivemind.eeg2flow)
+    print(test.hivemind.eda2flow)
     test.make_data()
-    print(test.hivemind.eeg2flow)
-
-
-# 1. Live EEG -> predicted flow
-
-# 2. Predicted flow from EEG -> core (for current_nnet_x_y_z into current_robot_x_y_z)
-
-# 3. Robot position (current_robot_x_y) -> predicted flow
-
-# 4. Live sound (amplitude of envelope) -> core (for current_nnet_x_y_z into current_robot_x_y_z)
-
-# 5. Live sound (amplitude of envelope) -> predicted flow
-
-# 6. Predicted flow from EEG -> sound (amplitude of envelope)
-
-# 7. Live EDA -> predicted flow
+    print(test.hivemind.eda2flow)

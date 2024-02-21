@@ -88,6 +88,11 @@ class AIFactoryRAMI:
         #                          model='nebula/models/eeg2flow.pt',
         #                          in_feature='eeg_buffer')
 
+        logging.info('NNetRAMI - EDA to flow initialization')
+        self.eda2flow = NNetRAMI(name="eda2flow",
+                                 model='nebula/models/eda2flow.pt',
+                                 in_feature='eda_buffer')
+
         logging.info('NNetRAMI - Flow to core initialization')
         self.flow2core = NNetRAMI(name="flow2core",
                                   model='nebula/models/flow2core.pt',
@@ -113,18 +118,15 @@ class AIFactoryRAMI:
                                    model='nebula/models/flow2audio.pt',
                                    in_feature='eda2flow')
 
-        logging.info('NNetRAMI - EDA to flow initialization')
-        self.eda2flow = NNetRAMI(name="eda2flow",
-                                 model='nebula/models/eda2flow.pt',
-                                 in_feature='eda_buffer')
 
-        self.netlist = [  # self.eeg2flow,
+
+        self.netlist = [self.eda2flow,
                         self.flow2core,
                         self.core2flow,
                         self.audio2core,
                         self.audio2flow,
                         self.flow2audio,
-                        self.eda2flow]
+                        ]
         print("AI factory initialized")
 
     def make_data(self):

@@ -1,7 +1,7 @@
 import art
 import logging
 import time
-import tkinter as tk
+# import tkinter as tk
 
 import config
 from modules.conducter import Conducter

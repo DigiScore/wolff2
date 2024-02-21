@@ -1,6 +1,6 @@
 # [HARDWARE]
 xarm_connected = False
-eda_live = False
+eda_live = True
 
 # [PLAY PARAMS]
 silence_listener = False

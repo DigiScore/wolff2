@@ -82,6 +82,7 @@ class Listener:
             if peak > 1000:
                 bars = "#" * int(50 * peak / 2 ** 16)
                 logging.debug(f"MIC LISTENER: {peak} {bars}")
+                print(f"MIC LISTENER: {peak} {bars}")
 
             # Reset the silence listener
             silence_timer = time() + 5   # 5 seconds ahead

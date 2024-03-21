@@ -1,6 +1,6 @@
 # [HARDWARE]
-xarm_connected = False
-eda_live = True
+xarm_connected = True
+eda_live = False
 
 # [PLAY PARAMS]
 silence_listener = False
@@ -10,9 +10,9 @@ temperature = 0
 
 # [XARM]
 xarm1_port = '192.168.1.222'
-xarm_x_extents = [-400, 400]  # cartesian coords in mm
-xarm_y_extents = [-400, 400]
-xarm_z_extents = [155, 1000]
+xarm_x_extents = [-500, 500]  # cartesian coords in mm
+xarm_y_extents = [-500, 500]
+xarm_z_extents = [55, 1000]
 # xarm_ballet_x_extents = [400, 400]
 # xarm_ballet_y_extents = [-250, 250]
 # xarm_ballet_z_extents = [150, 400]

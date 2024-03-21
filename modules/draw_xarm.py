@@ -225,6 +225,7 @@ class Drawbot(XArmAPI):
             self.motion_enable(enable=True)
             self.set_state(state=0)
             self.set_state(state=7)
+            self.go_random_3d()
 
     def clear_commands(self):
         """
@@ -323,11 +324,11 @@ class Drawbot(XArmAPI):
                              relative=False)
 
     def random_pen(self):
-        if config.xarm_multi_pen:
-            random_pen = choice(self.compass)
-        else:
-            random_pen = [uniform(*self.compass_range[0]),
-                          uniform(*self.compass_range[1])]
+        # if config.xarm_multi_pen:
+        #     random_pen = choice(self.compass)
+        # else:
+        random_pen = [uniform(*self.compass_range[0]),
+                      uniform(*self.compass_range[1])]
         self.roll, self.pitch = random_pen
 
     def move_y(self):

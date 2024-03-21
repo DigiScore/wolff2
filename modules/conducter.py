@@ -58,10 +58,11 @@ class Conducter:
         self.temperature = config.temperature
 
         if self.drawbot:
-            self.drawbot.home()
+            # self.drawbot.home()
+            self.drawbot.go_position_draw()
+
             input('To start press ENTER')
             # print('Going to draw position...')
-            # self.drawbot.go_position_draw()
             # input('Adjust pen height, then press ENTER')
             # self.drawbot.go_position_one_two()
             self.drawbot.go_position_ready()
@@ -243,7 +244,7 @@ class Conducter:
 
         # make a random choice (for now)
         # todo - maybe map these across the range of input thought-trains
-        randchoice = randrange(6)
+        randchoice = randrange(13)
         logging.debug(f'Random choice: {randchoice}')
 
         match randchoice:
@@ -312,6 +313,10 @@ class Conducter:
                 logging.info('random shape group')
                 self.drawbot.create_shape_group()
                 # self.drawbot.repeat_shape_group()
+
+            case 12:
+                logging.info('random pen move')
+                self.drawbot.random_pen()
 
 
     def high_energy_response(self):

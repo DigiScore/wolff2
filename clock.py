@@ -16,7 +16,7 @@ root.title('Clock')
 
 def time():
 	# string = strftime('%H:%M:%S')
-	string = datetime.utcnow().strftime('%H:%M:%S.%f')[:-3]
+	string = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 	lbl.config(text=string)
 	lbl.after(10, time)
 
@@ -24,7 +24,7 @@ def time():
 # Styling the label widget so that clock
 # will look more attractive
 lbl = Label(root, font=('calibri', 250, 'bold'),
-			background='purple',
+			background='black',
 			foreground='white')
 
 # Placing clock at the centre

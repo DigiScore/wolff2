@@ -81,6 +81,10 @@ class DataBorg:
             self.rhythm_rate: float = randrange(30, 100) / 100
             """Internal clock/ rhythm sub division"""
 
+            self.design_decision: str = " "
+            """Logs the current design decision"""
+
+
             ######################
             # Robot vars
             ######################

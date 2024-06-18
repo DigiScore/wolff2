@@ -246,29 +246,30 @@ class Conducter:
         # todo - maybe map these across the range of input thought-trains
         randchoice = randrange(13)
         logging.debug(f'Random choice: {randchoice}')
+        decision_type = " "
 
         match randchoice:
             case 0:
-                logging.info('draw line')
+                decision_type = 'draw line'
                 self.drawbot.go_draw(x + self.rnd(thought_train*10),
                                      y + self.rnd(thought_train*10),
                                      False)
 
             case 1:
-                logging.info('random character')
+                decision_type = 'random character'
                 self.drawbot.draw_random_char(thought_train * randrange(10, 20))
 
             case 2:
-                logging.info('dot')
+                decision_type = 'dot'
                 self.drawbot.dot()
 
             case 3:
-                logging.info('note head')
+                decision_type = 'note head'
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
 
             case 4:
-                logging.info('note head and line')
+                decision_type = 'note head and line'
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
                 self.drawbot.position_move_by(self.rnd(thought_train*10),
@@ -276,18 +277,18 @@ class Conducter:
                                               0, wait=True)
 
             case 5:
-                logging.info('random jump')
+                decision_type = 'random jump'
                 self.drawbot.go_random_jump()
 
             case 6:
-                logging.info('draw arc')
+                decision_type = 'draw arc'
                 self.drawbot.arc2D(x + self.rnd(arc_range),
                                    y + self.rnd(arc_range),
                                    x + self.rnd(arc_range),
                                    y + self.rnd(arc_range))
 
             case 7:
-                logging.info('small squiggle')
+                decision_type = 'small squiggle'
                 squiggle_list = []
                 for _ in range(randrange(3, 9)):
                     squiggle_list.append((self.rnd(arc_range),
@@ -296,27 +297,31 @@ class Conducter:
                 self.drawbot.squiggle(squiggle_list)
 
             case 8:
-                logging.info('draw circle')
+                decision_type = 'draw circle'
                 side = randrange(2)
                 self.drawbot.draw_circle(int(arc_range), side)
 
             case 9:
-                logging.info('arc')
+                decision_type = 'arc'
                 self.drawbot.go_draw(x + self.rnd(arc_range),
                                      y + self.rnd(arc_range))
 
             case 10:
-                logging.info('return to coord')
+                decision_type = 'return to coord'
                 self.drawbot.return_to_coord()
 
             case 11:
-                logging.info('random shape group')
+                decision_type = 'random shape group'
                 self.drawbot.create_shape_group()
                 # self.drawbot.repeat_shape_group()
 
             case 12:
-                logging.info('random pen move')
+                decision_type = 'random pen move'
                 self.drawbot.random_pen()
+
+        # log the decision
+        logging.info(decision_type)
+        self.hivemind.design_decision = decision_type
 
 
     def high_energy_response(self):

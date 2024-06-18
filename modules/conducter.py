@@ -151,7 +151,7 @@ class Conducter:
                 logging.debug(f'end time = {rhythm_loop_end_time}')
 
                 # Speed for this phrase
-                arm_speed = randrange(30, 500)
+                arm_speed = randrange(30, 200)
                 if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 
@@ -330,7 +330,9 @@ class Conducter:
         """
         # self.drawbot.clear_commands()
         # self.drawbot.go_random_jump()
-        logging.info("Drawing High Energy random 3D")
+        high_energy_log = "Drawing High Energy random 3D"
+        logging.info(high_energy_log)
+        self.hivemind.design_decision = high_energy_log
         if self.XARM_CONNECTED:
             self.drawbot.go_random_3d()
 

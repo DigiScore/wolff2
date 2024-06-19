@@ -1,5 +1,4 @@
 import logging
-from enum import Enum
 from random import random, randrange, uniform
 from threading import Thread
 from time import sleep, time
@@ -8,31 +7,13 @@ import config
 from nebula.hivemind import DataBorg
 
 
-# class RobotMode(Enum):
-#     Continuous = 0
-#     Modification = 1
-#     Inspiration = 2
-#     Repetition = 3
-#     OffPage = 4
-
-
 class Conducter:
     """
     Controls movement and shapes drawn by the robot.
     """
     def __init__(self, speed: int = 5):
 
-        # self.DOBOT_CONNECTED = config.dobot_connected
-        # verbose = config.dobot_verbose
-
         self.XARM_CONNECTED = config.xarm_connected
-
-        # Start robot communication,  may need `sudo chmod 666 /dev/ttyACM0`
-        # if self.DOBOT_CONNECTED:
-        #     from modules.draw_dobot import Drawbot
-        #
-        #     port = config.dobot1_port
-        #     self.drawbot = Drawbot(port=port, verbose=verbose)
 
         if self.XARM_CONNECTED:
             from modules.draw_xarm import Drawbot
@@ -204,28 +185,6 @@ class Conducter:
                         if self.drawbot:
                             self.design_move(thought_train)
 
-                            #
-                            # match robot_mode:  # determined at gesture loop point
-                            #     case RobotMode.Continuous:
-                            #         # move continuously using data streams from EMD, borg
-                            #         print("Continuous Mode")
-                            #         self.continuous(thought_train)
-                            #
-                            #     case RobotMode.Modification:
-                            #         # random shapes inspired by Cardews "Treatise"
-                            #         print("Modification/ Cardew Mode")
-                            #         self.cardew_inspiration(thought_train)
-                            #
-                            #     case RobotMode.Inspiration:
-                            #         # random shapes inspired by Wolff's 1, 2, 3
-                            #         print("Inspiration/ Wolff Mode")
-                            #         self.wolff_inspiration(thought_train)
-                            #
-                            #     case RobotMode.Repetition:
-                            #         # large repeating gestures
-                            #         print("Repetition Mode")
-                            #         self.repetition(thought_train)
-
                     sleep(0.1)
 
         logging.info('quitting director thread')
@@ -246,7 +205,6 @@ class Conducter:
         # todo - maybe map these across the range of input thought-trains
         randchoice = randrange(13)
         logging.debug(f'Random choice: {randchoice}')
-        decision_type = " "
 
         match randchoice:
             case 0:

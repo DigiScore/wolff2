@@ -27,6 +27,7 @@ class Listener:
         # self.running = True
         self.connected = False
         self.logging = False
+        self.mic_logging = config.mic_in_logging
 
         # Set up mic listening
         self.CHUNK = 2**11
@@ -82,7 +83,8 @@ class Listener:
             if peak > 1000:
                 bars = "#" * int(50 * peak / 2 ** 16)
                 logging.debug(f"MIC LISTENER: {peak} {bars}")
-                print(f"MIC LISTENER: {peak} {bars}")
+                if self.mic_logging:
+                    print(f"MIC LISTENER: {peak} {bars}")
 
             # Reset the silence listener
             silence_timer = time() + 5   # 5 seconds ahead

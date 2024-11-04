@@ -104,11 +104,26 @@ class Conducter:
             # Randomly pick an input stream for this cycle
             # (either mic_in or stream in config.stream_list)
             ###################################################################
+
+
+
+            # A Normal Mode
             if random() < self.mic_in_prediction:
                 rnd_stream = 'mic_in'
             else:
                 rnd = randrange(stream_list_len)
                 rnd_stream = stream_list[rnd]
+
+            # # B Random poetry
+            # rnd_stream = 'rnd_poetry'
+            #
+            # # C Normal NO Human (TURN MIC DOWN)
+            #
+            # # D Human only input
+            # rnd_stream = 'mic_in'
+
+
+
 
             self.hivemind.thought_train_stream = rnd_stream
             print(f"Random stream = {self.hivemind.thought_train_stream}")

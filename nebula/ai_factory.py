@@ -60,7 +60,7 @@ class NNetRAMI:
 
 
 class AIFactoryRAMI:
-    def __init__(self, speed: float = 1):
+    def __init__(self):  #, speed: float = 1):
         """
         Builds the individual neural nets that constitute the AI factory.
 
@@ -80,7 +80,7 @@ class AIFactoryRAMI:
 
         self.net_logging = False
         self.hivemind = DataBorg()
-        self.global_speed = speed
+        # self.global_speed = speed
         # Instantiate nets as objects and make models
         # logging.info('NNetRework1 - EEG to flow initialization')
         # self.eeg2flow = NNetRAMI(name="eeg2flow",
@@ -90,7 +90,7 @@ class AIFactoryRAMI:
         logging.info('NNetRework2 - Flow to core initialization')
         self.flow2core = NNetRAMI(name="flow2core",
                                     model='nebula/models/flow2core.pt',
-                                    in_feature='eeg2flow_2d')
+                                    in_feature='eda2flow_2d')
 
         logging.info('NNetRework3 - Core to flow initialization')
         self.core2flow = NNetRAMI(name="core2flow",
@@ -110,7 +110,7 @@ class AIFactoryRAMI:
         logging.info('NNetRework6 - Flow to audio initialization')
         self.flow2audio = NNetRAMI(name="flow2audio",
                                      model='nebula/models/flow2audio.pt',
-                                     in_feature='eeg2flow_2d')
+                                     in_feature='eda2flow_2d')
 
         logging.info('NNetRework7 - EDA to flow initialization')
         self.eda2flow = NNetRAMI(name="eda2flow",

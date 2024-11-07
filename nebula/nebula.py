@@ -59,7 +59,7 @@ class Nebula(Listener, AIFactoryRAMI):
         produces an affectual response to it's energy input, which in turn
         interferes with the data generation.
     """
-    def __init__(self, speed=1):
+    def __init__(self, eda)  #, speed=1):
         """
         Parameters
         ----------
@@ -74,7 +74,10 @@ class Nebula(Listener, AIFactoryRAMI):
         self.hivemind.running = True
 
         # Build the AI factory and pass it the data dict
-        AIFactoryRAMI.__init__(self, speed)
+        AIFactoryRAMI.__init__(self)  #, speed)
+
+        self.eda = eda
+
         # self.BRAINBIT_CONNECTED = config.eeg_live
         self.BITALINO_CONNECTED = config.eda_live
 
@@ -86,26 +89,26 @@ class Nebula(Listener, AIFactoryRAMI):
         #     first_brain_data = self.eeg_board.read(1)
         #     logging.info(f'Data from brainbit = {first_brain_data}')
 
-        # Init bitalino
-        if self.BITALINO_CONNECTED:
-            BITALINO_MAC_ADDRESS = config.mac_address
-            BITALINO_BAUDRATE = config.baudrate
-            BITALINO_ACQ_CHANNELS = config.channels
-
-            eda_started = False
-            while not eda_started:
-                try:
-                    self.eda = BITalino(BITALINO_MAC_ADDRESS)
-                    eda_started = True
-                except OSError:
-                    print("Unable to connect to Bitalino")
-                    retry = input("Retry (y/N)? ")
-                    if retry.lower() != "y" and retry.lower() != "yes":
-                        eda_started = True
-
-            self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
-            first_eda_data = self.eda.read(1)[0]
-            logging.info(f'Data from BITalino = {first_eda_data}')
+        # # Init bitalino
+        # if self.BITALINO_CONNECTED:
+        #     BITALINO_MAC_ADDRESS = config.mac_address
+        #     BITALINO_BAUDRATE = config.baudrate
+        #     BITALINO_ACQ_CHANNELS = config.channels
+        #
+        #     eda_started = False
+        #     while not eda_started:
+        #         try:
+        #             self.eda = BITalino(BITALINO_MAC_ADDRESS)
+        #             eda_started = True
+        #         except OSError:
+        #             print("Unable to connect to Bitalino")
+        #             retry = input("Retry (y/N)? ")
+        #             if retry.lower() != "y" and retry.lower() != "yes":
+        #                 eda_started = True
+        #
+        #     self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
+        #     first_eda_data = self.eda.read(1)[0]
+        #     logging.info(f'Data from BITalino = {first_eda_data}')
 
         # Work out master timing then collapse hivemind.running
         self.endtime = None
@@ -118,14 +121,14 @@ class Nebula(Listener, AIFactoryRAMI):
         # Declare all threads
         t1 = Thread(target=self.make_data)
         t2 = Thread(target=self.snd_listen)
-        t3 = Thread(target=self.jess_input)
+        t3 = Thread(target=self.human_input)
 
         # Start them all
         t1.start()
         t2.start()
         t3.start()
 
-    def jess_input(self):
+    def human_input(self):
         """
         Listen to live human input.
         """
@@ -134,8 +137,25 @@ class Nebula(Listener, AIFactoryRAMI):
                 break
             # Read data from bitalino
             if self.BITALINO_CONNECTED:
-                # Get raw data
-                eda_raw = [self.eda.read(1)[0][-1]]
+                # Get raw data from Bitalino
+                bitalino_raw = [self.eda.read(1)]
+
+                # write out the Bitalino data to the log
+                self.hivemind.bitalino_x = bitalino_raw[0]
+
+                self.hivemind.bitalino_y = bitalino_raw[1]
+
+                self.hivemind.bitalino_z = bitalino_raw[2]
+
+                self.hivemind.bitalino_eda = bitalino_raw[3]
+
+                self.hivemind.bitalino_heart = bitalino_raw[4]
+
+                self.hivemind.bitalino_breath = bitalino_raw[5]
+
+                # extract eda for processing
+                eda_raw = self.hivemind.bitalino_eda
+
                 logging.debug(f"eda data raw = {eda_raw}")
 
                 # Update raw EDA buffer
@@ -166,7 +186,7 @@ class Nebula(Listener, AIFactoryRAMI):
                 # Random data if no bitalino
                 self.hivemind.eda_buffer = np.random.uniform(size=(1, 50))
 
-            sleep(0.1)  # for 10 Hz
+            sleep(0.01)  # for 100 Hz
 
         self.hivemind.running = False
 
@@ -176,3 +196,4 @@ class Nebula(Listener, AIFactoryRAMI):
         """
         if self.BITALINO_CONNECTED:
             self.eda.close()
+

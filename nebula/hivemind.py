@@ -67,6 +67,24 @@ class DataBorg:
             """Live 5 sec buffered normalised data from bitalino"""
 
             ######################
+            # Bitalino streams
+            ######################
+
+            self.bitalino_x: float = random()
+
+            self.bitalino_y: float = random()
+
+            self.bitalino_z: float = random()
+
+            self.bitalino_eda: float = random()
+
+            self.bitalino_heart: float = random()
+
+            self.bitalino_breath: float = random()
+
+            self.bitalino_button: int = 0
+
+            ######################
             # Additional streams
             ######################
             self.master_stream: float = random()

@@ -10,9 +10,9 @@ from nebula.hivemind import DataBorg
 
 class BitalinoDataWriter:
 
-    def __init__(self):
+    def __init__(self, path):
         self.hivemind = DataBorg()
-        self.data_file = open(f"data/Bitalino_{self.hivemind.session_date}.json", "a")
+        self.data_file = open(f"{path}/Bitalino_{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
 
     def json_update(self):
@@ -41,6 +41,7 @@ class BitalinoDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
+        self.process_data()
 
     def main_loop(self):
         """
@@ -58,3 +59,6 @@ class BitalinoDataWriter:
             sleep(0.01)
         logging.info("quitting data writer thread")
         self.terminate_data_writer()
+
+    def process_data(self):
+        pass

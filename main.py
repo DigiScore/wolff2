@@ -1,17 +1,25 @@
 import config
 import logging
+from time import time
+import os
 
-import rami_main
-from modules.bitalino import BITalino
 from rami_main import Rami_Main
 
-BITALINO_CONNECTED = config.eda_live
-
+DATA_LOGGING = config.data_logging
+MAIN_PATH = "../data"
 
 def main():
 
-    # Init bitalino
-    if BITALINO_CONNECTED:
+    # Init data logging
+    if DATA_LOGGING:
+        # make new directory for this log
+        timestamp = f"{MAIN_PATH}/{time()}"
+        path = makenewdir(timestamp)
+
+        # get relevant libraries
+        from modules.bitalino import BITalino
+
+        # make
         BITALINO_MAC_ADDRESS = config.mac_address
         BITALINO_BAUDRATE = config.baudrate
         BITALINO_ACQ_CHANNELS = config.channels
@@ -35,8 +43,19 @@ def main():
         eda = None
 
     while True:
-        rami = Rami_Main(eda)
+        rami = Rami_Main(eda, path)
 
 
     if BITALINO_CONNECTED:
         eda.close()
+
+
+
+def makenewdir(timestamp):
+    try:
+        os.makedirs(timestamp)
+    except OSError:
+        pass
+    # let exception propagate if we just can't
+    # cd into the specified directory
+    os.chdir(timestamp)

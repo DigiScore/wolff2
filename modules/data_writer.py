@@ -10,9 +10,9 @@ from nebula.hivemind import DataBorg
 
 class DataWriter:
 
-    def __init__(self):
+    def __init__(self, path):
         self.hivemind = DataBorg()
-        self.data_file = open(f"data/{self.hivemind.session_date}.json", "a")
+        self.data_file = open(f"{path}/{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
 
     def json_update(self):
@@ -35,9 +35,9 @@ class DataWriter:
                 "x": self.hivemind.current_robot_x_y_z[0],
                 "y": self.hivemind.current_robot_x_y_z[1],
                 "z": self.hivemind.current_robot_x_y_z[2],
+            },
             "design decision": self.hivemind.design_decision,
             "interrupt": self.hivemind.interrupted
-            }
 
         }
         json_object = json.dumps(json_dict)

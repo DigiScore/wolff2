@@ -59,7 +59,7 @@ class Nebula(Listener, AIFactoryRAMI):
         produces an affectual response to it's energy input, which in turn
         interferes with the data generation.
     """
-    def __init__(self, eda)  #, speed=1):
+    def __init__(self, eda):  #, speed=1):
         """
         Parameters
         ----------

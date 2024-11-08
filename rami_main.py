@@ -20,7 +20,7 @@ class Rami_Main:
     This script also controls the live mic audio analyser.
     Paramaters are to be modified in config.py.
     """
-    def __init__(self, eda):
+    def __init__(self, eda, path):
         art.tprint("RAMI")
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()
@@ -36,8 +36,8 @@ class Rami_Main:
 
         # Init data writer
         if config.data_writer:
-            dw = DataWriter()
-            bdw = BitalinoDataWriter()
+            dw = DataWriter(path)
+            bdw = BitalinoDataWriter(path)
 
         # Start Nebula AI Factory after conducter starts data moving
         nebula.endtime = time.time() + config.duration_of_piece

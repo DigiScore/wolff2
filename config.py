@@ -1,6 +1,10 @@
 # [HARDWARE]
 xarm_connected = True
-eda_live = True
+# eda_live = True
+
+# [DATAWRITER]
+data_writer = True
+data_logging = True
 
 # [PLAY PARAMS]
 silence_listener = False
@@ -41,8 +45,7 @@ stream_list = ['rnd_poetry',
 # [DEBUG]
 # debug = logging.INFO
 
-# [DATAWRITER]
-data_writer = True
+
 
 """
 Notes:

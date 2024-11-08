@@ -3,7 +3,7 @@ import logging
 from time import time
 import os
 
-from rami_main import Rami_Main
+from modules.rami_main import Rami_Main
 
 DATA_LOGGING = config.data_logging
 MAIN_PATH = "../data"

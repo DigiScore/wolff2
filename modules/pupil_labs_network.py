@@ -2,6 +2,8 @@ import zmq
 import config
 
 class PupilLabs:
+    """https://github.com/pupil-labs/pupil-helpers/blob/master/python/pupil_remote_control.py
+    """
     PUPIL_LABS_ADDR = config.pupil_labs_addr
 
     def __init__(self):

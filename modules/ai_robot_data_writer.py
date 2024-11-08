@@ -6,7 +6,7 @@ from threading import Thread
 from time import sleep
 
 from nebula.hivemind import DataBorg
-from analysis.ai_visualiser import AI_visualiser
+from modules.ai_visualiser import AI_visualiser
 
 
 class DataWriter:

@@ -4,8 +4,8 @@ import time
 
 import config
 from modules.conducter import Conducter
-from modules.data_writer import DataWriter
-from modules.bitalino_data_writer import BitalinoDataWriter
+from modules.ai_robot_data_writer import DataWriter
+from modules.biodata_data_writer import BiodataDataWriter
 from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
 
@@ -38,13 +38,14 @@ class Rami_Main:
         # Init data writer
         if config.data_writer:
             dw = DataWriter(path)
-            bdw = BitalinoDataWriter(path)
+            bdw = BiodataDataWriter(path)
 
         # Start Nebula AI Factory after conducter starts data moving
         nebula.endtime = time.time() + config.duration_of_piece
         self.hivemind.running = True
         robot.main_loop()
         nebula.main_loop()
+
         if config.data_writer:
             dw.main_loop()
             bdw.main_loop()

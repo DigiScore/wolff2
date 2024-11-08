@@ -6,14 +6,19 @@ from threading import Thread
 from time import sleep
 
 from nebula.hivemind import DataBorg
+from modules.pupil_labs_network import PupilLabs
 
 
-class DataWriter:
+class BiodataDataWriter:
 
     def __init__(self, path):
         self.hivemind = DataBorg()
-        self.data_file = open(f"{path}/{self.hivemind.session_date}.json", "a")
+        self.data_file = open(f"{path}/Bitalino_{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
+        ###################
+        # init pupil labs
+        ###################
+        self.pupil_labs = PupilLabs()
 
     def json_update(self):
         """
@@ -21,24 +26,13 @@ class DataWriter:
         """
         json_dict = {
             "date": datetime.now().isoformat(),
-            "master_stream": self.hivemind.thought_train_stream,
-            "mic_in": self.hivemind.mic_in,
-            "rnd_poetry": self.hivemind.rnd_poetry,
-            # "eeg2flow": self.hivemind.eeg2flow,
-            "flow2core": self.hivemind.flow2core,
-            "core2flow": self.hivemind.core2flow,
-            "audio2core": self.hivemind.audio2core,
-            "audio2flow": self.hivemind.audio2flow,
-            "flow2audio": self.hivemind.flow2audio,
-            "eda2flow": self.hivemind.eda2flow,
-            "current_robot_x_y_z": {
-                "x": self.hivemind.current_robot_x_y_z[0],
-                "y": self.hivemind.current_robot_x_y_z[1],
-                "z": self.hivemind.current_robot_x_y_z[2],
-            },
-            "design decision": self.hivemind.design_decision,
-            "interrupt": self.hivemind.interrupted
-
+            "x": self.hivemind.bitalino_x,
+            "y": self.hivemind.bitalino_y,
+            "z": self.hivemind.bitalino_z,
+            "eda": self.hivemind.bitalino_eda,
+            "heart": self.hivemind.bitalino_heart,
+            "breath": self.hivemind.bitalino_breath,
+            "button": self.hivemind.bitalino_button
         }
         json_object = json.dumps(json_dict)
         self.data_file.write(json_object)
@@ -48,17 +42,24 @@ class DataWriter:
         """
         Terminate the json writer and close file.
         """
+        ###################
+        # init pupil labs
+        ###################
+        self.pupil_labs.stop_record()
         self.data_file.seek(self.data_file.tell() - 3, os.SEEK_SET)
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
+        self.process_data()
 
     def main_loop(self):
         """
         Start the main thread for the writing manager.
         """
+        self.pupil_labs.start_record()
         writer_thread = Thread(target=self.writing_manager)
         writer_thread.start()
+
 
     def writing_manager(self):
         """
@@ -69,3 +70,6 @@ class DataWriter:
             sleep(0.01)
         logging.info("quitting data writer thread")
         self.terminate_data_writer()
+
+    def process_data(self):
+        pass

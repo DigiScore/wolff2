@@ -5,6 +5,7 @@ xarm_connected = True
 # [DATAWRITER]
 data_writer = True
 data_logging = True
+pupil_labs_addr = "tcp://127.0.0.1:50020"
 
 # [PLAY PARAMS]
 silence_listener = False

@@ -10,6 +10,7 @@ from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
 
 
+
 class Rami_Main:
     """
     Main script to start the robot arm drawing digital score work.

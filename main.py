@@ -16,10 +16,13 @@ def main():
         timestamp = f"{MAIN_PATH}/{time()}"
         path = makenewdir(timestamp)
 
+        ###################
+        # Bitalino
+        ###################
         # get relevant libraries
         from modules.bitalino import BITalino
 
-        # make
+        # start bitalino
         BITALINO_MAC_ADDRESS = config.mac_address
         BITALINO_BAUDRATE = config.baudrate
         BITALINO_ACQ_CHANNELS = config.channels
@@ -38,6 +41,9 @@ def main():
         eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
         first_eda_data = eda.read(1)[0]
         logging.info(f'Data from BITalino = {first_eda_data}')
+
+
+
 
     else:
         eda = None

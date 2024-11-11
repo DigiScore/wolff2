@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from opensignalsreader import OpenSignalsReader
 import neurokit2 as nk
 from sklearn.preprocessing import MinMaxScaler
+import config
 
 # example of data
 # id d1 d2 d3 d4 x y z eda hr bth
@@ -17,8 +18,7 @@ class BitalinoVisualiser:
         self.raw_file_path = raw_file_path
         self.xyz_smoothing_window = 50
         self.sampling_rate = 100
-        self.figsize_xy = (60, 12)
-
+        self.figsize_xy = config.figsize_xy
 
     def main(self):
         # Read OpenSignals file

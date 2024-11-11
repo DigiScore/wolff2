@@ -40,9 +40,9 @@ class Conducter:
 
         if self.drawbot:
             # self.drawbot.home()
-            self.drawbot.go_position_draw()
+            # self.drawbot.go_position_draw()
 
-            input('To start press ENTER')
+            # input('To start press ENTER')
             # print('Going to draw position...')
             # input('Adjust pen height, then press ENTER')
             # self.drawbot.go_position_one_two()

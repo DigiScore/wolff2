@@ -47,12 +47,13 @@ def main():
         eda = None
 
     while True:
+        input('To start press ENTER')
+
         rami = Rami_Main(eda, master_path)
 
 
-    if BITALINO_CONNECTED:
-        eda.close()
-
+    # if BITALINO_CONNECTED:
+    #     eda.close()
 
 
 def makenewdir(timestamp):

@@ -10,23 +10,24 @@ from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
 import pandas as pd
 import matplotlib.pyplot as plt
+import config
 
 
 class PupilLabsVisualiser:
 
-    def __init__(self, path):
+    def __init__(self, pupillabs_path):
 
         # Change this to your local working directory
         # os.chdir("/Volumes/Current/Active_projects/RAMI/Data/Proof-of-concept/PupilLabs")
 
         # Subfolder within working directory containing Pupil Lab csv exports
-        self.path_data = "raw/"
+        self.path_data = f"{pupillabs_path}/raw"
 
         # Subfolder to receive exported plots
-        self.path_plots = "figures/"
+        self.path_plots = f"{pupillabs_path}/images"
 
         # Subfolder to receive exported filtered data
-        self.path_filtered = "filtered/"
+        self.path_filtered = f"{pupillabs_path}/filtered"
 
         # These parameters are used for the filtering function & can be changed if needed
         self.choose_resample = True  # Do you want to downsample to 60 Hz? True or False
@@ -36,6 +37,7 @@ class PupilLabsVisualiser:
         self.sg_w = 19  # Used in Savitzky-Golay filter (window size); reduce for less smoothing
         self.s_omit = 0
         self.e_omit = 100000
+        self.figsize_xy = config.figsize_xy
 
     def filtering(self, eye_data):
         # Resample down to 60 Hz using a linear interpolation
@@ -124,7 +126,7 @@ class PupilLabsVisualiser:
 
         # Create preliminary plots of raw data. Black lines are raw data; red lines are raw data only where
         # Pupil Labs' measured confidence is > .6
-        plt.figure(figsize=(11.69, 8.27))
+        plt.figure(figsize=self.figsize_xy)
         plt.subplot(2, 1, 1)
         plt.plot(eye0_true['newtime'], eye0_true['diameter_3d'], label='Raw Data')
         plt.plot(eye0_true[eye0_true['confidence'] > 0.6]['newtime'],
@@ -150,7 +152,7 @@ class PupilLabsVisualiser:
         filtered_eye1.to_csv(f"{self.path_filtered}{file_name}-Eye1.txt", index=False, sep='\t')
 
         ### Plot raw data + filtered data
-        plt.figure(figsize=(11.69, 8.27))
+        plt.figure(figsize=self.figsize_xy)
         plt.subplot(2, 1, 1)
         plt.plot(filtered_eye0['newtime'], filtered_eye0['diameter_3d'], label='Raw Data')
         plt.plot(filtered_eye0['newtime'], filtered_eye0['xmm_int'], color='red', label='Filtered Data')
@@ -190,6 +192,3 @@ class PupilLabsVisualiser:
         plt.plot(ag['rtime'], ag['xmm_int'], color='red', linewidth=2)
         plt.plot(ag['rtime'], ag['xmm_int'], color='red', linewidth=2)
         plt.show()
-
-
-

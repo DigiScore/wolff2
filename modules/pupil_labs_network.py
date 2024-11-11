@@ -16,19 +16,18 @@ class PupilLabs:
         self.socket = zmq.Socket(ctx, zmq.REQ)
         self.socket.connect(self.PUPIL_LABS_ADDR)
 
-        # todo - check its connected!!
-        # while not pupil_labs_started:
-        #     try:
-        #         self.socket.send_string("test")
-        #     except:
-        #         pass
-        #     finally:
-        #         pupil_labs_started = True
-
         # get visualiser ready
-        # todo create folders
         self.pupillabs_path = f"{master_path}/pupilLabs"
         self.makenewdir(self.pupillabs_path)
+
+        self.pupillabs_path_images = f"{self.pupillabs_path}/images"
+        self.makenewdir(self.pupillabs_path_images)
+
+        self.pupillabs_path_raw = f"{self.pupillabs_path}/raw"
+        self.makenewdir(self.pupillabs_path_raw)
+
+        self.pupillabs_path_filtered = f"{self.pupillabs_path}/filtered"
+        self.makenewdir(self.pupillabs_path_filtered)
 
     def start_record(self):
         self.socket.send_string("R")
@@ -39,7 +38,7 @@ class PupilLabs:
             print(self.socket.recv_string())
 
     def process_data(self):
-        self.pupil_vis = PupilLabsVisualiser(self.pupillabs_path)
+        self.pupil_vis = PupilLabsVisualiser(self.pupillabs_path, self.pupillabs_path_images)
         pupil_thread = Thread(target=self._process_data)
         pupil_thread.start()
 

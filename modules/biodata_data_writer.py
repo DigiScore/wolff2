@@ -6,20 +6,29 @@ from threading import Thread
 from time import sleep
 
 from nebula.hivemind import DataBorg
+from modules.bitalino_visualiser import BitalinoVisualiser
 from modules.pupil_labs_network import PupilLabs
 
 
 class BiodataDataWriter:
 
-    def __init__(self, path):
+    def __init__(self, master_path):
+        # make all dirs for data logging
+        self.bitalino_path = f"{master_path}/bitalino"
+        self.makenewdir(self.bitalino_path)
+
+        self.bitalino_images = f"{self.bitalino_path}/images"
+        self.makenewdir(self.bitalino_images)
+
         self.hivemind = DataBorg()
-        self.data_file = open(f"{path}/Bitalino_{self.hivemind.session_date}.json", "a")
+
+        self.data_file = open(f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
 
         ###################
         # init pupil labs
         ###################
-        self.pupil_labs = PupilLabs(path)
+        self.pupil_labs = PupilLabs(master_path)
 
     def json_update(self):
         """
@@ -56,8 +65,6 @@ class BiodataDataWriter:
         self.data_file.close()
         self.process_data()
 
-        #
-
     def main_loop(self):
         """
         Start the main thread for the writing manager.
@@ -77,4 +84,11 @@ class BiodataDataWriter:
         self.terminate_data_writer()
 
     def process_data(self):
-        pass
+        visualiser = BitalinoVisualiser(self.data_file, self.bitalino_images)
+        visualiser.main()
+
+    def makenewdir(self, path):
+        try:
+            os.makedirs(path)
+        except OSError:
+            print(f"Path Error - unable to create Directory {path}")

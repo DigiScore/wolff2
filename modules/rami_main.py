@@ -21,7 +21,7 @@ class Rami_Main:
     This script also controls the live mic audio analyser.
     Paramaters are to be modified in config.py.
     """
-    def __init__(self, eda, path):
+    def __init__(self, eda, master_path):
         art.tprint("RAMI")
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()

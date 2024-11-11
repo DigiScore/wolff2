@@ -9,7 +9,7 @@ class PupilLabs:
     """
     PUPIL_LABS_ADDR = config.pupil_labs_addr
 
-    def __init__(self, path):
+    def __init__(self, master_path):
 
         # pupil_labs_started = False
         ctx = zmq.Context()
@@ -27,8 +27,8 @@ class PupilLabs:
 
         # get visualiser ready
         # todo create folders
-        self.path = path
-
+        self.pupillabs_path = f"{master_path}/pupilLabs"
+        self.makenewdir(self.pupillabs_path)
 
     def start_record(self):
         self.socket.send_string("R")
@@ -39,9 +39,16 @@ class PupilLabs:
             print(self.socket.recv_string())
 
     def process_data(self):
-        self.pupil_vis = PupilLabsVisualiser()
+        self.pupil_vis = PupilLabsVisualiser(self.pupillabs_path)
         pupil_thread = Thread(target=self._process_data)
         pupil_thread.start()
 
     def _process_data(self):
         self.pupil_vis.main()
+
+    def makenewdir(self, path):
+        try:
+            os.makedirs(path)
+        except OSError:
+            print(f"Path Error - unable to create Directory {path}")
+

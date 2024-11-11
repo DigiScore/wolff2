@@ -6,17 +6,26 @@ from threading import Thread
 from time import sleep
 
 from nebula.hivemind import DataBorg
-from modules.ai_visualiser import AI_visualiser
+from modules.ai_robot_visualiser import AI_visualiser
 
 
 class DataWriter:
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, master_path):
         self.hivemind = DataBorg()
-        self.data_filename = f"{self.path}/{self.hivemind.session_date}.json"
-        self.data_file = open(self.data_filename, "a")
+
+        # make all dirs for data logging
+        self.ai_robot_path = f"{master_path}/ai_robot"
+        self.makenewdir(self.ai_robot_path)
+
+        self.ai_robot_images = f"{self.ai_robot_path}/images"
+        self.makenewdir(self.ai_robot_images)
+
+        self.hivemind = DataBorg()
+
+        self.data_file = open(f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
+
 
     def json_update(self):
         """
@@ -75,4 +84,11 @@ class DataWriter:
         self.terminate_data_writer()
 
     def process_and_plot(self):
-        AI_visualiser(path=self.data_filename)
+        AI_visualiser(raw_file_path=self.data_file,
+                      ai_robot__images_path=self.ai_robot_images)
+
+    def makenewdir(self, path):
+        try:
+            os.makedirs(path)
+        except OSError:
+            print(f"Path Error - unable to create Directory {path}")

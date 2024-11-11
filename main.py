@@ -6,15 +6,15 @@ import os
 from modules.rami_main import Rami_Main
 
 DATA_LOGGING = config.data_logging
-MAIN_PATH = "../data"
+MAIN_PATH = config.path
 
 def main():
 
     # Init data logging
     if DATA_LOGGING:
-        # make new directory for this log
-        timestamp = f"{MAIN_PATH}/{time()}"
-        path = makenewdir(timestamp)
+        # make new directory for this log e.g. ../data/20240908_123456
+        master_path = f"{MAIN_PATH}/{time()}"
+        makenewdir(master_path)
 
         ###################
         # Bitalino
@@ -47,7 +47,7 @@ def main():
         eda = None
 
     while True:
-        rami = Rami_Main(eda, path)
+        rami = Rami_Main(eda, master_path)
 
 
     if BITALINO_CONNECTED:
@@ -62,4 +62,4 @@ def makenewdir(timestamp):
         pass
     # let exception propagate if we just can't
     # cd into the specified directory
-    os.chdir(timestamp)
+    # os.chdir(timestamp)

@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 class PupilLabsVisualiser:
 
-    def __init__(self):
+    def __init__(self, path):
 
         # Change this to your local working directory
         # os.chdir("/Volumes/Current/Active_projects/RAMI/Data/Proof-of-concept/PupilLabs")

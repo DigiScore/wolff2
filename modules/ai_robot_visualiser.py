@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 
 class AI_visualiser:
 
-    def __init__(self, path):
-        self.path = path
+    def __init__(self, raw_file_path, ai_robot__images_path):
+        self.ai_robot__images_path = ai_robot__images_path
 
         # load the data from the file
-        df = pd.read_json(self.path)
+        df = pd.read_json(raw_file_path)
 
         # get robot data
         robot = pd.json_normalize(df["current_robot_x_y_z"])
@@ -67,8 +67,7 @@ class AI_visualiser:
         ax[4].legend(shadow=True, fancybox=True)
 
         plt.show()
-
-        plt.savefig(path)
+        plt.savefig(self.ai_robot__images_path)
 
 if __name__ == "__main__":
     test = AI_visualiser(path='../data/2024_11_05_1233.json')

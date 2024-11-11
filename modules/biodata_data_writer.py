@@ -19,7 +19,7 @@ class BiodataDataWriter:
         ###################
         # init pupil labs
         ###################
-        self.pupil_labs = PupilLabs()
+        self.pupil_labs = PupilLabs(path)
 
     def json_update(self):
         """
@@ -55,6 +55,8 @@ class BiodataDataWriter:
         self.data_file.write("]")
         self.data_file.close()
         self.process_data()
+
+        #
 
     def main_loop(self):
         """

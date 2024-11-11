@@ -43,8 +43,6 @@ def main():
         logging.info(f'Data from BITalino = {first_eda_data}')
 
 
-
-
     else:
         eda = None
 

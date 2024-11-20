@@ -76,39 +76,10 @@ class Nebula(Listener, AIFactoryRAMI):
         # Build the AI factory and pass it the data dict
         AIFactoryRAMI.__init__(self)  #, speed)
 
-        self.eda = eda
-
-        # self.BRAINBIT_CONNECTED = config.eeg_live
-        self.BITALINO_CONNECTED = config.eda_live
-
-        # # Init brainbit reader
-        # if self.BRAINBIT_CONNECTED:
-        #     logging.info("Starting EEG connection")
-        #     self.eeg_board = BrainbitReader()
-        #     self.eeg_board.start()
-        #     first_brain_data = self.eeg_board.read(1)
-        #     logging.info(f'Data from brainbit = {first_brain_data}')
-
-        # # Init bitalino
-        # if self.BITALINO_CONNECTED:
-        #     BITALINO_MAC_ADDRESS = config.mac_address
-        #     BITALINO_BAUDRATE = config.baudrate
-        #     BITALINO_ACQ_CHANNELS = config.channels
-        #
-        #     eda_started = False
-        #     while not eda_started:
-        #         try:
-        #             self.eda = BITalino(BITALINO_MAC_ADDRESS)
-        #             eda_started = True
-        #         except OSError:
-        #             print("Unable to connect to Bitalino")
-        #             retry = input("Retry (y/N)? ")
-        #             if retry.lower() != "y" and retry.lower() != "yes":
-        #                 eda_started = True
-        #
-        #     self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
-        #     first_eda_data = self.eda.read(1)[0]
-        #     logging.info(f'Data from BITalino = {first_eda_data}')
+        # Own Bitalino
+        self.BITALINO_CONNECTED = config.data_logging
+        if self.BITALINO_CONNECTED:
+            self.eda = eda
 
         # Work out master timing then collapse hivemind.running
         self.endtime = None

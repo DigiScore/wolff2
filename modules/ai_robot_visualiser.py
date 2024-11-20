@@ -55,7 +55,6 @@ class AI_visualiser:
         ax[2].set_xlabel("Time")
         ax[2].plot(date, df["master_stream"])
 
-
         # plot Interrupt
         ax[3].set_title("Interrupt")
         ax[3].set_ylabel("True/ False")

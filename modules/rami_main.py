@@ -1,5 +1,4 @@
 import art
-import logging
 import time
 
 import config
@@ -25,9 +24,6 @@ class Rami_Main:
         art.tprint("RAMI")
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()
-
-        # Logging for all modules
-        logging.basicConfig(level=logging.INFO)
 
         # Init the AI factory (inherits AIFactory, Listener)
         nebula = Nebula(eda=eda)  #, speed=config.speed)

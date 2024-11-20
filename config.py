@@ -34,7 +34,7 @@ mic_in_logging = False
 # [BITALINO]
 baudrate = 10
 channels = [0]
-mac_address = "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
+mac_address = "00:21:08:35:16:D4"  # "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 
 # [STREAMING]
 stream_list = ['rnd_poetry',

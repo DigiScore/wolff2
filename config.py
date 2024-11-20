@@ -1,18 +1,10 @@
 # [HARDWARE]
-xarm_connected = False
-# eda_live = True
-
-# [DATAWRITER]
-data_writer = True
-data_logging = True
-pupil_logging = False
-pupil_labs_addr = "tcp://127.0.0.1:50020"
-path = "data"
-figsize_xy = (100, 12)
+xarm_connected = True
+eda_live = False
 
 # [PLAY PARAMS]
 silence_listener = False
-duration_of_piece = 240  # in sec
+duration_of_piece = 300  # in sec
 speed = 5  # dynamic tempo of the all processes: 1 = slow, 10 = fast
 temperature = 0
 
@@ -33,9 +25,9 @@ mic_in_prediction = 0.36
 mic_in_logging = False
 
 # [BITALINO]
-baudrate = 100
-channels = [0, 1, 2, 3, 4, 5]
-mac_address = "/dev/cu.BITalino-16-D4"  # "00:21:08:35:16:D4" #"00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
+baudrate = 10
+channels = [0]
+mac_address = "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 
 # [STREAMING]
 stream_list = ['rnd_poetry',
@@ -49,7 +41,8 @@ stream_list = ['rnd_poetry',
 # [DEBUG]
 # debug = logging.INFO
 
-
+# [DATAWRITER]
+data_writer = True
 
 """
 Notes:

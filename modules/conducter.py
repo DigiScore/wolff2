@@ -107,7 +107,7 @@ class Conducter:
 
 
 
-            # A Normal Mode
+            # # A Normal Mode
             if random() < self.mic_in_prediction:
                 rnd_stream = 'mic_in'
             else:
@@ -116,12 +116,11 @@ class Conducter:
 
             # # B Random poetry
             # rnd_stream = 'rnd_poetry'
-            #
-            # # C Normal NO Human (TURN MIC DOWN)
+            # #
+            # # C Normal NO Human (TURN MIC DOWN)b
             #
             # # D Human only input
             # rnd_stream = 'mic_in'
-
 
 
 
@@ -147,7 +146,7 @@ class Conducter:
                 logging.debug(f'end time = {rhythm_loop_end_time}')
 
                 # Speed for this phrase
-                arm_speed = randrange(30, 200)
+                arm_speed = randrange(30, 1000)
                 if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 

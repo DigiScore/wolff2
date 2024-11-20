@@ -1,6 +1,13 @@
 # [HARDWARE]
 xarm_connected = True
-eda_live = False
+# eda_live = False
+
+# [DATAWRITER]
+data_writer = True
+data_logging = True
+pupil_labs_addr = "tcp://127.0.0.1:50020"
+path = "../data"
+figsize_xy = (100, 12)
 
 # [PLAY PARAMS]
 silence_listener = False
@@ -38,11 +45,7 @@ stream_list = ['rnd_poetry',
                'flow2audio',
                'eda2flow']
 
-# [DEBUG]
-# debug = logging.INFO
 
-# [DATAWRITER]
-data_writer = True
 
 """
 Notes:

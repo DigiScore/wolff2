@@ -3,11 +3,12 @@ import logging
 import os
 from datetime import datetime
 from threading import Thread
-from time import sleep
+from time import sleep, time
 
 from nebula.hivemind import DataBorg
 from modules.bitalino_visualiser import BitalinoVisualiser
 from modules.pupil_labs_network import PupilLabs
+import config
 
 
 class BiodataDataWriter:
@@ -28,7 +29,8 @@ class BiodataDataWriter:
         ###################
         # init pupil labs
         ###################
-        self.pupil_labs = PupilLabs(master_path)
+        if config.pupil_logging:
+            self.pupil_labs = PupilLabs(master_path)
 
     def json_update(self):
         """
@@ -56,7 +58,8 @@ class BiodataDataWriter:
         # init pupil labs
         ###################
         # close pupil labs
-        self.pupil_labs.stop_record()
+        if config.pupil_logging:
+            self.pupil_labs.stop_record()
 
         # close bitalino
         self.data_file.seek(self.data_file.tell() - 3, os.SEEK_SET)
@@ -69,7 +72,8 @@ class BiodataDataWriter:
         """
         Start the main thread for the writing manager.
         """
-        self.pupil_labs.start_record()
+        if config.pupil_logging:
+            self.pupil_labs.start_record()
         writer_thread = Thread(target=self.writing_manager)
         writer_thread.start()
 
@@ -91,4 +95,9 @@ class BiodataDataWriter:
         try:
             os.makedirs(path)
         except OSError:
-            print(f"Path Error - unable to create Directory {path}")
+            print(f"Path Error - unable to create Directory {path} as it might already exist.")
+
+    def _test_running(self):
+        self.hivemind.running = True
+
+

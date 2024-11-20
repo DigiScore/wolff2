@@ -46,7 +46,7 @@ class DataBorg:
             self.mic_in: float = random()
             """Percept input stream from client e.g. live mic level"""
 
-            with open('./nebula/models/audio2core_minmax.pickle', 'rb') as f:
+            with open('../nebula/models/audio2core_minmax.pickle', 'rb') as f:
                 audio_mins, audio_maxs = pickle.load(f)
             self.audio_mins: list = audio_mins
             self.audio_maxs: list = audio_maxs

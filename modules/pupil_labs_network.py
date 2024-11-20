@@ -10,11 +10,13 @@ class PupilLabs:
     PUPIL_LABS_ADDR = config.pupil_labs_addr
 
     def __init__(self, master_path):
+        print("Starting Pupil Labs .... waiting for connection")
 
         # pupil_labs_started = False
         ctx = zmq.Context()
         self.socket = zmq.Socket(ctx, zmq.REQ)
         self.socket.connect(self.PUPIL_LABS_ADDR)
+        print("Pupil Labs .... connected")
 
         # get visualiser ready
         self.pupillabs_path = f"{master_path}/pupilLabs"

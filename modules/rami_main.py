@@ -13,7 +13,7 @@ from nebula.nebula import Nebula
 
 class Rami_Main:
     """
-    Main script to start the robot arm drawing digital score work.
+    Main script to start a single robot arm digital score work.
     Conducter calls the local interpreter for project specific functions. This
     communicates directly to the robot libraries.
     Nebula kick-starts the AI Factory for generating NNet data and affect

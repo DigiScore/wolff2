@@ -68,6 +68,7 @@ class BiodataDataWriter:
         self.data_file.write("]")
         self.data_file.close()
         sleep(2)
+        # todo this has not been checked
         self.process_data()
 
     def main_loop(self):

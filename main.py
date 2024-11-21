@@ -81,6 +81,7 @@ class Main:
         """
         # while self.MASTER_RUNNING:
         # make new directory for this log e.g. ../data/20240908_123456
+        # todo this needs a iteration solution
         if DATA_LOGGING:
             self.master_path = f"{MAIN_PATH}/{time()}"
             self.makenewdir(self.master_path)

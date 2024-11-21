@@ -78,9 +78,9 @@ class DataBorg:
 
             self.bitalino_eda: int = 0
 
-            self.bitalino_heart: int = 0
+            self.bitalino_ecg: int = 0
 
-            self.bitalino_breath: int = 0
+            self.bitalino_rsp: int = 0
 
             # self.bitalino_button: int = 0
 

@@ -43,8 +43,8 @@ class BiodataDataWriter:
             "y": self.hivemind.bitalino_y,
             "z": self.hivemind.bitalino_z,
             "eda": self.hivemind.bitalino_eda,
-            "heart": self.hivemind.bitalino_heart,
-            "breath": self.hivemind.bitalino_breath,
+            "ecg": self.hivemind.bitalino_ecg,
+            "rsp": self.hivemind.bitalino_rsp,
             # "button": self.hivemind.bitalino_button,
         }
         json_object = json.dumps(json_dict)

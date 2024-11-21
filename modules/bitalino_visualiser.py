@@ -45,9 +45,9 @@ class BitalinoVisualiser:
         # rsp = acq.raw(6)
 
         # make into df or numpy
-        eda = df.to_numpy(df["eda"])
-        ecg = df.to_numpy(df["ecg"])
-        rsp = df.to_numpy(df["rsp"])
+        eda = df["eda"].values
+        ecg = df["ecg"].values
+        rsp = df["rsp"].values
 
         x = df["x"]
         y = df["y"]

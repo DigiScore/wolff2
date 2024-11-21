@@ -70,19 +70,19 @@ class DataBorg:
             # Bitalino streams
             ######################
 
-            self.bitalino_x: float = random()
+            self.bitalino_x: int = 0
 
-            self.bitalino_y: float = random()
+            self.bitalino_y: int = 0
 
-            self.bitalino_z: float = random()
+            self.bitalino_z: int = 0
 
-            self.bitalino_eda: float = random()
+            self.bitalino_eda: int = 0
 
-            self.bitalino_heart: float = random()
+            self.bitalino_heart: int = 0
 
-            self.bitalino_breath: float = random()
+            self.bitalino_breath: int = 0
 
-            self.bitalino_button: int = 0
+            # self.bitalino_button: int = 0
 
             ######################
             # Additional streams

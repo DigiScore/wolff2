@@ -1,5 +1,5 @@
 import logging
-from time import time
+from time import time, sleep
 import os
 import art
 
@@ -79,24 +79,23 @@ class Main:
         """
         Manage the experiment loop.
         """
-        while self.MASTER_RUNNING:
-            print('here')
-            # make new directory for this log e.g. ../data/20240908_123456
-            if DATA_LOGGING:
-                self.master_path = f"{MAIN_PATH}/{time()}"
-                self.makenewdir(self.master_path)
-            else:
-                self.master_path = None
+        # while self.MASTER_RUNNING:
+        # make new directory for this log e.g. ../data/20240908_123456
+        if DATA_LOGGING:
+            self.master_path = f"{MAIN_PATH}/{time()}"
+            self.makenewdir(self.master_path)
+        else:
+            self.master_path = None
 
-            # Iterate loop
-            _go = input('To start press ENTER (y/N) ')
-            if _go.lower() == "y" or _go.lower() == "yes":
-                self.rami_main()
-                # Rami_Main(self.eda, self.master_path)
-            else:
-                if DATA_LOGGING:
-                    self.eda.close()
-                self.MASTER_RUNNING = False
+        # Iterate loop
+        _go = input('To start press ENTER (y/N) ')
+        if _go.lower() == "y" or _go.lower() == "yes":
+            self.rami_main()
+            # Rami_Main(self.eda, self.master_path)
+        else:
+            if DATA_LOGGING:
+                self.eda.close()
+            self.MASTER_RUNNING = False
 
     def rami_main(self):
         """

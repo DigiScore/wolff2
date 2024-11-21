@@ -7,6 +7,7 @@ from time import sleep
 
 from nebula.hivemind import DataBorg
 from modules.ai_robot_visualiser import AI_visualiser
+import config
 
 
 class AIRobotDataWriter:
@@ -22,6 +23,7 @@ class AIRobotDataWriter:
         self.makenewdir(self.ai_robot_images)
 
         self.hivemind = DataBorg()
+        self.samplerate = config.samplerate
 
         self.data_file = open(f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
@@ -61,6 +63,7 @@ class AIRobotDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
+        sleep(2)
         self.process_and_plot()
 
     def main_loop(self):
@@ -76,7 +79,7 @@ class AIRobotDataWriter:
         """
         while self.hivemind.running:
             self.json_update()
-            sleep(0.01)
+            sleep(self.samplerate)
         logging.info("quitting data writer thread")
         self.terminate_data_writer()
 

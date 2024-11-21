@@ -109,23 +109,23 @@ class Nebula(Listener, AIFactoryRAMI):
             # Read data from bitalino
             if self.BITALINO_CONNECTED:
                 # Get raw data from Bitalino
-                bitalino_raw = [self.eda.read(1)[0]]
-                print(bitalino_raw)
+                bitalino_raw = self.eda.read(1)[0]
+
                 # write out the Bitalino data to the log
-                self.hivemind.bitalino_x = bitalino_raw[0][5]
+                self.hivemind.bitalino_x = int(bitalino_raw[5])
 
-                self.hivemind.bitalino_y = bitalino_raw[0][6]
+                self.hivemind.bitalino_y = int(bitalino_raw[6])
 
-                self.hivemind.bitalino_z = bitalino_raw[0][7]
+                self.hivemind.bitalino_z = int(bitalino_raw[7])
 
-                self.hivemind.bitalino_eda = bitalino_raw[0][8]
+                self.hivemind.bitalino_eda = int(bitalino_raw[8])
 
-                self.hivemind.bitalino_heart = bitalino_raw[0][9]
+                self.hivemind.bitalino_heart = int(bitalino_raw[9])
 
-                self.hivemind.bitalino_breath = bitalino_raw[0][10]
+                self.hivemind.bitalino_breath = int(bitalino_raw[10])
 
                 # extract eda for processing
-                eda_raw = self.hivemind.bitalino_eda
+                eda_raw = [self.hivemind.bitalino_eda]  # [self.eda.read(1)[0][-1]]
 
                 logging.debug(f"eda data raw = {eda_raw}")
 
@@ -161,10 +161,10 @@ class Nebula(Listener, AIFactoryRAMI):
 
         self.hivemind.running = False
 
-    def terminate(self):
-        """
-        Terminate threads and connections like a grownup.
-        """
-        if self.BITALINO_CONNECTED:
-            self.eda.close()
+    # def terminate(self):
+    #     """
+    #     Terminate threads and connections like a grownup.
+    #     """
+    #     if self.BITALINO_CONNECTED:
+    #         self.eda.close()
 

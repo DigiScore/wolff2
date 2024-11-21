@@ -22,6 +22,7 @@ class BiodataDataWriter:
         self.makenewdir(self.bitalino_images)
 
         self.hivemind = DataBorg()
+        self.samplerate = config.samplerate
 
         self.data_file = open(f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json", "a")
         self.data_file.write("[")
@@ -34,7 +35,7 @@ class BiodataDataWriter:
 
     def json_update(self):
         """
-        Write a hiveming tic in the json file.
+        Write a hivemind tic in the json file.
         """
         json_dict = {
             "date": datetime.now().isoformat(),
@@ -44,7 +45,7 @@ class BiodataDataWriter:
             "eda": self.hivemind.bitalino_eda,
             "heart": self.hivemind.bitalino_heart,
             "breath": self.hivemind.bitalino_breath,
-            "button": self.hivemind.bitalino_button
+            # "button": self.hivemind.bitalino_button,
         }
         json_object = json.dumps(json_dict)
         self.data_file.write(json_object)
@@ -66,6 +67,7 @@ class BiodataDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
+        sleep(2)
         self.process_data()
 
     def main_loop(self):
@@ -83,7 +85,7 @@ class BiodataDataWriter:
         """
         while self.hivemind.running:
             self.json_update()
-            sleep(0.01)
+            sleep(self.samplerate)
         logging.info("quitting data writer thread")
         self.terminate_data_writer()
 

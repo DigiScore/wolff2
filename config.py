@@ -5,10 +5,11 @@ xarm_connected = True
 # [DATAWRITER]
 data_writer = True
 data_logging = True
-pupil_logging = True
+pupil_logging = False
 pupil_labs_addr = "tcp://127.0.0.1:50020"
 path = "data"
 figsize_xy = (100, 12)
+samplerate = 0.01
 
 # [PLAY PARAMS]
 silence_listener = False
@@ -33,7 +34,7 @@ mic_in_prediction = 0.36
 mic_in_logging = False
 
 # [BITALINO]
-baudrate = 10
+baudrate = 100
 channels = [0, 1, 2, 3, 4, 5]
 mac_address = "98:D3:B1:FD:3D:1F"  # "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 

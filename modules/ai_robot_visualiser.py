@@ -1,9 +1,12 @@
+import logging
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import config
+import json
 
 # example of data
-# {"date": "2024-06-19T09:23:53.715722", "master_stream": "mic_in", "mic_in": 0.19192041015625, "rnd_poetry": 0.4705154363470828, "flow2core": 0.4325794083715225, "core2flow": 0.6366659559974667, "audio2core": 0.15154093505951877, "audio2flow": 0.4944602665519162, "flow2audio": 2.256709656255868e-07, "eda2flow": 0.9999999793856779, "current_robot_x_y_z": {"x": 0, "y": 0, "z": 0, "design decision": " ", "interrupt": false}},
+# {"date": "2024-11-21T12:22:33.275471", "master_stream": " ", "mic_in": 4.482421875e-05, "rnd_poetry": 0.3010769531419044, "flow2core": 0.4151631397097578, "core2flow": 0.6335565511568154, "audio2core": 0.21971498619599966, "audio2flow": 0.6035721781171628, "flow2audio": 3.6552383224169296e-10, "eda2flow": 0.9998352258886954, "design decision": " ", "interrupt": false, "x": 0.423767, "y": 0.591036, "z": 0.28214708994709},
 
 class AI_visualiser:
 
@@ -13,15 +16,12 @@ class AI_visualiser:
         self.figsize_xy = config.figsize_xy
 
         # load the data from the file
-        df = pd.read_json(raw_file_path)
-
-        # get robot data
-        robot = pd.json_normalize(df["current_robot_x_y_z"])
+        df = pd.DataFrame(json.loads(open(raw_file_path).read()))
 
         # each row of x and y is a list; explode the values in the lists to separate rows
         df = df.explode(["date", "master_stream", "mic_in", "rnd_poetry", "flow2core", "core2flow",
                          "audio2core", "audio2flow", "flow2audio", "eda2flow",
-                         "design decision", "interrupt"], ignore_index=True)
+                         "design decision", "interrupt", "x", "y", "z"], ignore_index=True)
 
         # get date and time
         df["date"] = pd.to_datetime(df["date"])
@@ -65,9 +65,9 @@ class AI_visualiser:
         ax[4].set_title("Robot xyz")
         ax[4].set_ylabel("Amplitude")
         ax[4].set_xlabel("Time")
-        ax[4].plot(date, robot["x"], label="x")
-        ax[4].plot(date, robot["y"], label="y")
-        ax[4].plot(date, robot["z"], label="z")
+        ax[4].plot(date, df["x"], label="x")
+        ax[4].plot(date, df["y"], label="y")
+        ax[4].plot(date, df["z"], label="z")
         ax[4].legend(shadow=True, fancybox=True)
 
         # plot design decisions
@@ -80,4 +80,5 @@ class AI_visualiser:
         plt.savefig(self.ai_robot__images_path)
 
 if __name__ == "__main__":
-    test = AI_visualiser(path='../data/2024_11_05_1233.json')
+    test = AI_visualiser('../data/1732191750.3564394/ai_robot/AI_Robot_2024_11_21_1222.json',
+                         '../data/1732191750.3564394/ai_robot/images')

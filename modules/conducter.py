@@ -37,16 +37,16 @@ class Conducter:
 
         # Get the baseline temperature from config
         self.temperature = config.temperature
-
-        if self.drawbot:
-            # self.drawbot.home()
-            # self.drawbot.go_position_draw()
-
-            # input('To start press ENTER')
-            # print('Going to draw position...')
-            # input('Adjust pen height, then press ENTER')
-            # self.drawbot.go_position_one_two()
-            self.drawbot.go_position_ready()
+        #
+        # if self.drawbot:
+        #     # self.drawbot.home()
+        #     # self.drawbot.go_position_draw()
+        #
+        #     # input('To start press ENTER')
+        #     # print('Going to draw position...')
+        #     # input('Adjust pen height, then press ENTER')
+        #     # self.drawbot.go_position_one_two()
+        #     self.drawbot.go_position_ready()
 
     def main_loop(self):
         """
@@ -146,7 +146,7 @@ class Conducter:
                 logging.debug(f'end time = {rhythm_loop_end_time}')
 
                 # Speed for this phrase
-                arm_speed = randrange(30, 1000)
+                arm_speed = randrange(30, 600)
                 if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 

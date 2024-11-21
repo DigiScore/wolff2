@@ -82,7 +82,7 @@ class Nebula(Listener, AIFactoryRAMI):
             self.eda = eda
 
         # Work out master timing then collapse hivemind.running
-        self.endtime = None
+        self.endtime = 0
 
     def main_loop(self):
         """
@@ -109,20 +109,20 @@ class Nebula(Listener, AIFactoryRAMI):
             # Read data from bitalino
             if self.BITALINO_CONNECTED:
                 # Get raw data from Bitalino
-                bitalino_raw = [self.eda.read(1)]
-
+                bitalino_raw = [self.eda.read(1)[0]]
+                print(bitalino_raw)
                 # write out the Bitalino data to the log
-                self.hivemind.bitalino_x = bitalino_raw[0]
+                self.hivemind.bitalino_x = bitalino_raw[0][5]
 
-                self.hivemind.bitalino_y = bitalino_raw[1]
+                self.hivemind.bitalino_y = bitalino_raw[0][6]
 
-                self.hivemind.bitalino_z = bitalino_raw[2]
+                self.hivemind.bitalino_z = bitalino_raw[0][7]
 
-                self.hivemind.bitalino_eda = bitalino_raw[3]
+                self.hivemind.bitalino_eda = bitalino_raw[0][8]
 
-                self.hivemind.bitalino_heart = bitalino_raw[4]
+                self.hivemind.bitalino_heart = bitalino_raw[0][9]
 
-                self.hivemind.bitalino_breath = bitalino_raw[5]
+                self.hivemind.bitalino_breath = bitalino_raw[0][10]
 
                 # extract eda for processing
                 eda_raw = self.hivemind.bitalino_eda

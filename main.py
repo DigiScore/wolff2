@@ -50,7 +50,7 @@ class Main:
                 except OSError:
                     print("Unable to connect to Bitalino")
                     retry = input("Retry (y/N)? ")
-                    if retry.lower() != "y" and retry.lower() != "yes":
+                    if retry.lower() != "y" or retry.lower() != "yes":
                         eda_started = True
 
             self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
@@ -80,6 +80,7 @@ class Main:
         Manage the experiment loop.
         """
         while self.MASTER_RUNNING:
+            print('here')
             # make new directory for this log e.g. ../data/20240908_123456
             if DATA_LOGGING:
                 self.master_path = f"{MAIN_PATH}/{time()}"
@@ -88,14 +89,14 @@ class Main:
                 self.master_path = None
 
             # Iterate loop
-            _go = input('To start press ENTER (y/N)')
-            if _go.lower() != "y" and _go.lower() != "yes":
+            _go = input('To start press ENTER (y/N) ')
+            if _go.lower() == "y" or _go.lower() == "yes":
                 self.rami_main()
                 # Rami_Main(self.eda, self.master_path)
             else:
                 if DATA_LOGGING:
                     self.eda.close()
-                    self.MASTER_RUNNING = False
+                self.MASTER_RUNNING = False
 
     def rami_main(self):
         """

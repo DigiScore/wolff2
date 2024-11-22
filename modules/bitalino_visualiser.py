@@ -27,24 +27,13 @@ class BitalinoVisualiser:
 
         # each row of x and y is a list; explode the values in the lists to separate rows
         df = df.explode(["date", "x", "y", "z",
-                         "eda", "heart", "breath"], ignore_index=True)
+                         "eda", "ecg", "rsp"], ignore_index=True)
 
         # get date and time
         df["date"] = pd.to_datetime(df["date"])
         date = df["date"]
 
-        # Read OpenSignals file
-        # acq = OpenSignalsReader(self.raw_file_path)
-
-        # convert raw data into np arrays
-        # x = acq.raw(1)
-        # y = acq.raw(2)
-        # z = acq.raw(3)
-        # eda = acq.raw(4)
-        # ecg = acq.raw(5)
-        # rsp = acq.raw(6)
-
-        # make into df or numpy
+        # Read data file make into df or numpy
         eda = df["eda"].values
         ecg = df["ecg"].values
         rsp = df["rsp"].values
@@ -97,6 +86,6 @@ class BitalinoVisualiser:
 
 
 if __name__ == "__main__":
-    test = BitalinoVisualiser('../data/1732191750.3564394/bitalino/Bitalino_2024_11_21_1222.json',
-                              '../data/1732191750.3564394/bitalino/images')
+    test = BitalinoVisualiser('../data/1732268552.4228742/bitalino/Bitalino_2024_11_22_0942.json',
+                              '../data/1732268552.4228742/bitalino/images')
     # test.main()

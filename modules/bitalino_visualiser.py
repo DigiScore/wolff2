@@ -27,8 +27,6 @@ class BitalinoVisualiser:
         self.sampling_rate = 100
         self.figsize_xy = config.figsize_xy
 
-    # def main(self):
-
         # load the data from the file
         df = pd.DataFrame(json.loads(open(raw_file_path).read()))
 
@@ -45,9 +43,9 @@ class BitalinoVisualiser:
         ecg = df["ecg"].values
         rsp = df["rsp"].values
 
-        x = df["x"]
-        y = df["y"]
-        z = df["z"]
+        x = pd.DataFrame(df["x"])
+        y = pd.DataFrame(df["y"])
+        z = pd.DataFrame(df["z"])
 
         # smoothing data
         xs = x.rolling(self.xyz_smoothing_window).sum()
@@ -59,15 +57,15 @@ class BitalinoVisualiser:
 
         eda_signals, eda_info = nk.eda_process(eda, sampling_rate=self.sampling_rate)
         nk.eda_plot(eda_signals, eda_info)
+        plt.savefig(f"{self.figures_path}/eda")
 
         ecg_signals, ecg_info = nk.ecg_process(ecg, sampling_rate=self.sampling_rate)
         self.rami_ecg_plot(ecg_signals, ecg_info)
+        plt.savefig(f"{self.figures_path}/ecg")
 
         rsp_signals, rsp_info = nk.rsp_process(rsp, sampling_rate=self.sampling_rate)
         nk.rsp_plot(rsp_signals, rsp_info)
-
-        plt.show()
-        plt.savefig(self.figures_path)
+        plt.savefig(f"{self.figures_path}/rsp")
 
         ##########################
         # Robot movement
@@ -88,8 +86,8 @@ class BitalinoVisualiser:
         ax.plot(date, zss, label="z")
         ax.legend(shadow=True, fancybox=True)
 
-        plt.show()
-        plt.savefig(self.figures_path)
+        # plt.show()
+        plt.savefig(f"{self.figures_path}/xyz")
 
     def rami_ecg_plot(self, ecg_signals, info=None):
         """**Visualize ECG data**
@@ -198,4 +196,3 @@ class BitalinoVisualiser:
 if __name__ == "__main__":
     test = BitalinoVisualiser('../data/1732268552.4228742/bitalino/Bitalino_2024_11_22_0942.json',
                               '../data/1732268552.4228742/bitalino/images')
-    # test.main()

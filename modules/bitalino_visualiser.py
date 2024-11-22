@@ -194,5 +194,5 @@ class BitalinoVisualiser:
         )
 
 if __name__ == "__main__":
-    test = BitalinoVisualiser('../data/1732268552.4228742/bitalino/Bitalino_2024_11_22_0942.json',
-                              '../data/1732268552.4228742/bitalino/images')
+    test = BitalinoVisualiser('../data/1732271846.9152355/bitalino/Bitalino_2024_11_22_1037.json',
+                              '../data/1732271846.9152355/bitalino/images')

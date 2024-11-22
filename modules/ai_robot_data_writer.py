@@ -64,7 +64,7 @@ class AIRobotDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(1)
+        sleep(3)
         self.process_and_plot()
 
     def main_loop(self):

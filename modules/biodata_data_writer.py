@@ -68,7 +68,7 @@ class BiodataDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(1)
+        sleep(3)
         # todo this has not been checked
         self.process_data()
 

@@ -76,8 +76,7 @@ class AI_visualiser:
         ax[5].set_xlabel("Time")
         ax[5].plot(date, df["interrupt"])
 
-        plt.show()
-        plt.savefig(self.ai_robot__images_path)
+        plt.savefig(f"{self.ai_robot__images_path}/ai_plot")
 
 if __name__ == "__main__":
     test = AI_visualiser('../data/1732191750.3564394/ai_robot/AI_Robot_2024_11_21_1222.json',

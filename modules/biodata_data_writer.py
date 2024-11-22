@@ -24,7 +24,8 @@ class BiodataDataWriter:
         self.hivemind = DataBorg()
         self.samplerate = config.samplerate
 
-        self.data_file = open(f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json", "a")
+        self.data_file_path = f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json"
+        self.data_file = open(self.data_file_path, "a")
         self.data_file.write("[")
 
         ###################
@@ -67,7 +68,7 @@ class BiodataDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(2)
+        sleep(1)
         # todo this has not been checked
         self.process_data()
 
@@ -91,8 +92,7 @@ class BiodataDataWriter:
         self.terminate_data_writer()
 
     def process_data(self):
-        visualiser = BitalinoVisualiser(self.data_file, self.bitalino_images)
-        visualiser.main()
+        visualiser = BitalinoVisualiser(self.data_file_path, self.bitalino_images)
 
     def makenewdir(self, path):
         try:

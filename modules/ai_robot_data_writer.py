@@ -25,7 +25,8 @@ class AIRobotDataWriter:
         self.hivemind = DataBorg()
         self.samplerate = config.samplerate
 
-        self.data_file = open(f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json", "a")
+        self.data_file_path = f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json"
+        self.data_file = open(self.data_file_path, "a")
         self.data_file.write("[")
 
 
@@ -63,7 +64,7 @@ class AIRobotDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(2)
+        sleep(1)
         self.process_and_plot()
 
     def main_loop(self):
@@ -84,7 +85,7 @@ class AIRobotDataWriter:
         self.terminate_data_writer()
 
     def process_and_plot(self):
-        AI_visualiser(raw_file_path=self.data_file,
+        AI_visualiser(raw_file_path=self.data_file_path,
                       ai_robot__images_path=self.ai_robot_images)
 
     def makenewdir(self, path):

@@ -202,7 +202,7 @@ class Conducter:
                     sleep(0.1)
 
         logging.info('quitting director thread')
-        self.terminate()
+        # self.terminate()
 
 
     def design_move(self, thought_train):

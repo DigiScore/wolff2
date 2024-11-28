@@ -110,7 +110,7 @@ class Listener:
                     if time() >= silence_timer:
                         self.hivemind.running = False
         logging.info('quitting listener thread')
-        self.terminate_listener()
+        # self.terminate_listener()
 
     def terminate_listener(self):
         wavfile.write(f'data/{self.hivemind.session_date}.wav', self.RATE,

@@ -124,6 +124,9 @@ class DataBorg:
             """Signals an interrupt to the gesture manager"""
 
             self.running: bool = False
+            """Local running bool for single experiments"""
+
+            self.MASTER_RUNNING: bool = False
             """Master running bool for whole script"""
 
         else:

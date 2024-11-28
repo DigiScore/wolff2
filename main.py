@@ -72,14 +72,14 @@ class Main:
         self.robot = Conducter()
 
         # Set experiment loop flag
-        self.MASTER_RUNNING = True
+        self.hivemind.MASTER_RUNNING = True
 
 
     def main_loop(self):
         """
         Manage the experiment loop.
         """
-        while self.MASTER_RUNNING:
+        while self.hivemind.MASTER_RUNNING:
             # make new directory for this log e.g. ../data/20240908_123456
             if DATA_LOGGING:
                 self.master_path = f"{MAIN_PATH}/{time()}"
@@ -92,13 +92,21 @@ class Main:
             if _go.lower() == "n":  # or _go.lower() == "yes":
                 if DATA_LOGGING:
                     self.eda.close()
-                self.MASTER_RUNNING = False
+                self.hivemind.MASTER_RUNNING = False
+                self.terminate_all()
             else:
                 self.rami_main()
                 # Rami_Main(self.eda, self.master_path)
 
             while self.hivemind.running:
                 sleep(1)
+
+    def terminate_all(self):
+        """
+        Terminates all active agents and threads
+        """
+        self.robot.terminate()
+        self.nebula.terminate_listener()
 
     def rami_main(self):
         """
@@ -118,7 +126,7 @@ class Main:
         # Start Nebula AI Factory after conducter starts data moving
         self.nebula.endtime = time() + config.duration_of_piece
         self.hivemind.running = True
-        self.robot = Conducter()
+        # self.robot = Conducter()
         self.robot.main_loop()
         self.nebula.main_loop()
 

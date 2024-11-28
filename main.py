@@ -80,26 +80,27 @@ class Main:
         Manage the experiment loop.
         """
         while self.hivemind.MASTER_RUNNING:
-            # make new directory for this log e.g. ../data/20240908_123456
-            if DATA_LOGGING:
-                self.master_path = f"{MAIN_PATH}/{time()}"
-                self.makenewdir(self.master_path)
-            else:
-                self.master_path = None
-
-            # Iterate loop
-            _go = input("To start press ENTER or 'n' to stop press ENTER: ")
-            if _go.lower() == "n":  # or _go.lower() == "yes":
+            for experiment_mode in config.experiment_modes:
+                # make new directory for this log e.g. ../data/20240908_123456
                 if DATA_LOGGING:
-                    self.eda.close()
-                self.hivemind.MASTER_RUNNING = False
-                self.terminate_all()
-            else:
-                self.rami_main()
-                # Rami_Main(self.eda, self.master_path)
+                    self.master_path = f"{MAIN_PATH}/{time()}_mode_{experiment_mode}"
+                    self.makenewdir(self.master_path)
+                else:
+                    self.master_path = None
 
-            while self.hivemind.running:
-                sleep(1)
+                # Iterate loop
+                _go = input("To start press ENTER or 'n' to stop press ENTER: ")
+                if _go.lower() == "n":  # or _go.lower() == "yes":
+                    if DATA_LOGGING:
+                        self.eda.close()
+                    self.hivemind.MASTER_RUNNING = False
+                    self.terminate_all()
+                else:
+                    self.rami_main(experiment_mode)
+                    # Rami_Main(self.eda, self.master_path)
+
+                while self.hivemind.running:
+                    sleep(1)
 
     def terminate_all(self):
         """
@@ -108,7 +109,7 @@ class Main:
         self.robot.terminate()
         self.nebula.terminate_listener()
 
-    def rami_main(self):
+    def rami_main(self, experiment_mode):
         """
         Main script to start a single robot arm digital score work.
         Conducter calls the local interpreter for project specific functions. This
@@ -127,7 +128,7 @@ class Main:
         self.nebula.endtime = time() + config.duration_of_piece
         self.hivemind.running = True
         # self.robot = Conducter()
-        self.robot.main_loop()
+        self.robot.main_loop(experiment_mode)
         self.nebula.main_loop()
 
         if config.data_writer:

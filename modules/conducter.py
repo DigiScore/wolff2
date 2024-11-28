@@ -48,11 +48,11 @@ class Conducter:
         #     # self.drawbot.go_position_one_two()
         #     self.drawbot.go_position_ready()
 
-    def main_loop(self):
+    def main_loop(self, experiment_mode):
         """
         Starts the main thread for the gesture manager
         """
-        gesture_thread = Thread(target=self.gesture_manager)
+        gesture_thread = Thread(target=self.gesture_manager, args=[experiment_mode,])
         gesture_thread.start()
 
         if self.drawbot:
@@ -60,7 +60,7 @@ class Conducter:
             position_thread.start()
             self.drawbot.command_list_main_loop()
 
-    def gesture_manager(self):
+    def gesture_manager(self, experiment_mode):
         """
         Listens to the realtime incoming signal and calculates an affectual
         response based on general boundaries:
@@ -105,22 +105,21 @@ class Conducter:
             # (either mic_in or stream in config.stream_list)
             ###################################################################
 
+            if experiment_mode == 0:
+                # # A Normal Mode
+                if random() < self.mic_in_prediction:
+                    rnd_stream = 'mic_in'
+                else:
+                    rnd = randrange(stream_list_len)
+                    rnd_stream = stream_list[rnd]
+            elif experiment_mode == 1:
+                # B Random poetry
+                rnd_stream = 'rnd_poetry'
 
-
-            # # A Normal Mode
-            if random() < self.mic_in_prediction:
+            elif experiment_mode == 2:
+                # C Normal NO Human (TURN MIC DOWN)b
+                # D Human only input
                 rnd_stream = 'mic_in'
-            else:
-                rnd = randrange(stream_list_len)
-                rnd_stream = stream_list[rnd]
-
-            # # B Random poetry
-            # rnd_stream = 'rnd_poetry'
-            # #
-            # # C Normal NO Human (TURN MIC DOWN)b
-            #
-            # # D Human only input
-            # rnd_stream = 'mic_in'
 
 
 

@@ -97,6 +97,9 @@ class Main:
                 self.rami_main()
                 # Rami_Main(self.eda, self.master_path)
 
+            while self.hivemind.running:
+                sleep(1)
+
     def rami_main(self):
         """
         Main script to start a single robot arm digital score work.
@@ -115,6 +118,7 @@ class Main:
         # Start Nebula AI Factory after conducter starts data moving
         self.nebula.endtime = time() + config.duration_of_piece
         self.hivemind.running = True
+        self.robot = Conducter()
         self.robot.main_loop()
         self.nebula.main_loop()
 

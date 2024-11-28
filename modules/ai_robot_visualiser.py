@@ -10,9 +10,9 @@ import json
 
 class AI_visualiser:
 
-    def __init__(self, raw_file_path, ai_robot__images_path):
+    def __init__(self, raw_file_path, ai_robot_images_path):
         # variables
-        self.ai_robot__images_path = ai_robot__images_path
+        self.ai_robot_images_path = ai_robot_images_path
         self.figsize_xy = config.figsize_xy
 
         # load the data from the file
@@ -76,7 +76,7 @@ class AI_visualiser:
         ax[5].set_xlabel("Time")
         ax[5].plot(date, df["interrupt"])
 
-        plt.savefig(f"{self.ai_robot__images_path}/ai_plot")
+        plt.savefig(f"{self.ai_robot_images_path}/ai_plot")
 
 if __name__ == "__main__":
     test = AI_visualiser('../data/1732271846.9152355/ai_robot/AI_Robot_2024_11_22_1037.json',

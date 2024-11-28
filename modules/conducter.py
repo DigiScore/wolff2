@@ -60,7 +60,7 @@ class Conducter:
             position_thread.start()
             self.drawbot.command_list_main_loop()
 
-    def gesture_manager(self, experiment_mode):
+    def gesture_manager(self, experiment_mode=0):
         """
         Listens to the realtime incoming signal and calculates an affectual
         response based on general boundaries:
@@ -106,22 +106,25 @@ class Conducter:
             ###################################################################
 
             if experiment_mode == 0:
-                # # A Normal Mode
+                """
+                A Normal Mode
+                """
                 if random() < self.mic_in_prediction:
                     rnd_stream = 'mic_in'
                 else:
                     rnd = randrange(stream_list_len)
                     rnd_stream = stream_list[rnd]
             elif experiment_mode == 1:
-                # B Random poetry
+                """
+                B Random poetry
+                """
                 rnd_stream = 'rnd_poetry'
 
             elif experiment_mode == 2:
-                # C Normal NO Human (TURN MIC DOWN)b
-                # D Human only input
+                """
+                C Human only input
+                """
                 rnd_stream = 'mic_in'
-
-
 
             self.hivemind.thought_train_stream = rnd_stream
             print(f"Random stream = {self.hivemind.thought_train_stream}")

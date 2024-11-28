@@ -64,7 +64,7 @@ class AIRobotDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(3)
+        sleep(1)
         self.process_and_plot()
 
     def main_loop(self):
@@ -86,7 +86,7 @@ class AIRobotDataWriter:
 
     def process_and_plot(self):
         AI_visualiser(raw_file_path=self.data_file_path,
-                      ai_robot__images_path=self.ai_robot_images)
+                      ai_robot_images_path=self.ai_robot_images)
 
     def makenewdir(self, path):
         try:

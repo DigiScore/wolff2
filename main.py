@@ -10,6 +10,7 @@ from modules.biodata_data_writer import BiodataDataWriter
 from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
 # from modules.rami_main import Rami_Main
+from clock import Clock
 
 DATA_LOGGING = config.data_logging
 MAIN_PATH = config.path
@@ -74,6 +75,9 @@ class Main:
         # Set experiment loop flag
         self.hivemind.MASTER_RUNNING = True
 
+        self.ui = Clock()
+        self.ui.mainloop()
+
 
     def main_loop(self):
         """
@@ -81,31 +85,60 @@ class Main:
         """
         while self.hivemind.MASTER_RUNNING:
             for experiment_mode in config.experiment_modes:
-                # make new directory for this log e.g. ../data/20240908_123456
-                if DATA_LOGGING:
-                    self.master_path = f"{MAIN_PATH}/{time()}_mode_{experiment_mode}"
-                    self.makenewdir(self.master_path)
-                else:
-                    self.master_path = None
 
-                # Iterate loop
-                _go = input("To start press ENTER or 'n' to stop press ENTER: ")
-                if _go.lower() == "n":  # or _go.lower() == "yes":
+                # is this first time through with a new experiment
+                if self.ui.go_flag:
+                    # make new directory for this log e.g. ../data/20240908_123456
                     if DATA_LOGGING:
-                        self.eda.close()
-                    self.hivemind.MASTER_RUNNING = False
-                    self.terminate_all()
-                else:
-                    self.rami_main(experiment_mode)
-                    # Rami_Main(self.eda, self.master_path)
+                        self.master_path = f"{MAIN_PATH}/{time()}_mode_{experiment_mode}"
+                        self.makenewdir(self.master_path)
+                    else:
+                        self.master_path = None
 
-                while self.hivemind.running:
-                    sleep(1)
+                    # run all systems
+                    self.rami_main(experiment_mode)
+
+                    # turn go flag off
+                    self.ui.go_flag = False
+
+                if self.hivemind.running:
+                    self.ui.end_flag = False
+
+                # update the clock
+                self.ui.make_clock()
+                sleep(0.1)
+
+            # end of experiments so close things down
+            self.hivemind.MASTER_RUNNING = False
+            self.hivemind.running = False
+
+        # close everything like a grown up
+        self.terminate_all()
+
+
+
+
+
+                # # Iterate loop
+                # _go = input("To start press ENTER or 'n' to stop press ENTER: ")
+                # if _go.lower() == "n":  # or _go.lower() == "yes":
+                #     if DATA_LOGGING:
+                #         self.eda.close()
+                #     self.hivemind.MASTER_RUNNING = False
+                #
+                # else:
+                #
+                #     # Rami_Main(self.eda, self.master_path)
+                #
+                # while self.hivemind.running:
+                #     sleep(1)
 
     def terminate_all(self):
         """
         Terminates all active agents and threads
         """
+        if DATA_LOGGING:
+            self.eda.close()
         self.robot.terminate()
         self.nebula.terminate_listener()
 

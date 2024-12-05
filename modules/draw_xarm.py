@@ -116,9 +116,10 @@ class Drawbot(XArmAPI):
         """
         logging.debug(f'NUMBER OF CMD IN CACHE: {self.cmd_num}')
         logging.debug(f"ITEM: {item}, STATE: {self.get_state()}")
-        self.clear_alarms()
+        error_code = item['error_code']
+        self.clear_alarms(error_code)
         # If Safety Boundary Limit or Speed Exceeds Limit
-        if item['error_code'] == 35 or item['error_code'] == 24:
+        if error_code == 35 or error_code == 24:
             self.go_random_3d()
 
     def command_list_main_loop(self):
@@ -213,7 +214,7 @@ class Drawbot(XArmAPI):
     #     logging.debug(f'Rnd result = {result}')
     #     return result
 
-    def clear_alarms(self) -> None:
+    def clear_alarms(self, error_code) -> None:
         """
         Clear the alarms logs and warnings.
         """
@@ -222,7 +223,13 @@ class Drawbot(XArmAPI):
         if self.has_error:
             self.set_state(state=4)
             self.clean_error()
-            self.motion_enable(enable=True)
+            self.set_state(state=0)
+            self.set_state(state=7)
+            self.go_random_3d()
+        if 11 <= error_code <= 17:
+            servo = error_code - 10
+            self.arm.clean_servo_error(servo_id=servo)
+            self.clean_error()
             self.set_state(state=0)
             self.set_state(state=7)
             self.go_random_3d()

@@ -6,12 +6,12 @@ experiment_modes = [0, 1, 2]
 
 
 # [HARDWARE]
-xarm_connected = True
+xarm_connected = False
 # eda_live = False
 
 # [DATAWRITER]
-data_writer = True
-data_logging = True
+data_writer = False
+data_logging = False
 pupil_logging = False
 pupil_labs_addr = "tcp://127.0.0.1:50020"
 path = "data"

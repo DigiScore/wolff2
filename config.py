@@ -1,8 +1,9 @@
 # [EXPERIMENT MODES]
-experiment_modes = [0, 1, 2]
+experiment_modes = [0, 1, 2, 3]
 # 0 = normal mode
 # 1 = random poetry only. No AI. No human interaction
 # 2 = human input only
+# 3 = scripted list
 
 
 # [HARDWARE]
@@ -12,8 +13,8 @@ xarm_connected = False
 # [DATAWRITER]
 data_writer = False
 data_logging = False
-pupil_logging = False
-pupil_labs_addr = "tcp://127.0.0.1:50020"
+# pupil_logging = False
+# pupil_labs_addr = "tcp://127.0.0.1:50020"
 path = "data"
 figsize_xy = (100, 12)
 samplerate = 0.01
@@ -42,7 +43,7 @@ mic_in_logging = False
 
 # [BITALINO]
 baudrate = 100
-channels = [0, 1, 2, 3, 4, 5]
+channels = [0, 1, 2, 3]  # , 4, 5]
 mac_address = "98:D3:B1:FD:3D:1F"  #"00:21:08:35:16:D4"    # "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 
 # [STREAMING]

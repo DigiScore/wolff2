@@ -2,6 +2,7 @@ import logging
 from time import time, sleep
 import os
 import art
+from random import shuffle
 
 import config
 from modules.conducter import Conducter
@@ -64,7 +65,7 @@ class Main:
         ###################
         # Start Nebula AI
         ###################
-        art.tprint("RAMI")
+        art.tprint("Wolff1")
 
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
@@ -84,7 +85,11 @@ class Main:
         Manage the experiment loop.
         """
         while self.hivemind.MASTER_RUNNING:
-            for experiment_mode in config.experiment_modes:
+            random_experiment_list = config.experiment_modes
+            shuffle(random_experiment_list)
+            print("Shuffling experimental modes: ", random_experiment_list)
+
+            for experiment_mode in random_experiment_list:
 
                 # is this first time through with a new experiment
                 if self.ui.go_flag:
@@ -96,7 +101,7 @@ class Main:
                         self.master_path = None
 
                     # run all systems
-                    self.rami_main(experiment_mode)
+                    self.wolff1_main(experiment_mode)
 
                     # turn go flag off
                     self.ui.go_flag = False
@@ -115,24 +120,6 @@ class Main:
         # close everything like a grown up
         self.terminate_all()
 
-
-
-
-
-                # # Iterate loop
-                # _go = input("To start press ENTER or 'n' to stop press ENTER: ")
-                # if _go.lower() == "n":  # or _go.lower() == "yes":
-                #     if DATA_LOGGING:
-                #         self.eda.close()
-                #     self.hivemind.MASTER_RUNNING = False
-                #
-                # else:
-                #
-                #     # Rami_Main(self.eda, self.master_path)
-                #
-                # while self.hivemind.running:
-                #     sleep(1)
-
     def terminate_all(self):
         """
         Terminates all active agents and threads
@@ -142,7 +129,7 @@ class Main:
         self.robot.terminate()
         self.nebula.terminate_listener()
 
-    def rami_main(self, experiment_mode):
+    def wolff1_main(self, experiment_mode):
         """
         Main script to start a single robot arm digital score work.
         Conducter calls the local interpreter for project specific functions. This

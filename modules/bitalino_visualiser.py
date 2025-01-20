@@ -32,7 +32,7 @@ class BitalinoVisualiser:
 
         # each row of x and y is a list; explode the values in the lists to separate rows
         df = df.explode(["date", "x", "y", "z",
-                         "eda", "ecg", "rsp"], ignore_index=True)
+                         "eda"], ignore_index=True)
 
         # get date and time
         df["date"] = pd.to_datetime(df["date"])
@@ -40,8 +40,8 @@ class BitalinoVisualiser:
 
         # Read data file make into df or numpy
         eda = df["eda"].values
-        ecg = df["ecg"].values
-        rsp = df["rsp"].values
+        # ecg = df["ecg"].values
+        # rsp = df["rsp"].values
 
         x = pd.DataFrame(df["x"])
         y = pd.DataFrame(df["y"])
@@ -59,13 +59,13 @@ class BitalinoVisualiser:
         nk.eda_plot(eda_signals, eda_info)
         plt.savefig(f"{self.figures_path}/eda")
 
-        ecg_signals, ecg_info = nk.ecg_process(ecg, sampling_rate=self.sampling_rate)
-        self.rami_ecg_plot(ecg_signals, ecg_info)
-        plt.savefig(f"{self.figures_path}/ecg")
-
-        rsp_signals, rsp_info = nk.rsp_process(rsp, sampling_rate=self.sampling_rate)
-        nk.rsp_plot(rsp_signals, rsp_info)
-        plt.savefig(f"{self.figures_path}/rsp")
+        # ecg_signals, ecg_info = nk.ecg_process(ecg, sampling_rate=self.sampling_rate)
+        # self.rami_ecg_plot(ecg_signals, ecg_info)
+        # plt.savefig(f"{self.figures_path}/ecg")
+        #
+        # rsp_signals, rsp_info = nk.rsp_process(rsp, sampling_rate=self.sampling_rate)
+        # nk.rsp_plot(rsp_signals, rsp_info)
+        # plt.savefig(f"{self.figures_path}/rsp")
 
         ##########################
         # Robot movement

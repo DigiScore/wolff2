@@ -31,8 +31,8 @@ class BiodataDataWriter:
         ###################
         # init pupil labs
         ###################
-        if config.pupil_logging:
-            self.pupil_labs = PupilLabs(master_path)
+        # if config.pupil_logging:
+        #     self.pupil_labs = PupilLabs(master_path)
 
     def json_update(self):
         """
@@ -44,8 +44,8 @@ class BiodataDataWriter:
             "y": self.hivemind.bitalino_y,
             "z": self.hivemind.bitalino_z,
             "eda": self.hivemind.bitalino_eda,
-            "ecg": self.hivemind.bitalino_ecg,
-            "rsp": self.hivemind.bitalino_rsp,
+            # "ecg": self.hivemind.bitalino_ecg,
+            # "rsp": self.hivemind.bitalino_rsp,
             # "button": self.hivemind.bitalino_button,
         }
         json_object = json.dumps(json_dict)
@@ -60,8 +60,8 @@ class BiodataDataWriter:
         # init pupil labs
         ###################
         # close pupil labs
-        if config.pupil_logging:
-            self.pupil_labs.stop_record()
+        # if config.pupil_logging:
+        #     self.pupil_labs.stop_record()
 
         # close bitalino
         self.data_file.seek(self.data_file.tell() - 3, os.SEEK_SET)
@@ -75,8 +75,8 @@ class BiodataDataWriter:
         """
         Start the main thread for the writing manager.
         """
-        if config.pupil_logging:
-            self.pupil_labs.start_record()
+        # if config.pupil_logging:
+        #     self.pupil_labs.start_record()
         writer_thread = Thread(target=self.writing_manager)
         writer_thread.start()
 

@@ -219,7 +219,7 @@ class Conducter:
 
         # make a random choice (for now)
         # todo - maybe map these across the range of input thought-trains
-        randchoice = randrange(13)
+        randchoice = randrange(12)
         logging.debug(f'Random choice: {randchoice}')
 
         match randchoice:
@@ -284,12 +284,12 @@ class Conducter:
                 decision_type = 'return to coord'
                 self.drawbot.return_to_coord()
 
-            case 11:
-                decision_type = 'random shape group'
-                self.drawbot.create_shape_group()
-                # self.drawbot.repeat_shape_group()
+            # case 11:
+            #     decision_type = 'random shape group'
+            #     self.drawbot.create_shape_group()
+            #     # self.drawbot.repeat_shape_group()
 
-            case 12:
+            case 11:
                 decision_type = 'random pen move'
                 self.drawbot.random_pen()
 

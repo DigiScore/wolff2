@@ -131,6 +131,7 @@ class AIFactoryRAMI:
         Makes a prediction for each NNet in the AI factory while hivemind is
         running.
         """
+        print("Started making data for Nebula")
         while self.hivemind.running:
             for net in self.netlist:
                 in_val = self.get_seed(net)

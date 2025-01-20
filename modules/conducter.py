@@ -42,7 +42,7 @@ class Conducter:
         #     # self.drawbot.home()
         #     # self.drawbot.go_position_draw()
         #
-        #     # input('To start press ENTER')
+        input('To start press ENTER')
         #     # print('Going to draw position...')
         #     # input('Adjust pen height, then press ENTER')
         #     # self.drawbot.go_position_one_two()
@@ -74,6 +74,8 @@ class Conducter:
         if self.drawbot:
             print("Started robot control thread")
             self.drawbot.go_position_draw()
+        else:
+            print("Started robot control thread - no robot")
 
         # Names for affect listening
         stream_list = config.stream_list
@@ -223,10 +225,7 @@ class Conducter:
         Follows a pre-defined scripted. Bypasses all gen funcs
         """
         pass
-        self.drawbot.arc()
-        self.drawbot.bot_move_to()
 
-        self.hivemind.running = False
 
     def design_move(self, thought_train):
         """

@@ -11,7 +11,7 @@ from modules.biodata_data_writer import BiodataDataWriter
 from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
 # from modules.rami_main import Rami_Main
-from clock import Clock
+# from clock import Clock
 
 DATA_LOGGING = config.data_logging
 MAIN_PATH = config.path
@@ -26,7 +26,7 @@ class Main:
     """
     def __init__(self):
         # Logging for all modules
-        logging.basicConfig(level=logging.WARNING)
+        logging.basicConfig(level=logging.INFO)
 
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()
@@ -65,9 +65,9 @@ class Main:
         ###################
         # Start Nebula AI
         ###################
-        art.tprint("Wolff1")
+        art.tprint("Wolff 1")
 
-        answer = input("Start clock?")
+        answer = input("Click enter when you started the clock?")
 
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
@@ -75,11 +75,8 @@ class Main:
         # Init Conducter & Gesture management (controls XArm)
         self.robot = Conducter()
 
-        # Set experiment loop flag
+        # Set master experiment loop flag
         self.hivemind.MASTER_RUNNING = True
-
-        # self.ui = Clock()
-        # self.ui.mainloop()
 
 
     def main_loop(self):
@@ -92,6 +89,7 @@ class Main:
         print("Shuffling experimental modes: ", random_experiment_list)
 
         for experiment_mode in random_experiment_list:
+            self.first_time_through = True
             while self.hivemind.MASTER_RUNNING:
                 # is this first time through with a new experiment
                 # if self.ui.go_flag:
@@ -103,19 +101,11 @@ class Main:
                     self.master_path = None
 
                 # run all systems
-                if self.hivemind.running:
+                if self.first_time_through:
                     self.wolff1_main(experiment_mode)
+                    self.first_time_through = False
 
                 else:
-
-                    # turn go flag off
-                    # self.ui.go_flag = False
-
-                    # if self.hivemind.running:
-                    #     self.ui.end_flag = False
-
-                    # update the clock
-                    # self.ui.make_clock()
                     sleep(1)
             answer = input("Next Experiment?")
 

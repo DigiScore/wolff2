@@ -26,7 +26,7 @@ class Main:
     """
     def __init__(self):
         # Logging for all modules
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.WARNING)
 
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()
@@ -67,6 +67,8 @@ class Main:
         ###################
         art.tprint("Wolff1")
 
+        answer = input("Start clock?")
+
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
 
@@ -76,46 +78,50 @@ class Main:
         # Set experiment loop flag
         self.hivemind.MASTER_RUNNING = True
 
-        self.ui = Clock()
-        self.ui.mainloop()
+        # self.ui = Clock()
+        # self.ui.mainloop()
 
 
     def main_loop(self):
         """
         Manage the experiment loop.
         """
-        while self.hivemind.MASTER_RUNNING:
-            random_experiment_list = config.experiment_modes
-            shuffle(random_experiment_list)
-            print("Shuffling experimental modes: ", random_experiment_list)
+        # while self.hivemind.MASTER_RUNNING:
+        random_experiment_list = config.experiment_modes
+        shuffle(random_experiment_list)
+        print("Shuffling experimental modes: ", random_experiment_list)
 
-            for experiment_mode in random_experiment_list:
-
+        for experiment_mode in random_experiment_list:
+            while self.hivemind.MASTER_RUNNING:
                 # is this first time through with a new experiment
-                if self.ui.go_flag:
-                    # make new directory for this log e.g. ../data/20240908_123456
-                    if DATA_LOGGING:
-                        self.master_path = f"{MAIN_PATH}/{time()}_mode_{experiment_mode}"
-                        self.makenewdir(self.master_path)
-                    else:
-                        self.master_path = None
+                # if self.ui.go_flag:
+                # make new directory for this log e.g. ../data/20240908_123456
+                if DATA_LOGGING:
+                    self.master_path = f"{MAIN_PATH}/{time()}_mode_{experiment_mode}"
+                    self.makenewdir(self.master_path)
+                else:
+                    self.master_path = None
 
-                    # run all systems
+                # run all systems
+                if self.hivemind.running:
                     self.wolff1_main(experiment_mode)
 
+                else:
+
                     # turn go flag off
-                    self.ui.go_flag = False
+                    # self.ui.go_flag = False
 
-                if self.hivemind.running:
-                    self.ui.end_flag = False
+                    # if self.hivemind.running:
+                    #     self.ui.end_flag = False
 
-                # update the clock
-                self.ui.make_clock()
-                sleep(0.1)
+                    # update the clock
+                    # self.ui.make_clock()
+                    sleep(1)
+            answer = input("Next Experiment?")
 
-            # end of experiments so close things down
-            self.hivemind.MASTER_RUNNING = False
-            self.hivemind.running = False
+        # end of experiments so close things down
+        self.hivemind.MASTER_RUNNING = False
+        self.hivemind.running = False
 
         # close everything like a grown up
         self.terminate_all()

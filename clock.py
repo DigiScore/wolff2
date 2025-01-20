@@ -28,9 +28,9 @@ class Clock:
 		self.window_closed = False
 
 		# bind key events
-		self.root.bind("<Key>", self.key_handler)
-		self.go_flag = False
-		self.end_flag = True
+		# self.root.bind("<Key>", self.key_handler)
+		# self.go_flag = False
+		# self.end_flag = True
 
 	def on_close(self):
 		"""
@@ -43,24 +43,24 @@ class Clock:
 		clock_thread.start()
 		self.root.mainloop()
 
-	def key_handler(self, event):
-		print(event.char, event.keysym, event.keycode)
-		if event.char == "y":
-			self.go_flag = True
-			self.end_flag = False
-		elif event.char == "n":
-			self.hivemind.MASTER_RUNNING = False
+	# def key_handler(self, event):
+	# 	print(event.char, event.keysym, event.keycode)
+	# 	if event.char == "y":
+	# 		self.go_flag = True
+	# 		self.end_flag = False
+	# 	elif event.char == "n":
+	# 		self.hivemind.MASTER_RUNNING = False
 
 	def make_clock(self):
 		"""
 		Loop to update the window content at 10 Hz.
 		"""
 		# while self.hivemind.MASTER_RUNNING:
-		if self.end_flag:
-			string = "READY FOR NEXT EXPERIMENT? (y/n)"
-		else:
-			# string = strftime('%H:%M:%S')
-			string = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+		# if self.end_flag:
+		# 	string = "READY FOR NEXT EXPERIMENT? (y/n)"
+		# else:
+		# 	# string = strftime('%H:%M:%S')
+		string = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 
 		self.lbl.config(text=string)
 		# self.lbl.after(10, self.time)

@@ -71,7 +71,7 @@ class Nebula(Listener, AIFactoryRAMI):
         Listener.__init__(self)
 
         # Set global vars
-        self.hivemind.running = True
+        # self.hivemind.running = True
 
         # Build the AI factory and pass it the data dict
         AIFactoryRAMI.__init__(self)  #, speed)

@@ -7,7 +7,7 @@ from time import sleep, time
 
 from nebula.hivemind import DataBorg
 from modules.bitalino_visualiser import BitalinoVisualiser
-from modules.pupil_labs_network import PupilLabs
+# from modules.pupil_labs_network import PupilLabs
 import config
 
 

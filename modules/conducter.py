@@ -218,7 +218,7 @@ class Conducter:
         logging.info('quitting director thread')
 
         # print gesture list for "scripted list test"
-        logging.info(self.temp_gesture_capture_list)
+        print("======================= temp_gesture_capture_list", self.temp_gesture_capture_list)
         # self.terminate()
 
     #   todo - make script

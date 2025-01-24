@@ -76,7 +76,7 @@ class Drawbot(XArmAPI):
         self.compass_range = [[270, 90],  # roll min-max
                               [-100, 100]]  # pitch min-max
 
-        self.random_pen()
+        # self.random_pen()
 
         # Make a shared list / dict
         self.ready_position = [sum(config.xarm_x_extents)/2, 0, self.z + 100]
@@ -119,8 +119,8 @@ class Drawbot(XArmAPI):
         error_code = item['error_code']
         self.clear_alarms(error_code)
         # If Safety Boundary Limit or Speed Exceeds Limit
-        if error_code == 35 or error_code == 24:
-            self.go_random_3d()
+        # if error_code == 35 or error_code == 24:
+        #     self.go_random_3d()
 
     def command_list_main_loop(self):
         """

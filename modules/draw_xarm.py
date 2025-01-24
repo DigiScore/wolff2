@@ -214,7 +214,7 @@ class Drawbot(XArmAPI):
     #     logging.debug(f'Rnd result = {result}')
     #     return result
 
-    def clear_alarms(self, error_code) -> None:
+    def clear_alarms(self, error_code = None) -> None:
         """
         Clear the alarms logs and warnings.
         """
@@ -226,13 +226,14 @@ class Drawbot(XArmAPI):
             self.set_state(state=0)
             self.set_state(state=7)
             self.go_random_3d()
-        if 11 <= error_code <= 17:
-            servo = error_code - 10
-            self.arm.clean_servo_error(servo_id=servo)
-            self.clean_error()
-            self.set_state(state=0)
-            self.set_state(state=7)
-            self.go_random_3d()
+        if error_code:
+            if 11 <= error_code <= 17:
+                servo = error_code - 10
+                self.arm.clean_servo_error(servo_id=servo)
+                self.clean_error()
+                self.set_state(state=0)
+                self.set_state(state=7)
+                self.go_random_3d()
 
     def clear_commands(self):
         """

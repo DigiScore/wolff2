@@ -1,5 +1,5 @@
 # [EXPERIMENT MODES]
-experiment_modes = [3]  # [0, 1, 2, 3]
+experiment_modes = [0, 1, 2]  # , 3]
 # 0 = normal mode
 # 1 = random poetry only. No AI. No human interaction
 # 2 = human input only
@@ -21,7 +21,7 @@ samplerate = 0.01
 
 # [PLAY PARAMS]
 silence_listener = False
-duration_of_piece = 240  # in sec
+duration_of_piece = 60  # 240  # in sec
 speed = 5  # dynamic tempo of the all processes: 1 = slow, 10 = fast
 temperature = 0
 

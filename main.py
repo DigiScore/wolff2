@@ -89,6 +89,8 @@ class Main:
         print("Shuffling experimental modes: ", random_experiment_list)
 
         for experiment_mode in random_experiment_list:
+            # reset variables
+            self.hivemind.MASTER_RUNNING = True
             self.first_time_through = True
             while self.hivemind.MASTER_RUNNING:
                 # is this first time through with a new experiment
@@ -108,6 +110,7 @@ class Main:
                 else:
                     sleep(1)
             answer = input("Next Experiment?")
+            self.first_time_through = True
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False

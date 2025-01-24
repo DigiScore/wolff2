@@ -160,6 +160,7 @@ class Nebula(Listener, AIFactoryRAMI):
             sleep(0.01)  # for 100 Hz
 
         self.hivemind.running = False
+        self.hivemind.MASTER_RUNNING = False
 
     # def terminate(self):
     #     """

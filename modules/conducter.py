@@ -43,11 +43,11 @@ class Conducter:
         # self.scripted_experiment = ScriptedExperiment()
 
 
-        if self.drawbot:
-            self.drawbot.home()
-            # self.drawbot.go_position_draw()
-
-        input('To start press ENTER when robot stops')
+        # # if self.drawbot:
+        # #     self.drawbot.home()
+        #     # self.drawbot.go_position_draw()
+        #
+        # input('To start press ENTER when robot stops')
         #     # print('Going to draw position...')
         #     # input('Adjust pen height, then press ENTER')
         #     # self.drawbot.go_position_one_two()
@@ -57,12 +57,19 @@ class Conducter:
         """
         Starts the main thread for the gesture manager
         """
+        if self.drawbot:
+            self.drawbot.home()
+        # self.drawbot.go_position_draw()
+
+        input('To start press ENTER when robot stops')
+
         gesture_thread = Thread(target=self.gesture_manager, args=[experiment_mode,])
         gesture_thread.start()
 
         if self.drawbot:
             position_thread = Thread(target=self.drawbot.get_normalised_position)
             position_thread.start()
+            position_thread.join()
             self.drawbot.command_list_main_loop()
 
     def gesture_manager(self, experiment_mode=0):
@@ -77,10 +84,10 @@ class Conducter:
         """
 
         if self.drawbot:
-            if experiment_mode != 3:
+            # if experiment_mode != 3:
 
-                print("Started robot control thread")
-                self.drawbot.go_position_draw()
+            print("Started robot control thread")
+            self.drawbot.home()
         else:
             print("Started robot control thread - no robot")
 
@@ -152,6 +159,9 @@ class Conducter:
 
                 # run through fixed experiment scrip[t
                 self.scripted_move()
+                self.hivemind.running = False
+                self.hivemind.MASTER_RUNNING = False
+                break
 
             self.hivemind.thought_train_stream = rnd_stream
             logging.info(f"Random stream = {self.hivemind.thought_train_stream}")
@@ -230,6 +240,7 @@ class Conducter:
 
                     sleep(0.1)
 
+        self.drawbot.home()
         logging.info('quitting director thread')
 
         # print gesture list for "scripted list test"
@@ -398,7 +409,7 @@ class Conducter:
         return result
 
     def scripted_move_clear_alarms(self):
-        while self.doing_script:
+        while self.hivemind.running:
             self.drawbot.clear_alarms()
             sleep(0.1)
 

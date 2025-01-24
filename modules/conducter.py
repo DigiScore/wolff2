@@ -82,7 +82,7 @@ class Conducter:
         stream_list_len = len(stream_list)
 
         self.temp_gesture_capture_list = []
-        self.temp_start_time = time()
+        self.elapsed_time = time()
 
         while self.hivemind.running:
             ###################################################################
@@ -216,6 +216,8 @@ class Conducter:
                     sleep(0.1)
 
         logging.info('quitting director thread')
+
+        # print gesture list for "scripted list test"
         logging.info(self.temp_gesture_capture_list)
         # self.terminate()
 
@@ -250,42 +252,42 @@ class Conducter:
                 self.drawbot.go_draw(paramx,
                                      paramy,
                                      False)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.go_draw(x, y, False)", paramx, paramy, False])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.go_draw(x, y, False)", paramx, paramy, False])
 
             case 1:
                 decision_type = 'random character'
                 param = thought_train * randrange(10, 20)
                 self.drawbot.draw_random_char(param)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.draw_random_char(param)", param])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.draw_random_char(param)", param])
 
             case 2:
                 decision_type = 'dot'
                 self.drawbot.dot()
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.dot"])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.dot"])
 
             case 3:
                 decision_type = 'note head'
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.note_head(note_size)", note_size])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.note_head(note_size)", note_size])
 
             case 4:
                 decision_type = 'note head and line'
                 note_size = randrange(1, 10)
                 self.drawbot.note_head(size=note_size)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.note_head(note_size)", note_size])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.note_head(note_size)", note_size])
 
                 paramx = self.rnd(thought_train*10)
                 paramy = self.rnd(thought_train*10)
                 self.drawbot.position_move_by(paramx,
                                               paramy,
                                               0, wait=True)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.position_move_by(paramx, paramy,0, wait=True)", paramx, paramy])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.position_move_by(paramx, paramy,0, wait=True)", paramx, paramy])
 
             case 5:
                 decision_type = 'random jump'
                 self.drawbot.go_random_jump()
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.go_random_jump()"])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.go_random_jump()"])
 
             case 6:
                 decision_type = 'draw arc'
@@ -294,7 +296,7 @@ class Conducter:
                 x2 = x + self.rnd(arc_range)
                 y2 = y + self.rnd(arc_range)
                 self.drawbot.arc2D(x1, y1, x2, y2)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.arc2D(x1, y1, x2, y2)", x1, y1, x2, y2])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.arc2D(x1, y1, x2, y2)", x1, y1, x2, y2])
 
             case 7:
                 decision_type = 'small squiggle'
@@ -304,26 +306,26 @@ class Conducter:
                                           self.rnd(arc_range),
                                           self.rnd(arc_range)))
                 self.drawbot.squiggle(squiggle_list)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.squiggle(squiggle_list)", squiggle_list])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.squiggle(squiggle_list)", squiggle_list])
 
             case 8:
                 decision_type = 'draw circle'
                 side = randrange(2)
                 x1 = int(arc_range)
                 self.drawbot.draw_circle(x1, side)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.draw_circle(x1, side)", x1, side])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.draw_circle(x1, side)", x1, side])
 
             case 9:
                 decision_type = 'arc'
                 x1 = x + self.rnd(arc_range)
                 y1 = y + self.rnd(arc_range)
                 self.drawbot.go_draw(x1, y1)
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.go_draw(x1, y1)", x1, y1])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.go_draw(x1, y1)", x1, y1])
 
             case 10:
                 decision_type = 'return to coord'
                 self.drawbot.return_to_coord()
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.return_to_coord()"])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.return_to_coord()"])
 
             # case 11:
             #     decision_type = 'random shape group'
@@ -333,7 +335,10 @@ class Conducter:
             case 11:
                 decision_type = 'random pen move'
                 self.drawbot.random_pen()
-                self.temp_gesture_capture_list.append([time() - self.temp_start_time, "self.drawbot.random_pen()"])
+                self.temp_gesture_capture_list.append([time() - self.elapsed_time, "self.drawbot.random_pen()"])
+
+        # make now time to calc ela[psed time for scripted logging
+        self.elapsed_time = time()
 
         # log the decision
         logging.info(decision_type)

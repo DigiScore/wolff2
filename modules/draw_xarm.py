@@ -405,7 +405,7 @@ class Drawbot(XArmAPI):
         Go directly to the home position.
         """
         self.set_fence_mode(False)
-        self.bot_move_to(x=180, y=0, z=100, wait=True)
+        self.bot_move_to(x=180, y=0, z=500, wait=True)
         # self.move_gohome(wait=True)
 
     def go_draw(self, x, y, wait=False):

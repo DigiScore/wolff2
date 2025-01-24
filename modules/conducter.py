@@ -87,7 +87,7 @@ class Conducter:
             # if experiment_mode != 3:
 
             print("Started robot control thread")
-            self.drawbot.home()
+            # self.drawbot.home()
         else:
             print("Started robot control thread - no robot")
 

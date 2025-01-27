@@ -87,8 +87,8 @@ class Main:
         # self.hivemind.MASTER_RUNNING = True
 
     def clock_thread(self):
-        while self.hivemind.MASTER_RUNNING:
-            subprocess.run(["python3", "clock.py"], )
+        # while self.hivemind.MASTER_RUNNING:
+        subprocess.run(["python3", "clock.py"], )
 
     def main_loop(self):
         """
@@ -134,6 +134,7 @@ class Main:
 
         # close everything like a grown up
         self.terminate_all()
+        print("Close the clock window")
 
     def terminate_all(self):
         """

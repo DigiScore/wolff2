@@ -22,6 +22,8 @@ def time():
 	string = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 	lbl.config(text=string)
 	lbl.after(10, time)
+	if not hivemind.MASTER_RUNNING:
+		root.destroy()
 
 
 # Styling the label widget so that clock

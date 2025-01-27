@@ -240,8 +240,10 @@ class Conducter:
 
                     sleep(0.1)
 
-        self.drawbot.home()
+        if self.drawbot:
+                self.drawbot.home()
         logging.info('quitting director thread')
+        self.hivemind.MASTER_RUNNING = False
 
         # print gesture list for "scripted list test"
         # print("======================= temp_gesture_capture_list", self.temp_gesture_capture_list)

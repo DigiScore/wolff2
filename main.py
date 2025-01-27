@@ -76,7 +76,7 @@ class Main:
         self.robot = Conducter()
 
         # Set master experiment loop flag
-        self.hivemind.MASTER_RUNNING = True
+        # self.hivemind.MASTER_RUNNING = True
 
 
     def main_loop(self):
@@ -88,7 +88,8 @@ class Main:
         shuffle(random_experiment_list)
         print("Shuffling experimental modes: ", random_experiment_list)
 
-        for experiment_mode in random_experiment_list:
+        for i, experiment_mode in enumerate(random_experiment_list):
+            print("Running experimental modes: ", experiment_mode)
             # reset variables
             self.hivemind.MASTER_RUNNING = True
             self.first_time_through = True
@@ -109,7 +110,11 @@ class Main:
 
                 else:
                     sleep(1)
-            answer = input("Next Experiment?")
+            print(f"Completed experiment mode {experiment_mode}, running data analysis.")
+            if i < len(random_experiment_list - 1):
+                answer = input("Next Experiment?")
+            else:
+                print("Terminating experiment mode.")
             self.first_time_through = True
 
         # end of experiments so close things down

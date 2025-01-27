@@ -381,7 +381,7 @@ class Conducter:
         """
         Smart collapse of all threads and comms.
         """
-        print('TERMINATING')
+        print('TERMINATING robot and conducter')
         if self.drawbot:
             self.drawbot.go_position_ready()
             self.drawbot.go_position_one_two()

@@ -120,9 +120,9 @@ class Nebula(Listener, AIFactoryRAMI):
 
                 self.hivemind.bitalino_eda = int(bitalino_raw[8])
 
-                self.hivemind.bitalino_ecg = int(bitalino_raw[9])
-
-                self.hivemind.bitalino_rsp = int(bitalino_raw[10])
+                # self.hivemind.bitalino_ecg = int(bitalino_raw[9])
+                #
+                # self.hivemind.bitalino_rsp = int(bitalino_raw[10])
 
                 # extract eda for processing
                 eda_raw = [self.hivemind.bitalino_eda]  # [self.eda.read(1)[0][-1]]

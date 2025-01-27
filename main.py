@@ -3,6 +3,9 @@ from time import time, sleep
 import os
 import art
 from random import shuffle
+import subprocess
+from threading import Thread
+
 
 import config
 from modules.conducter import Conducter
@@ -67,7 +70,12 @@ class Main:
         ###################
         art.tprint("Wolff 1")
 
-        answer = input("Click enter when you started the clock?")
+        # start clock
+        # subprocess.run(["python3", "clock.py"], )
+        clock = Thread(target=self.clock_thread)
+        clock.start()
+
+        answer = input("Click enter when you are ready to go")
 
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
@@ -78,6 +86,9 @@ class Main:
         # Set master experiment loop flag
         # self.hivemind.MASTER_RUNNING = True
 
+    def clock_thread(self):
+        while self.hivemind.MASTER_RUNNING:
+            subprocess.run(["python3", "clock.py"], )
 
     def main_loop(self):
         """
@@ -144,7 +155,7 @@ class Main:
         Paramaters are to be modified in config.py.
         """
         # Init data writer
-        if config.data_writer:
+        if DATA_LOGGING:
             aidw = AIRobotDataWriter(self.master_path)
             bdw = BiodataDataWriter(self.master_path)
 
@@ -155,7 +166,7 @@ class Main:
         self.robot.main_loop(experiment_mode)
         self.nebula.main_loop()
 
-        if config.data_writer:
+        if DATA_LOGGING:
             aidw.main_loop()
             bdw.main_loop()
 

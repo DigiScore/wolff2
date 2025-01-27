@@ -126,7 +126,7 @@ class DataBorg:
             self.running: bool = False
             """Local running bool for single experiments"""
 
-            self.MASTER_RUNNING: bool = False
+            self.MASTER_RUNNING: bool = True
             """Master running bool for whole script"""
 
         else:

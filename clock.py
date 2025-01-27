@@ -1,6 +1,7 @@
 # importing whole module
 from tkinter import *
 from tkinter.ttk import *
+from nebula.hivemind import DataBorg
 
 # importing strftime function to
 # retrieve system's time
@@ -10,6 +11,8 @@ from datetime import datetime
 # creating tkinter window
 root = Tk()
 root.title('Clock')
+
+hivemind = DataBorg()
 
 # This function is used to
 # display time on the label
@@ -33,3 +36,6 @@ lbl.pack(anchor='center')
 time()
 
 mainloop()
+# while hivemind.MASTER_RUNNING:
+# 	root.update()
+# 	root.update_idletasks()

@@ -224,7 +224,7 @@ class Drawbot(XArmAPI):
             self.set_state(state=4)
             self.clean_error()
             self.set_state(state=0)
-            self.set_state(state=7)
+            # self.set_mode(state=7)
             self.go_random_3d()
         if error_code:
             if 11 <= error_code <= 17:
@@ -232,7 +232,7 @@ class Drawbot(XArmAPI):
                 self.arm.clean_servo_error(servo_id=servo)
                 self.clean_error()
                 self.set_state(state=0)
-                self.set_state(state=7)
+                # self.set_mode(state=7)
                 self.go_random_3d()
 
     def clear_commands(self):
@@ -242,7 +242,7 @@ class Drawbot(XArmAPI):
         self.set_state(4)
         sleep(0.1)
         self.set_state(0)
-        self.set_state(state=7)
+        # self.set_mode(state=7)
 
     # def force_queued_stop(self):
     #     """
@@ -405,8 +405,16 @@ class Drawbot(XArmAPI):
         Go directly to the home position.
         """
         self.set_fence_mode(False)
-        self.bot_move_to(x=180, y=0, z=500, wait=True)
+        # self.bot_move_to(x=180, y=0, z=500, wait=True)
         # self.move_gohome(wait=True)
+        self.motion_enable(enable=True)
+        self.set_mode(0)
+        self.set_state(state=0)
+
+        self.move_gohome(wait=True)
+        self.set_fence_mode(config.xarm_fenced)
+        self.set_mode(7)
+        self.set_state(0)
 
     def go_draw(self, x, y, wait=False):
         """

@@ -111,7 +111,7 @@ class Main:
                 else:
                     sleep(1)
             print(f"Completed experiment mode {experiment_mode}, running data analysis.")
-            if i < len(random_experiment_list - 1):
+            if i < len(random_experiment_list)- 1:
                 answer = input("Next Experiment?")
             else:
                 print("Terminating experiment mode.")

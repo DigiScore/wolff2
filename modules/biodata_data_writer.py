@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from threading import Thread
 from time import sleep, time
+from pathlib import Path
 
 from nebula.hivemind import DataBorg
 from modules.bitalino_visualiser import BitalinoVisualiser
@@ -15,16 +16,16 @@ class BiodataDataWriter:
 
     def __init__(self, master_path):
         # make all dirs for data logging
-        self.bitalino_path = f"{master_path}/bitalino"
+        self.bitalino_path = Path(f"{master_path}/bitalino")
         self.makenewdir(self.bitalino_path)
 
-        self.bitalino_images = f"{self.bitalino_path}/images"
+        self.bitalino_images = Path(f"{self.bitalino_path}/images")
         self.makenewdir(self.bitalino_images)
 
         self.hivemind = DataBorg()
         self.samplerate = config.samplerate
 
-        self.data_file_path = f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json"
+        self.data_file_path = Path(f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json")
         self.data_file = open(self.data_file_path, "a")
         self.data_file.write("[")
 
@@ -68,8 +69,8 @@ class BiodataDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(1)
-        self.process_data()
+        # sleep(3)
+        # self.process_data()
 
     def main_loop(self):
         """
@@ -95,7 +96,8 @@ class BiodataDataWriter:
 
     def makenewdir(self, path):
         try:
-            os.makedirs(path)
+            path.mkdir(parents=True)
+            # os.mkdir(path)
         except OSError:
             print(f"Path Error - unable to create Directory {path} as it might already exist.")
 

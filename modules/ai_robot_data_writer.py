@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 from threading import Thread
 from time import sleep
+from pathlib import Path
 
 from nebula.hivemind import DataBorg
 from modules.ai_robot_visualiser import AI_visualiser
@@ -16,16 +17,16 @@ class AIRobotDataWriter:
         self.hivemind = DataBorg()
 
         # make all dirs for data logging
-        self.ai_robot_path = f"{master_path}/ai_robot"
+        self.ai_robot_path = Path(f"{master_path}/ai_robot")
         self.makenewdir(self.ai_robot_path)
 
-        self.ai_robot_images = f"{self.ai_robot_path}/images"
+        self.ai_robot_images = Path(f"{self.ai_robot_path}/images")
         self.makenewdir(self.ai_robot_images)
 
         self.hivemind = DataBorg()
         self.samplerate = config.samplerate
 
-        self.data_file_path = f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json"
+        self.data_file_path = Path(f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json")
         self.data_file = open(self.data_file_path, "a")
         self.data_file.write("[")
 
@@ -64,8 +65,8 @@ class AIRobotDataWriter:
         self.data_file.truncate()  # remove ",\n"
         self.data_file.write("]")
         self.data_file.close()
-        sleep(1)
-        self.process_and_plot()
+        # sleep(3)
+        # self.process_and_plot()
 
     def main_loop(self):
         """
@@ -90,6 +91,7 @@ class AIRobotDataWriter:
 
     def makenewdir(self, path):
         try:
-            os.makedirs(path)
+           path.mkdir(parents=True)
+           # os.makedirs(path)
         except OSError:
             print(f"Path Error - unable to create Directory {path}")

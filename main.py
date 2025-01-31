@@ -5,7 +5,7 @@ import art
 from random import shuffle
 import subprocess
 from threading import Thread
-
+from pathlib import Path
 
 import config
 from modules.conducter import Conducter
@@ -95,43 +95,46 @@ class Main:
         Manage the experiment loop.
         """
         # while self.hivemind.MASTER_RUNNING:
-        random_experiment_list = config.experiment_modes
-        shuffle(random_experiment_list)
-        print("=========================================         Shuffling experimental modes: ", random_experiment_list)
+        for repeat in range(2):
+            random_experiment_list = config.experiment_modes
+            shuffle(random_experiment_list)
+            print(f"=========================================         Shuffling experimental modes: Block {repeat + 1}: {random_experiment_list}")
 
-        for i, experiment_mode in enumerate(random_experiment_list):
-            # Init Conducter & Gesture management (controls XArm)
-            self.robot = Conducter()
+            for i, experiment_mode in enumerate(random_experiment_list):
+                # Init Conducter & Gesture management (controls XArm)
+                self.robot = Conducter()
 
 
-            print("=========================================         Running experimental mode: ", experiment_mode)
-            # reset variables
-            self.hivemind.MASTER_RUNNING = True
-            self.first_time_through = True
-            while self.hivemind.MASTER_RUNNING:
-                # is this first time through with a new experiment
-                # if self.ui.go_flag:
-                # make new directory for this log e.g. ../data/20240908_123456
-                if DATA_LOGGING:
-                    self.master_path = f"{MAIN_PATH}/{time()}_mode_{experiment_mode}"
-                    self.makenewdir(self.master_path)
+                print(f"=========================================         Running experimental mode:  {repeat + 1} - {experiment_mode}")
+                # reset variables
+                self.hivemind.MASTER_RUNNING = True
+                self.first_time_through = True
+                while self.hivemind.MASTER_RUNNING:
+                    # is this first time through with a new experiment
+                    # if self.ui.go_flag:
+                    # make new directory for this log e.g. ../data/20240908_123456
+                    if DATA_LOGGING:
+                        if self.first_time_through:
+                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
+                            self.makenewdir(self.master_path)
+                    else:
+                        self.master_path = None
+
+                    # run all systems
+                    if self.first_time_through:
+                        self.wolff1_main(experiment_mode)
+                        self.first_time_through = False
+
+                    else:
+                        sleep(1)
+                self.robot.terminate()
+                print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}, running data analysis.")
+                if i < len(random_experiment_list)- 1:
+                    answer = input("Next Experiment?")
                 else:
-                    self.master_path = None
-
-                # run all systems
-                if self.first_time_through:
-                    self.wolff1_main(experiment_mode)
-                    self.first_time_through = False
-
-                else:
-                    sleep(1)
-            self.robot.terminate()
-            print(f"=========================================         Completed experiment mode {experiment_mode}, running data analysis.")
-            if i < len(random_experiment_list)- 1:
-                answer = input("Next Experiment?")
-            else:
-                print("TERMINATING experiment mode.")
-            self.first_time_through = True
+                    print("TERMINATING experiment mode.")
+                self.first_time_through = True
+            answer = input("Next Experiment?")
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False
@@ -178,7 +181,8 @@ class Main:
 
     def makenewdir(self, timestamp):
         try:
-            os.makedirs(timestamp)
+            # os.mkdir(timestamp)
+            timestamp.mkdir(parents=True)
             print(f"Created dir {timestamp}")
         except OSError:
             print(f"OS Make error. Could not make {timestamp}")

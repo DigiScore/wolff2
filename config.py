@@ -1,5 +1,5 @@
 # [EXPERIMENT MODES]
-experiment_modes = [0, 1, 2, 3]
+experiment_modes = [0, 1, 2] #, 3]
 # 0 = normal mode
 # 1 = random poetry only. No AI. No human interaction
 # 2 = human input only
@@ -12,7 +12,7 @@ xarm_connected = True
 
 # [DATAWRITER]
 # data_writer = False
-data_logging = False
+data_logging = True
 # pupil_logging = False
 # pupil_labs_addr = "tcp://127.0.0.1:50020"
 path = "data"

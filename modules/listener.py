@@ -113,8 +113,8 @@ class Listener:
         # self.terminate_listener()
 
     def terminate_listener(self):
-        wavfile.write(f'data/{self.hivemind.session_date}.wav', self.RATE,
-                      self.hivemind.audio_buffer_raw.astype(np.int16))
+        # wavfile.write(f'data/{self.hivemind.session_date}.wav', self.RATE,
+        #               self.hivemind.audio_buffer_raw.astype(np.int16))
         self.stream.stop_stream()
         self.stream.close()
         self.p.terminate()

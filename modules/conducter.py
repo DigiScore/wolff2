@@ -743,5 +743,5 @@ class Conducter:
         # self.drawbot.go_draw(171.82, 163.82, False)
         # sleep(23.530739545822144)
         # self.drawbot.note_head(9)
-        print("====================================================== END OF SCRIPTED TEST")
+        # print("====================================================== END OF SCRIPTED TEST")
         self.doing_script = False

@@ -72,10 +72,10 @@ class Main:
 
         # start clock
         # subprocess.run(["python3", "clock.py"], )
-        clock = Thread(target=self.clock_thread)
-        clock.start()
+        # clock = Thread(target=self.clock_thread)
+        # clock.start()
 
-        answer = input("Click enter when you are ready to go")
+        answer = input("Click enter when you are ready to go, after STARTING CLOCK")
 
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
@@ -88,7 +88,7 @@ class Main:
 
     def clock_thread(self):
         # while self.hivemind.MASTER_RUNNING:
-        subprocess.run(["python3", "clock.py"], )
+        subprocess.run(["python", "clock.py"], )
 
     def main_loop(self):
         """
@@ -97,14 +97,14 @@ class Main:
         # while self.hivemind.MASTER_RUNNING:
         random_experiment_list = config.experiment_modes
         shuffle(random_experiment_list)
-        print("Shuffling experimental modes: ", random_experiment_list)
+        print("=========================================         Shuffling experimental modes: ", random_experiment_list)
 
         for i, experiment_mode in enumerate(random_experiment_list):
             # Init Conducter & Gesture management (controls XArm)
             self.robot = Conducter()
 
 
-            print("Running experimental modes: ", experiment_mode)
+            print("=========================================         Running experimental mode: ", experiment_mode)
             # reset variables
             self.hivemind.MASTER_RUNNING = True
             self.first_time_through = True
@@ -125,13 +125,13 @@ class Main:
 
                 else:
                     sleep(1)
-            print(f"Completed experiment mode {experiment_mode}, running data analysis.")
+            self.robot.terminate()
+            print(f"=========================================         Completed experiment mode {experiment_mode}, running data analysis.")
             if i < len(random_experiment_list)- 1:
                 answer = input("Next Experiment?")
             else:
-                print("Terminating experiment mode.")
+                print("TERMINATING experiment mode.")
             self.first_time_through = True
-            self.robot.terminate()
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False

@@ -61,7 +61,7 @@ class Conducter:
             self.drawbot.go_position_draw()
         # self.drawbot.go_position_draw()
 
-        input('To start press ENTER when robot stops')
+        # input('To start press ENTER when robot stops')
 
         gesture_thread = Thread(target=self.gesture_manager, args=[experiment_mode,])
         gesture_thread.start()
@@ -383,7 +383,6 @@ class Conducter:
         """
         print('TERMINATING robot and conducter')
         if self.drawbot:
-            self.drawbot.move_gohome()
             # self.drawbot.go_position_draw()
             # self.drawbot.go_position_one_two()
             # self.drawbot.home()
@@ -392,6 +391,7 @@ class Conducter:
             #     self.drawbot.close()
             if self.XARM_CONNECTED:
                 self.drawbot.set_fence_mode(False)
+                self.drawbot.move_gohome()
                 self.drawbot.disconnect()
 
     def rnd(self, power_of_command: int) -> int:
@@ -412,7 +412,7 @@ class Conducter:
         return result
 
     def scripted_move_clear_alarms(self):
-        while self.hivemind.running:
+        while self.hivemind.MASTER_RUNNING:
             self.drawbot.clear_alarms()
             sleep(0.1)
 
@@ -420,7 +420,7 @@ class Conducter:
         """
         Follows a pre-defined scripted. Bypasses all gen funcs
         """
-        print("====================================================== STARTED SCRIPTED TEST")
+        # print("====================================================== STARTED SCRIPTED TEST")
 
         sleep(0.455397367477417)
         self.drawbot.go_random_jump()
@@ -555,7 +555,7 @@ class Conducter:
         self.drawbot.return_to_coord()
         sleep(0.1153249740600586)
         self.drawbot.draw_random_char(0.0006138671875)
-        sleep(22.78401517868042)
+        sleep(8.78401517868042)
         self.drawbot.squiggle(
             [(1, -3, -2), (4, 3, 3), (2, 2, -1), (3, 1, -3), (1, 3, -3), (-2, -4, -2), (1, 4, -1), (2, 3, 1)])
         sleep(0.45129990577697754)
@@ -594,7 +594,7 @@ class Conducter:
         self.drawbot.dot
         sleep(0.45125365257263184)
         self.drawbot.random_pen()
-        sleep(19.283308267593384)
+        sleep(7.283308267593384)
         self.drawbot.arc2D(353.976, -180.334, 355.976, -183.334)
         sleep(1.5017340183258057)
         self.drawbot.go_draw(198.8293167607559, 194.8293167607559, False)

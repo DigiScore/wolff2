@@ -2157,11 +2157,13 @@ class Base(BaseObject, Events):
         if self._state in [4, 5]:
             self._sleep_finish_time = 0
             if self._is_ready:
-                pretty_print('[clean_error], xArm is not ready to move', color='red')
+                pass
+                # pretty_print('[clean_error], xArm is not ready to move', color='red')
             self._is_ready = False
         else:
             if not self._is_ready:
-                pretty_print('[clean_error], xArm is ready to move', color='green')
+                pass
+                # pretty_print('[clean_error], xArm is ready to move', color='green')
             self._is_ready = True
         self.log_api_info('API -> clean_error -> code={}'.format(ret[0]), code=ret[0])
         return ret[0]

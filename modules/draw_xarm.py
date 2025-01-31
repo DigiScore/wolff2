@@ -228,8 +228,8 @@ class Drawbot(XArmAPI):
             self.clean_error()
             self.set_state(state=0)
             # self.set_mode(state=7)
-            # self.go_random_3d()
-            self.return_to_coord()
+            self.go_random_3d()
+            # self.return_to_coord()
         if error_code:
             if 11 <= error_code <= 17:
                 servo = error_code - 10
@@ -237,8 +237,8 @@ class Drawbot(XArmAPI):
                 self.clean_error()
                 self.set_state(state=0)
                 # self.set_mode(state=7)
-                # self.go_random_3d()
-                self.return_to_coord()
+                self.go_random_3d()
+                # self.return_to_coord()
 
     def clear_commands(self):
         """
@@ -416,7 +416,7 @@ class Drawbot(XArmAPI):
         self.set_mode(0)
         self.set_state(state=0)
 
-        self.move_gohome(wait=True)
+        self.move_gohome()
         self.set_fence_mode(config.xarm_fenced)
         self.set_mode(7)
         self.set_state(0)

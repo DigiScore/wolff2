@@ -115,7 +115,7 @@ class Main:
                     # make new directory for this log e.g. ../data/20240908_123456
                     if DATA_LOGGING:
                         if self.first_time_through:
-                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
+                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF1_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
                             self.makenewdir(self.master_path)
                     else:
                         self.master_path = None

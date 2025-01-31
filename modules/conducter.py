@@ -1,11 +1,10 @@
 import logging
-from random import random, randrange, uniform
+from random import random, randrange
 from threading import Thread
 from time import sleep, time
 
 import config
 from nebula.hivemind import DataBorg
-from data.scripted_test import ScriptedExperiment
 
 
 class Conducter:

@@ -58,7 +58,7 @@ class Conducter:
         Starts the main thread for the gesture manager
         """
         if self.drawbot:
-            self.drawbot.home()
+            self.drawbot.go_position_draw()
         # self.drawbot.go_position_draw()
 
         input('To start press ENTER when robot stops')
@@ -185,7 +185,7 @@ class Conducter:
                 logging.debug(f'end time = {rhythm_loop_end_time}')
 
                 # Speed for this phrase
-                arm_speed = randrange(30, 400)
+                arm_speed = randrange(30, 200)
                 if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 
@@ -241,7 +241,7 @@ class Conducter:
                     sleep(0.1)
 
         if self.drawbot:
-                self.drawbot.home()
+                self.drawbot.go_position_ready()
         logging.info('quitting director thread')
         self.hivemind.MASTER_RUNNING = False
 
@@ -383,9 +383,9 @@ class Conducter:
         """
         print('TERMINATING robot and conducter')
         if self.drawbot:
-            self.drawbot.go_position_ready()
-            self.drawbot.go_position_one_two()
-            self.drawbot.home()
+            self.drawbot.go_position_draw()
+            # self.drawbot.go_position_one_two()
+            # self.drawbot.home()
             self.drawbot.clear_commands()
             # if self.DOBOT_CONNECTED:
             #     self.drawbot.close()

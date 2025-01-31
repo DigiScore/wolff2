@@ -342,10 +342,11 @@ class Base(BaseObject, Events):
 
     @staticmethod
     def log_api_info(msg, *args, code=0, **kwargs):
-        if code == 0:
-            logger.info(msg, *args, **kwargs)
-        else:
-            logger.error(msg, *args, **kwargs)
+        pass
+        # if code == 0:
+        #     logger.info(msg, *args, **kwargs)
+        # else:
+        #     logger.error(msg, *args, **kwargs)
 
     def _check_version(self, is_first=False):
         if is_first:

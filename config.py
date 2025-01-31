@@ -7,7 +7,7 @@ experiment_modes = [0]  #, 1, 2]  #, 3]
 
 
 # [HARDWARE]
-xarm_connected = False
+xarm_connected = True
 # eda_live = False
 
 # [DATAWRITER]

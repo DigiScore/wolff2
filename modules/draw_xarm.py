@@ -225,7 +225,7 @@ class Drawbot(XArmAPI):
             self.clean_error()
             self.set_state(state=0)
             # self.set_mode(state=7)
-            self.go_random_3d()
+            # self.go_random_3d()
         if error_code:
             if 11 <= error_code <= 17:
                 servo = error_code - 10
@@ -233,7 +233,7 @@ class Drawbot(XArmAPI):
                 self.clean_error()
                 self.set_state(state=0)
                 # self.set_mode(state=7)
-                self.go_random_3d()
+                # self.go_random_3d()
 
     def clear_commands(self):
         """

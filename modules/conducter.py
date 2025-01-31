@@ -69,7 +69,7 @@ class Conducter:
         if self.drawbot:
             position_thread = Thread(target=self.drawbot.get_normalised_position)
             position_thread.start()
-            position_thread.join()
+            # position_thread.join()
             self.drawbot.command_list_main_loop()
 
     def gesture_manager(self, experiment_mode=0):
@@ -383,7 +383,8 @@ class Conducter:
         """
         print('TERMINATING robot and conducter')
         if self.drawbot:
-            self.drawbot.go_position_draw()
+            self.drawbot.move_gohome()
+            # self.drawbot.go_position_draw()
             # self.drawbot.go_position_one_two()
             # self.drawbot.home()
             self.drawbot.clear_commands()

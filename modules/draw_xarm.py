@@ -35,6 +35,9 @@ class Drawbot(XArmAPI):
         self.motion_enable(enable=True)
         self.set_mode(0)
         self.set_state(state=0)
+        self.move_gohome()
+
+        # set limits
         boundary_limits = [
             config.xarm_x_extents[1] + config.xarm_irregular_shape_extents,
             config.xarm_x_extents[0] - config.xarm_irregular_shape_extents,
@@ -226,6 +229,7 @@ class Drawbot(XArmAPI):
             self.set_state(state=0)
             # self.set_mode(state=7)
             # self.go_random_3d()
+            self.return_to_coord()
         if error_code:
             if 11 <= error_code <= 17:
                 servo = error_code - 10
@@ -234,6 +238,7 @@ class Drawbot(XArmAPI):
                 self.set_state(state=0)
                 # self.set_mode(state=7)
                 # self.go_random_3d()
+                self.return_to_coord()
 
     def clear_commands(self):
         """

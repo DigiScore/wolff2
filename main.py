@@ -80,8 +80,8 @@ class Main:
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
 
-        # Init Conducter & Gesture management (controls XArm)
-        self.robot = Conducter()
+        # # Init Conducter & Gesture management (controls XArm)
+        # self.robot = Conducter()
 
         # Set master experiment loop flag
         # self.hivemind.MASTER_RUNNING = True
@@ -100,6 +100,10 @@ class Main:
         print("Shuffling experimental modes: ", random_experiment_list)
 
         for i, experiment_mode in enumerate(random_experiment_list):
+            # Init Conducter & Gesture management (controls XArm)
+            self.robot = Conducter()
+
+
             print("Running experimental modes: ", experiment_mode)
             # reset variables
             self.hivemind.MASTER_RUNNING = True
@@ -127,6 +131,7 @@ class Main:
             else:
                 print("Terminating experiment mode.")
             self.first_time_through = True
+            self.robot.terminate()
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False

@@ -1,10 +1,9 @@
 # Wolff1
 
-Musicking robot interacting in real-time with a musician ensemble through drawing digital score, 
-designed to enhance creativity using audio captured by a microphone and physiological 
-measures ([EEG](https://en.wikipedia.org/wiki/Electroencephalography) and [EDA](https://en.wikipedia.org/wiki/Electrodermal_activity)). Currently supports [Dobot Magician Lite](https://www.dobot-robots.com/products/education/magician-lite.html) and [UFactory xArm](https://www.ufactory.cc/xarm-collaborative-robot), 
-uses a [BrainBit](https://brainbit.com/) EEG and [BITalino](https://www.pluxbiosignals.com/collections/bitalino) EDA. Tested on Windows 10 primarily.
-
+Wolff1 is a digital score. It is a realisation of Christian Wolff’s famous composition 
+_For 1, 2 or 3 Players_ (1964) conceptualized as an interactive robot. 
+The robot is embedded with AI that has been trained on Wolff’s original score and will work with 
+a performer in realtime to realise the music.
 
 ## Setup a) VENV
 - Install [Python 3.10](https://www.python.org/) or higher

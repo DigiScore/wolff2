@@ -1,0 +1,29 @@
+[project]
+name = "wolff1"
+version = "0.1.0"
+description = "Test for togetherness"
+authors = [
+    {name = "craig vear craig.vear@nottingham.ac.uk"}
+]
+license = {text = "BSD 2"}
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy (>=2.2.2,<3.0.0)",
+    "pyaudio (>=0.2.14,<0.3.0)",
+    "pyserial (>=3.5,<4.0)",
+    "torch (>=2.6.0,<3.0.0)",
+    "scipy (>=1.15.1,<2.0.0)",
+    "art (>=6.4,<7.0)",
+    "matplotlib (>=3.10.0,<4.0.0)",
+    "scikit-learn (>=1.6.1,<2.0.0)",
+    "requests (>=2.32.3,<3.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
+    "neurokit2 (>=0.2.10,<0.3.0)",
+    "pyzmq (>=26.2.1,<27.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

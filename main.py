@@ -25,7 +25,7 @@ class Main:
     then it will init the connections.
     Essentially, it wil iterate through a series of RAMI experiments, and log
     data for each one separately, while maintaining connection the sensors.
-    This is managed through a input question in main_loop.
+    This is managed through an input question in main_loop.
     """
     def __init__(self):
         # Logging for all modules
@@ -70,25 +70,10 @@ class Main:
         ###################
         art.tprint("Wolff 1")
 
-        # start clock
-        # subprocess.run(["python3", "clock.py"], )
-        # clock = Thread(target=self.clock_thread)
-        # clock.start()
-
-        answer = input("Click enter when you are ready to go, after STARTING CLOCK")
+        answer = input("Click enter when you are ready to go, after STARTING CLOCK & OPEN SIGNALS")
 
         # Init the AI factory (inherits AIFactory, Listener)
-        self.nebula = Nebula(eda=self.eda)  # , speed=config.speed)
-
-        # # Init Conducter & Gesture management (controls XArm)
-        # self.robot = Conducter()
-
-        # Set master experiment loop flag
-        # self.hivemind.MASTER_RUNNING = True
-
-    def clock_thread(self):
-        # while self.hivemind.MASTER_RUNNING:
-        subprocess.run(["python", "clock.py"], )
+        self.nebula = Nebula(eda=self.eda)
 
     def main_loop(self):
         """
@@ -128,7 +113,7 @@ class Main:
                     else:
                         sleep(1)
                 self.robot.terminate()
-                print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}, running data analysis.")
+                print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}.")
                 if i < len(random_experiment_list)- 1:
                     answer = input("Next Experiment?")
                 else:
@@ -166,7 +151,7 @@ class Main:
         # Init data writer
         if DATA_LOGGING:
             aidw = AIRobotDataWriter(self.master_path)
-            bdw = BiodataDataWriter(self.master_path)
+            # bdw = BiodataDataWriter(self.master_path)
 
         # Start Nebula AI Factory after conducter starts data moving
         self.nebula.endtime = time() + config.duration_of_piece
@@ -177,7 +162,7 @@ class Main:
 
         if DATA_LOGGING:
             aidw.main_loop()
-            bdw.main_loop()
+            # bdw.main_loop()
 
     def makenewdir(self, timestamp):
         try:

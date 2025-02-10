@@ -8,13 +8,9 @@ experiment_modes = [0, 1, 2, 3]
 
 # [HARDWARE]
 xarm_connected = True
-# eda_live = False
 
 # [DATAWRITER]
-# data_writer = False
 data_logging = True
-# pupil_logging = False
-# pupil_labs_addr = "tcp://127.0.0.1:50020"
 path = "data"
 figsize_xy = (100, 12)
 samplerate = 0.01
@@ -30,9 +26,6 @@ xarm1_port = '192.168.1.222'
 xarm_x_extents = [-500, 500]  # cartesian coords in mm
 xarm_y_extents = [-500, 500]
 xarm_z_extents = [55, 1000]
-# xarm_ballet_x_extents = [400, 400]
-# xarm_ballet_y_extents = [-250, 250]
-# xarm_ballet_z_extents = [150, 400]
 xarm_irregular_shape_extents = 50
 xarm_fenced = True
 
@@ -43,7 +36,7 @@ mic_in_logging = False
 
 # [BITALINO]
 baudrate = 100
-channels = [0, 1, 2, 3]  # , 4, 5]
+channels = [0, 1, 2, 3]
 mac_address = "00:21:08:35:16:D4"    # "98:D3:B1:FD:3D:1F"   "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 
 # [STREAMING]

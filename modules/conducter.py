@@ -401,7 +401,7 @@ class Conducter:
     def scripted_move_clear_alarms(self):
         while self.hivemind.MASTER_RUNNING:
             if self.drawbot:
-                self.drawbot.clear_alarms()
+                self.drawbot.clear_alarms_script()
                 sleep(0.1)
 
     def scripted_move(self):

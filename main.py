@@ -133,8 +133,8 @@ class Main:
         """
         Terminates all active agents and threads
         """
-        if DATA_LOGGING:
-            self.eda.close()
+        # if DATA_LOGGING:
+        #     self.eda.close()
         self.robot.terminate()
         self.nebula.terminate_listener()
 

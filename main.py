@@ -34,36 +34,36 @@ class Main:
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()
 
-        # Init data logging
-        if DATA_LOGGING:
-            ###################
-            # Start Bitalino
-            ###################
-            # get relevant libraries
-            from modules.bitalino import BITalino
+        # # Init data logging
+        # if DATA_LOGGING:
+        #     ###################
+        #     # Start Bitalino
+        #     ###################
+        #     # get relevant libraries
+        #     from modules.bitalino import BITalino
+        #
+        #     # start bitalino
+        #     BITALINO_MAC_ADDRESS = config.mac_address
+        #     BITALINO_BAUDRATE = config.baudrate
+        #     BITALINO_ACQ_CHANNELS = config.channels
+        #
+        #     eda_started = False
+        #     while not eda_started:
+        #         try:
+        #             self.eda = BITalino(BITALINO_MAC_ADDRESS)
+        #             eda_started = True
+        #         except OSError:
+        #             print("Unable to connect to Bitalino")
+        #             retry = input("Retry (y/N)? ")
+        #             if retry.lower() != "y":  #  or retry.lower() != "yes":
+        #                 eda_started = True
+        #
+        #     self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
+        #     first_eda_data = self.eda.read(1)[0]
+        #     logging.info(f'Data from BITalino = {first_eda_data}')
 
-            # start bitalino
-            BITALINO_MAC_ADDRESS = config.mac_address
-            BITALINO_BAUDRATE = config.baudrate
-            BITALINO_ACQ_CHANNELS = config.channels
-
-            eda_started = False
-            while not eda_started:
-                try:
-                    self.eda = BITalino(BITALINO_MAC_ADDRESS)
-                    eda_started = True
-                except OSError:
-                    print("Unable to connect to Bitalino")
-                    retry = input("Retry (y/N)? ")
-                    if retry.lower() != "y":  #  or retry.lower() != "yes":
-                        eda_started = True
-
-            self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
-            first_eda_data = self.eda.read(1)[0]
-            logging.info(f'Data from BITalino = {first_eda_data}')
-
-        else:
-            self.eda = None
+        # else:
+        self.eda = None
 
         ###################
         # Start Nebula AI
@@ -73,7 +73,7 @@ class Main:
         answer = input("Click enter when you are ready to go, after STARTING CLOCK & OPEN SIGNALS")
 
         # Init the AI factory (inherits AIFactory, Listener)
-        self.nebula = Nebula(eda=self.eda)
+        self.nebula = Nebula() # eda=self.eda)
 
     def main_loop(self):
         """

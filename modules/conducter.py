@@ -69,7 +69,8 @@ class Conducter:
             position_thread = Thread(target=self.drawbot.get_normalised_position)
             position_thread.start()
             # position_thread.join()
-            self.drawbot.command_list_main_loop()
+            if experiment_mode != 3:
+                self.drawbot.command_list_main_loop()
 
     def gesture_manager(self, experiment_mode=0):
         """

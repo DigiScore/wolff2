@@ -35,35 +35,35 @@ class Main:
         self.hivemind = DataBorg()
 
         # # Init data logging
-        # if DATA_LOGGING:
-        #     ###################
-        #     # Start Bitalino
-        #     ###################
-        #     # get relevant libraries
-        #     from modules.bitalino import BITalino
-        #
-        #     # start bitalino
-        #     BITALINO_MAC_ADDRESS = config.mac_address
-        #     BITALINO_BAUDRATE = config.baudrate
-        #     BITALINO_ACQ_CHANNELS = config.channels
-        #
-        #     eda_started = False
-        #     while not eda_started:
-        #         try:
-        #             self.eda = BITalino(BITALINO_MAC_ADDRESS)
-        #             eda_started = True
-        #         except OSError:
-        #             print("Unable to connect to Bitalino")
-        #             retry = input("Retry (y/N)? ")
-        #             if retry.lower() != "y":  #  or retry.lower() != "yes":
-        #                 eda_started = True
-        #
-        #     self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
-        #     first_eda_data = self.eda.read(1)[0]
-        #     logging.info(f'Data from BITalino = {first_eda_data}')
+        if DATA_LOGGING:
+            ###################
+            # Start Bitalino
+            ###################
+            # get relevant libraries
+            from modules.bitalino import BITalino
 
-        # else:
-        self.eda = None
+            # start bitalino
+            BITALINO_MAC_ADDRESS = config.mac_address
+            BITALINO_BAUDRATE = config.baudrate
+            BITALINO_ACQ_CHANNELS = config.channels
+
+            eda_started = False
+            while not eda_started:
+                try:
+                    self.eda = BITalino(BITALINO_MAC_ADDRESS)
+                    eda_started = True
+                except OSError:
+                    print("Unable to connect to Bitalino")
+                    retry = input("Retry (y/N)? ")
+                    if retry.lower() != "y":  #  or retry.lower() != "yes":
+                        eda_started = True
+
+            self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
+            first_eda_data = self.eda.read(1)[0]
+            logging.info(f'Data from BITalino = {first_eda_data}')
+
+        else:
+            self.eda = None
 
         ###################
         # Start Nebula AI
@@ -73,7 +73,7 @@ class Main:
         answer = input("Click enter when you are ready to go, after STARTING CLOCK & OPEN SIGNALS")
 
         # Init the AI factory (inherits AIFactory, Listener)
-        self.nebula = Nebula() # eda=self.eda)
+        self.nebula = Nebula(eda=self.eda)
 
     def main_loop(self):
         """
@@ -100,7 +100,7 @@ class Main:
                     # make new directory for this log e.g. ../data/20240908_123456
                     if DATA_LOGGING:
                         if self.first_time_through:
-                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF1_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
+                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF2_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
                             self.makenewdir(self.master_path)
                     else:
                         self.master_path = None
@@ -151,7 +151,7 @@ class Main:
         # Init data writer
         if DATA_LOGGING:
             aidw = AIRobotDataWriter(self.master_path)
-            # bdw = BiodataDataWriter(self.master_path)
+            bdw = BiodataDataWriter(self.master_path)
 
         # Start Nebula AI Factory after conducter starts data moving
         self.nebula.endtime = time() + config.duration_of_piece
@@ -162,7 +162,7 @@ class Main:
 
         if DATA_LOGGING:
             aidw.main_loop()
-            # bdw.main_loop()
+            bdw.main_loop()
 
     def makenewdir(self, timestamp):
         try:

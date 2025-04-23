@@ -136,19 +136,19 @@ class Conducter:
                     rnd = randrange(stream_list_len)
                     rnd_stream = stream_list[rnd]
 
-            elif experiment_mode == 1:
-                """
-                B Random poetry
-                """
-                rnd_stream = 'rnd_poetry'
+            # elif experiment_mode == 1:
+            #     """
+            #     B Random poetry
+            #     """
+            #     rnd_stream = 'rnd_poetry'
 
-            elif experiment_mode == 2:
+            elif experiment_mode == 1:
                 """
                 C Human only input
                 """
                 rnd_stream = 'mic_in'
 
-            elif experiment_mode == 3:
+            elif experiment_mode == 2:
                 """
                 D Pre defined scripted moves only
                 """
@@ -185,10 +185,11 @@ class Conducter:
                 logging.debug(f'end time = {rhythm_loop_end_time}')
 
                 # Speed for this phrase
-                arm_speed = randrange(30, 200)
+                arm_speed = randrange(30, 150)
                 if self.XARM_CONNECTED:
                     self.drawbot.set_speed(arm_speed)
 
+                # todo bypass this for Mic only
                 while time() < rhythm_loop_end_time:
                     ###########################################################
                     # Stream the chosen data around a loop
@@ -260,7 +261,7 @@ class Conducter:
         arc_range = thought_train * 10
 
         # make a random choice (for now)
-        # todo - maybe map these across the range of input thought-trains
+        # todo -if mic only input (mode 1) map 12 notes of octave onto (%12) a gesture as randchoice variable)
         randchoice = randrange(12)
         logging.debug(f'Random choice: {randchoice}')
 

@@ -230,15 +230,15 @@ class Drawbot(XArmAPI):
             # self.set_mode(state=7)
             # self.go_random_3d()
             # self.return_to_coord()
-        if error_code:
-            if 11 <= error_code <= 17:
-                servo = error_code - 10
-                self.arm.clean_servo_error(servo_id=servo)
-                self.clean_error()
-                self.set_state(state=0)
-                # self.set_mode(state=7)
-                # self.go_random_3d()
-                # self.return_to_coord()
+        # if error_code:
+        #     if 11 <= error_code <= 17:
+        #         servo = error_code - 10
+        #         self.arm.clean_servo_error(servo_id=servo)
+        #         self.clean_error()
+        #         self.set_state(state=0)
+        #         # self.set_mode(state=7)
+        #         # self.go_random_3d()
+        #         # self.return_to_coord()
 
     def clear_alarms(self, error_code = None) -> None:
         """
@@ -251,17 +251,20 @@ class Drawbot(XArmAPI):
             self.clean_error()
             self.set_state(state=0)
             # self.set_mode(state=7)
-            self.go_random_3d()
+            # todo move to last position (or pop last position from move list)
+            self.return_to_last_coord()
+
+            # self.go_random_3d()
             # self.return_to_coord()
-        if error_code:
-            if 11 <= error_code <= 17:
-                servo = error_code - 10
-                self.arm.clean_servo_error(servo_id=servo)
-                self.clean_error()
-                self.set_state(state=0)
-                # self.set_mode(state=7)
-                self.go_random_3d()
-                # self.return_to_coord()
+        # if error_code:
+        #     if 11 <= error_code <= 17:
+        #         servo = error_code - 10
+        #         self.arm.clean_servo_error(servo_id=servo)
+        #         self.clean_error()
+        #         self.set_state(state=0)
+        #         # self.set_mode(state=7)
+        #         self.go_random_3d()
+        #         # self.return_to_coord()
 
     def clear_commands(self):
         """
@@ -1175,4 +1178,15 @@ class Drawbot(XArmAPI):
         coords_length = int(len(self.coords))
         if coords_length > 0:
             coord = self.coords[randrange(0, coords_length)]
+            self.go_draw_up(coord[0], coord[1])
+
+    def return_to_last_coord(self):
+        """
+        Randomly choose a coordinate from the list of coords and move the pen
+        to it. Unlike the other return_to functions it doesn't do anything
+        other than move to that coord.
+        """
+        coords_length = int(len(self.coords))
+        if coords_length > 0:
+            coord = self.coords[-2]
             self.go_draw_up(coord[0], coord[1])

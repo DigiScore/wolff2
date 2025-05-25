@@ -12,8 +12,8 @@ a performer in realtime to realise the music.
 pip install -r requirements.txt
 ```
 ## Setup b) poetry
-- Navigate inside wolff1 folder
-  -     poetry shell
+- Navigate inside wolff2 folder
+  -     poetry env activate
   -     poetry install
 
 ## Quick Start

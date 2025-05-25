@@ -1,4 +1,4 @@
-# Wolff1
+# Wolff2
 
 Wolff2 is a digital score. It is a realisation of Christian Wolff’s famous composition 
 _For 1, 2 or 3 Players_ (1964) conceptualized as an interactive robot. 

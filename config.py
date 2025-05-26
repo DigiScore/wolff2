@@ -1,9 +1,7 @@
 # [EXPERIMENT MODES]
-experiment_modes = [0, 1, 2]
+experiment_modes = [0, 1]
 # 0 = normal mode
-# 1 = random poetry only. No AI. No human interaction
-# 2 = human input only
-# 3 = scripted list
+# 1 = scripted list
 
 
 # [HARDWARE]

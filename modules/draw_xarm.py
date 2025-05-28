@@ -1187,6 +1187,6 @@ class Drawbot(XArmAPI):
         other than move to that coord.
         """
         coords_length = int(len(self.coords))
-        if coords_length > 0:
+        if coords_length > 3:
             coord = self.coords[-2]
             self.go_draw_up(coord[0], coord[1])

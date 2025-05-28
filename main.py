@@ -79,7 +79,12 @@ class Main:
         Manage the experiment loop.
         """
         # while self.hivemind.MASTER_RUNNING:
-        random_experiment_list = generate_random_modes()  #
+        random_experiment_list = generate_random_modes()
+
+        print("\nMODES FOR THIS SESSION:")
+        for i in random_experiment_list:
+            print(f"\t{i}")
+
         repeat = 1
         for i, experiment_mode in enumerate(random_experiment_list):
             # Init Conducter & Gesture management (controls XArm)

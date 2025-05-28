@@ -1,7 +1,6 @@
 import logging
 from time import time, sleep
 import art
-from random import shuffle
 from pathlib import Path
 
 import config
@@ -80,7 +79,7 @@ class Main:
         Manage the experiment loop.
         """
         # while self.hivemind.MASTER_RUNNING:
-        random_experiment_list = generate_random_modes()#
+        random_experiment_list = generate_random_modes()  #
         repeat = 1
         for i, experiment_mode in enumerate(random_experiment_list):
             # Init Conducter & Gesture management (controls XArm)

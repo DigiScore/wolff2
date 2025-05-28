@@ -1,10 +1,7 @@
 import logging
 from time import time, sleep
-import os
 import art
 from random import shuffle
-import subprocess
-from threading import Thread
 from pathlib import Path
 
 import config

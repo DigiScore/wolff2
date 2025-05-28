@@ -124,8 +124,8 @@ class Main:
                 answer = input("Next Experiment?")
             else:
                 print("TERMINATING experiment mode.")
+            repeat += 1
             self.first_time_through = True
-        answer = input("Next Experiment?")
 
         # end of experiments so close things down
         self.hivemind.MASTER_RUNNING = False

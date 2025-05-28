@@ -10,11 +10,10 @@ from modules.ai_robot_data_writer import AIRobotDataWriter
 from modules.biodata_data_writer import BiodataDataWriter
 from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
-# from modules.rami_main import Rami_Main
-# from clock import Clock
 
 DATA_LOGGING = config.data_logging
 MAIN_PATH = config.path
+
 
 class Main:
     """
@@ -24,6 +23,7 @@ class Main:
     data for each one separately, while maintaining connection the sensors.
     This is managed through an input question in main_loop.
     """
+
     def __init__(self):
         # Logging for all modules
         logging.basicConfig(level=logging.WARNING)
@@ -57,7 +57,7 @@ class Main:
 
             self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
             first_eda_data = self.eda.read(1)[0]
-            logging.info(f'Data from BITalino = {first_eda_data}')
+            logging.info(f"Data from BITalino = {first_eda_data}")
 
         else:
             self.eda = None
@@ -67,7 +67,9 @@ class Main:
         ###################
         art.tprint("Wolff 1")
 
-        answer = input("Click enter when you are ready to go, after STARTING CLOCK & OPEN SIGNALS")
+        answer = input(
+            "Click enter when you are ready to go, after STARTING CLOCK & OPEN SIGNALS"
+        )
 
         # Init the AI factory (inherits AIFactory, Listener)
         self.nebula = Nebula(eda=self.eda)
@@ -80,14 +82,17 @@ class Main:
         for repeat in range(2):
             random_experiment_list = config.experiment_modes
             shuffle(random_experiment_list)
-            print(f"=========================================         Shuffling experimental modes: Block {repeat + 1}: {random_experiment_list}")
+            print(
+                f"=========================================         Shuffling experimental modes: Block {repeat + 1}: {random_experiment_list}"
+            )
 
             for i, experiment_mode in enumerate(random_experiment_list):
                 # Init Conducter & Gesture management (controls XArm)
                 self.robot = Conducter()
 
-
-                print(f"=========================================         Running experimental mode:  {repeat + 1} - {experiment_mode}")
+                print(
+                    f"=========================================         Running experimental mode:  {repeat + 1} - {experiment_mode}"
+                )
                 # reset variables
                 self.hivemind.MASTER_RUNNING = True
                 self.first_time_through = True
@@ -97,7 +102,9 @@ class Main:
                     # make new directory for this log e.g. ../data/20240908_123456
                     if DATA_LOGGING:
                         if self.first_time_through:
-                            self.master_path = Path(f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF2_block_{repeat+1}_performance_{i+1}_mode_{experiment_mode}")
+                            self.master_path = Path(
+                                f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF2_block_{repeat + 1}_performance_{i + 1}_mode_{experiment_mode}"
+                            )
                             self.makenewdir(self.master_path)
                     else:
                         self.master_path = None
@@ -110,8 +117,10 @@ class Main:
                     else:
                         sleep(1)
                 self.robot.terminate()
-                print(f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}.")
-                if i < len(random_experiment_list)- 1:
+                print(
+                    f"=========================================         Completed experiment mode  {repeat + 1} - {experiment_mode}."
+                )
+                if i < len(random_experiment_list) - 1:
                     answer = input("Next Experiment?")
                 else:
                     print("TERMINATING experiment mode.")
@@ -173,4 +182,3 @@ class Main:
 if __name__ == "__main__":
     go = Main()
     go.main_loop()
-

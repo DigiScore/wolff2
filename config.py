@@ -1,6 +1,6 @@
 # [EXPERIMENT MODES]
 experiment_modes = [0, 1]
-# 0 = normal mode
+# 0 = normal mode (AI)
 # 1 = scripted list
 
 
@@ -20,7 +20,8 @@ speed = 5  # dynamic tempo of the all processes: 1 = slow, 10 = fast
 temperature = 0
 
 # [XARM]
-xarm1_port = '192.168.1.212'
+# xarm1_port = '192.168.1.212'
+xarm1_port = '127.0.0.1'
 xarm_x_extents = [-500, 500]  # cartesian coords in mm
 xarm_y_extents = [-500, 500]
 xarm_z_extents = [55, 1000]

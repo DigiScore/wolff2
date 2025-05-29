@@ -361,8 +361,7 @@ class Drawbot(XArmAPI):
                     servo_id=1,
                     angle=angle,
                     speed=100,
-                    wait=True,
-                    radius=0.0
+                    wait=False,
                 )
                 if code == 0:
                     self.set_only_check_type(0)
@@ -370,8 +369,7 @@ class Drawbot(XArmAPI):
                         servo_id=1,
                         angle=angle,
                         speed=100,
-                        wait=True,
-                        radius=0.0
+                        wait=False,
                     )
 
             if bool(getrandbits(1)):
@@ -381,8 +379,7 @@ class Drawbot(XArmAPI):
                     servo_id=2,
                     angle=angle,
                     speed=100,
-                    wait=True,
-                    radius=0.0
+                    wait=False,
                 )
                 if code == 0:
                     self.set_only_check_type(0)
@@ -390,8 +387,7 @@ class Drawbot(XArmAPI):
                         servo_id=2,
                         angle=angle,
                         speed=100,
-                        wait=True,
-                        radius=0.0
+                        wait=False,
                     )
 
             if bool(getrandbits(1)):
@@ -401,8 +397,7 @@ class Drawbot(XArmAPI):
                     servo_id=3,
                     angle=angle,
                     speed=100,
-                    wait=True,
-                    radius=0.0
+                    wait=False,
                 )
                 if code == 0:
                     self.set_only_check_type(0)
@@ -410,8 +405,7 @@ class Drawbot(XArmAPI):
                         servo_id=3,
                         angle=angle,
                         speed=100,
-                        wait=True,
-                        radius=0.0
+                        wait=False,
                     )
 
             if bool(getrandbits(1)):
@@ -421,8 +415,7 @@ class Drawbot(XArmAPI):
                     servo_id=4,
                     angle=angle,
                     speed=100,
-                    wait=True,
-                    radius=0.0
+                    wait=False,
                 )
                 if code == 0:
                     self.set_only_check_type(0)
@@ -430,8 +423,7 @@ class Drawbot(XArmAPI):
                         servo_id=4,
                         angle=angle,
                         speed=100,
-                        wait=True,
-                        radius=0.0
+                        wait=False,
                     )
 
             if bool(getrandbits(1)):
@@ -441,8 +433,7 @@ class Drawbot(XArmAPI):
                     servo_id=5,
                     angle=angle,
                     speed=100,
-                    wait=True,
-                    radius=0.0
+                    wait=False,
                 )
                 if code == 0:
                     self.set_only_check_type(0)
@@ -450,8 +441,7 @@ class Drawbot(XArmAPI):
                         servo_id=5,
                         angle=angle,
                         speed=100,
-                        wait=True,
-                        radius=0.0
+                        wait=False,
                     )
 
     def bot_move_to(
@@ -485,7 +475,7 @@ class Drawbot(XArmAPI):
             yaw=self.yaw,
             speed=speed,
             mvacc=mvacc,
-            wait=wait,
+            wait=False,
             relative=relative,
             motion_type=2,
         )
@@ -500,7 +490,7 @@ class Drawbot(XArmAPI):
                 yaw=self.yaw,
                 speed=speed,
                 mvacc=mvacc,
-                wait=wait,
+                wait=False,
                 relative=relative,
                 motion_type=2,
             )

@@ -352,98 +352,6 @@ class Drawbot(XArmAPI):
         pose = self.position[:3]
         self.bot_move_to(*pose)  # for updating cache last used position
 
-    def random_servos(self):
-        if bool(getrandbits(1)):
-            if bool(getrandbits(1)):
-                angle = randrange(-30, 30)
-                self.set_only_check_type(3)
-                code = self.set_servo_angle(
-                    servo_id=1,
-                    angle=angle,
-                    speed=100,
-                    wait=False,
-                )
-                if code == 0:
-                    self.set_only_check_type(0)
-                    self.set_servo_angle(
-                        servo_id=1,
-                        angle=angle,
-                        speed=100,
-                        wait=False,
-                    )
-
-            if bool(getrandbits(1)):
-                angle = randrange(-10, 1)
-                self.set_only_check_type(3)
-                code = self.set_servo_angle(
-                    servo_id=2,
-                    angle=angle,
-                    speed=100,
-                    wait=False,
-                )
-                if code == 0:
-                    self.set_only_check_type(0)
-                    self.set_servo_angle(
-                        servo_id=2,
-                        angle=angle,
-                        speed=100,
-                        wait=False,
-                    )
-
-            if bool(getrandbits(1)):
-                angle = randrange(-25, 0)
-                self.set_only_check_type(3)
-                code = self.set_servo_angle(
-                    servo_id=3,
-                    angle=angle,
-                    speed=100,
-                    wait=False,
-                )
-                if code == 0:
-                    self.set_only_check_type(0)
-                    self.set_servo_angle(
-                        servo_id=3,
-                        angle=angle,
-                        speed=100,
-                        wait=False,
-                    )
-
-            if bool(getrandbits(1)):
-                angle = randrange(-2, 0)
-                self.set_only_check_type(3)
-                code = self.set_servo_angle(
-                    servo_id=4,
-                    angle=angle,
-                    speed=100,
-                    wait=False,
-                )
-                if code == 0:
-                    self.set_only_check_type(0)
-                    self.set_servo_angle(
-                        servo_id=4,
-                        angle=angle,
-                        speed=100,
-                        wait=False,
-                    )
-
-            if bool(getrandbits(1)):
-                angle = randrange(-3, 1)
-                self.set_only_check_type(3)
-                code = self.set_servo_angle(
-                    servo_id=5,
-                    angle=angle,
-                    speed=100,
-                    wait=False,
-                )
-                if code == 0:
-                    self.set_only_check_type(0)
-                    self.set_servo_angle(
-                        servo_id=5,
-                        angle=angle,
-                        speed=100,
-                        wait=False,
-                    )
-
     def bot_move_to(
         self,
         x: float = None,
@@ -463,8 +371,6 @@ class Drawbot(XArmAPI):
         if y < 60:
             y = randrange(80, 150)
 
-        if bool(getrandbits(1)):
-            self.random_servos()
         self.set_only_check_type(3)
         code = self.set_position(
             x=x,

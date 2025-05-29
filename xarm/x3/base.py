@@ -1217,7 +1217,7 @@ class Base(BaseObject, Events):
                 pass
         self._report_connect_changed_callback(False, False)
         with self._pause_cond:
-            self._pause_cond.notifyAll()
+            self._pause_cond.notify_all()
         self._clean_thread()
 
     def set_timeout(self, timeout):

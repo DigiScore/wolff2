@@ -4,6 +4,7 @@ import art
 from pathlib import Path
 
 import config
+from modules import bitalino_module
 from modules.conducter import Conducter
 from modules.ai_robot_data_writer import AIRobotDataWriter
 from modules.biodata_data_writer import BiodataDataWriter
@@ -36,8 +37,6 @@ class Main:
             ###################
             # Start Bitalino
             ###################
-            # get relevant libraries
-            from modules.bitalino import BITalino
 
             # start bitalino
             BITALINO_MAC_ADDRESS = config.mac_address
@@ -47,7 +46,7 @@ class Main:
             eda_started = False
             while not eda_started:
                 try:
-                    self.eda = BITalino(BITALINO_MAC_ADDRESS)
+                    self.eda = bitalino_module.BITalino(BITALINO_MAC_ADDRESS)
                     eda_started = True
                 except OSError:
                     print("Unable to connect to Bitalino")

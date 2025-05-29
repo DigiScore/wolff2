@@ -360,7 +360,7 @@ class Drawbot(XArmAPI):
                 code = self.set_servo_angle(
                     servo_id=1,
                     angle=angle,
-                    speed=randrange(100, 200),
+                    speed=100,
                     wait=True,
                     radius=0.0
                 )
@@ -369,7 +369,7 @@ class Drawbot(XArmAPI):
                     self.set_servo_angle(
                         servo_id=1,
                         angle=angle,
-                        speed=randrange(100, 200),
+                        speed=100,
                         wait=True,
                         radius=0.0
                     )
@@ -380,7 +380,7 @@ class Drawbot(XArmAPI):
                 code = self.set_servo_angle(
                     servo_id=2,
                     angle=angle,
-                    speed=randrange(100, 200),
+                    speed=100,
                     wait=True,
                     radius=0.0
                 )
@@ -389,7 +389,7 @@ class Drawbot(XArmAPI):
                     self.set_servo_angle(
                         servo_id=2,
                         angle=angle,
-                        speed=randrange(100, 200),
+                        speed=100,
                         wait=True,
                         radius=0.0
                     )
@@ -400,7 +400,7 @@ class Drawbot(XArmAPI):
                 code = self.set_servo_angle(
                     servo_id=3,
                     angle=angle,
-                    speed=randrange(100, 200),
+                    speed=100,
                     wait=True,
                     radius=0.0
                 )
@@ -409,7 +409,7 @@ class Drawbot(XArmAPI):
                     self.set_servo_angle(
                         servo_id=3,
                         angle=angle,
-                        speed=randrange(100, 200),
+                        speed=100,
                         wait=True,
                         radius=0.0
                     )
@@ -420,7 +420,7 @@ class Drawbot(XArmAPI):
                 code = self.set_servo_angle(
                     servo_id=4,
                     angle=angle,
-                    speed=randrange(100, 200),
+                    speed=100,
                     wait=True,
                     radius=0.0
                 )
@@ -429,7 +429,7 @@ class Drawbot(XArmAPI):
                     self.set_servo_angle(
                         servo_id=4,
                         angle=angle,
-                        speed=randrange(100, 200),
+                        speed=100,
                         wait=True,
                         radius=0.0
                     )
@@ -440,7 +440,7 @@ class Drawbot(XArmAPI):
                 code = self.set_servo_angle(
                     servo_id=5,
                     angle=angle,
-                    speed=randrange(100, 200),
+                    speed=100,
                     wait=True,
                     radius=0.0
                 )
@@ -449,7 +449,7 @@ class Drawbot(XArmAPI):
                     self.set_servo_angle(
                         servo_id=5,
                         angle=angle,
-                        speed=randrange(100, 200),
+                        speed=100,
                         wait=True,
                         radius=0.0
                     )

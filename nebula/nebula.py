@@ -20,7 +20,7 @@ from threading import Thread
 from time import sleep, time
 
 import config
-from modules.bitalino import BITalino
+from modules.bitalino_module import BITalino
 
 # from modules.brainbit import BrainbitReader
 from modules.listener import Listener

@@ -20,21 +20,39 @@ port = config.xarm1_port
 drawbot = Drawbot(port)
 
 middle = [
-    sum(config.xarm_x_extents)/2,
-    sum(config.xarm_y_extents)/2,
-    sum(config.xarm_z_extents)/2
+    sum(config.xarm_x_extents) / 2,
+    sum(config.xarm_y_extents) / 2,
+    sum(config.xarm_z_extents) / 2,
 ]
 offlimit = [
-    sum(config.xarm_x_extents)/2,
-    sum(config.xarm_y_extents)/2,
-    config.xarm_z_extents[1] + 70
+    sum(config.xarm_x_extents) / 2,
+    sum(config.xarm_y_extents) / 2,
+    config.xarm_z_extents[1] + 70,
 ]
-pose1 = [drawbot.draw_position[0]+50, drawbot.draw_position[1], drawbot.z,
-         drawbot.roll, drawbot.pitch, drawbot.yaw]
-pose2 = [drawbot.draw_position[0], drawbot.draw_position[1]+50, drawbot.z,
-         drawbot.roll, drawbot.pitch, drawbot.yaw]
-pose3 = [drawbot.draw_position[0], drawbot.draw_position[1]+100, drawbot.z,
-         drawbot.roll, drawbot.pitch, drawbot.yaw]
+pose1 = [
+    drawbot.draw_position[0] + 50,
+    drawbot.draw_position[1],
+    drawbot.z,
+    drawbot.roll,
+    drawbot.pitch,
+    drawbot.yaw,
+]
+pose2 = [
+    drawbot.draw_position[0],
+    drawbot.draw_position[1] + 50,
+    drawbot.z,
+    drawbot.roll,
+    drawbot.pitch,
+    drawbot.yaw,
+]
+pose3 = [
+    drawbot.draw_position[0],
+    drawbot.draw_position[1] + 100,
+    drawbot.z,
+    drawbot.roll,
+    drawbot.pitch,
+    drawbot.yaw,
+]
 
 
 ################
@@ -90,14 +108,12 @@ def test_home():
 
 def test_go_draw():
     drawbot.go_position_draw()
-    drawbot.go_draw(drawbot.draw_position[0] + 50,
-                    drawbot.draw_position[1] + 50)
+    drawbot.go_draw(drawbot.draw_position[0] + 50, drawbot.draw_position[1] + 50)
 
 
 def test_go_draw_up():
     drawbot.go_position_draw()
-    drawbot.go_draw_up(drawbot.draw_position[0] + 50,
-                       drawbot.draw_position[1] + 50)
+    drawbot.go_draw_up(drawbot.draw_position[0] + 50, drawbot.draw_position[1] + 50)
 
 
 def test_go_random_draw():
@@ -128,8 +144,7 @@ def test_position_move_by():
 def test_squiggle():
     drawbot.go_position_draw()
     squiggle_list = [
-        (uniform(-5, 5), uniform(-5, 5), uniform(-5, 5))
-        for _ in range(randrange(3, 9))
+        (uniform(-5, 5), uniform(-5, 5), uniform(-5, 5)) for _ in range(randrange(3, 9))
     ]
     drawbot.squiggle(squiggle_list)
 
@@ -191,15 +206,15 @@ def test_draw_circle():
 
 def test_draw_char():
     drawbot.go_position_draw()
-    drawbot.draw_char('A', size=5)
-    drawbot.draw_char('B', size=5)
-    drawbot.draw_char('C', size=5)
-    drawbot.draw_char('D', size=5)
-    drawbot.draw_char('E', size=5)
-    drawbot.draw_char('F', size=5)
-    drawbot.draw_char('G', size=5)
-    drawbot.draw_char('P', size=5)
-    drawbot.draw_char('Z', size=5)
+    drawbot.draw_char("A", size=5)
+    drawbot.draw_char("B", size=5)
+    drawbot.draw_char("C", size=5)
+    drawbot.draw_char("D", size=5)
+    drawbot.draw_char("E", size=5)
+    drawbot.draw_char("F", size=5)
+    drawbot.draw_char("G", size=5)
+    drawbot.draw_char("P", size=5)
+    drawbot.draw_char("Z", size=5)
 
 
 def test_create_shape_group():

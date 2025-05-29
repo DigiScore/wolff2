@@ -5,7 +5,6 @@ from modules.bitalino import BITalino
 from nebula.hivemind import DataBorg
 
 
-
 # make new directory for this log e.g. ../data/20240908_123456
 master_path = f"../data/{time()}"
 hivemind = DataBorg()
@@ -29,12 +28,11 @@ while not eda_started:
             eda_started = True
 
 eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
-first_eda_data = "hiya"  #eda.read(1)[0]
-print(f'Data from BITalino = {first_eda_data}')
+first_eda_data = "hiya"  # eda.read(1)[0]
+print(f"Data from BITalino = {first_eda_data}")
 
 
 hivemind.running = True
-
 
 
 test = BiodataDataWriter(master_path)

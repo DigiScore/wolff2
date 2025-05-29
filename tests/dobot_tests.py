@@ -19,17 +19,29 @@ port = config.dobot1_port
 drawbot = Drawbot(port=port, verbose=False)
 
 middle = [
-    sum(config.x_extents)/2,
-    sum(config.y_extents)/2,
-    sum(config.z_extents)/2,
-    0
+    sum(config.x_extents) / 2,
+    sum(config.y_extents) / 2,
+    sum(config.z_extents) / 2,
+    0,
 ]
-pose1 = [drawbot.draw_position[0]+20, drawbot.draw_position[1],
-         drawbot.draw_position[2], drawbot.draw_position[3]]
-pose2 = [drawbot.draw_position[0], drawbot.draw_position[1]+20,
-         drawbot.draw_position[2], drawbot.draw_position[3]]
-pose3 = [drawbot.draw_position[0], drawbot.draw_position[1]+30,
-         drawbot.draw_position[2], drawbot.draw_position[3]]
+pose1 = [
+    drawbot.draw_position[0] + 20,
+    drawbot.draw_position[1],
+    drawbot.draw_position[2],
+    drawbot.draw_position[3],
+]
+pose2 = [
+    drawbot.draw_position[0],
+    drawbot.draw_position[1] + 20,
+    drawbot.draw_position[2],
+    drawbot.draw_position[3],
+]
+pose3 = [
+    drawbot.draw_position[0],
+    drawbot.draw_position[1] + 30,
+    drawbot.draw_position[2],
+    drawbot.draw_position[3],
+]
 
 
 ################
@@ -75,14 +87,12 @@ def test_home():
 
 def test_go_draw():
     drawbot.go_position_draw()
-    drawbot.go_draw(drawbot.draw_position[0] + 20,
-                    drawbot.draw_position[1] + 20)
+    drawbot.go_draw(drawbot.draw_position[0] + 20, drawbot.draw_position[1] + 20)
 
 
 def test_go_draw_up():
     drawbot.go_position_draw()
-    drawbot.go_draw_up(drawbot.draw_position[0] + 20,
-                       drawbot.draw_position[1] + 20)
+    drawbot.go_draw_up(drawbot.draw_position[0] + 20, drawbot.draw_position[1] + 20)
 
 
 def test_go_random_draw():
@@ -108,8 +118,7 @@ def test_position_move_by():
 def test_squiggle():
     drawbot.go_position_draw()
     squiggle_list = [
-        (uniform(-5, 5), uniform(-5, 5), uniform(-5, 5))
-        for _ in range(randrange(3, 9))
+        (uniform(-5, 5), uniform(-5, 5), uniform(-5, 5)) for _ in range(randrange(3, 9))
     ]
     drawbot.squiggle(squiggle_list)
 
@@ -171,15 +180,15 @@ def test_draw_circle():
 
 def test_draw_char():
     drawbot.go_position_draw()
-    drawbot.draw_char('A', size=5)
-    drawbot.draw_char('B', size=5)
-    drawbot.draw_char('C', size=5)
-    drawbot.draw_char('D', size=5)
-    drawbot.draw_char('E', size=5)
-    drawbot.draw_char('F', size=5)
-    drawbot.draw_char('G', size=5)
-    drawbot.draw_char('P', size=5)
-    drawbot.draw_char('Z', size=5)
+    drawbot.draw_char("A", size=5)
+    drawbot.draw_char("B", size=5)
+    drawbot.draw_char("C", size=5)
+    drawbot.draw_char("D", size=5)
+    drawbot.draw_char("E", size=5)
+    drawbot.draw_char("F", size=5)
+    drawbot.draw_char("G", size=5)
+    drawbot.draw_char("P", size=5)
+    drawbot.draw_char("Z", size=5)
 
 
 def test_create_shape_group():

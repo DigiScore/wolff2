@@ -11,6 +11,7 @@ craig.vear@nottingham.ac.uk
 
 Dedicated to Fabrizio Poltronieri
 """
+
 import logging
 import numpy as np
 import warnings
@@ -20,6 +21,7 @@ from time import sleep, time
 
 import config
 from modules.bitalino import BITalino
+
 # from modules.brainbit import BrainbitReader
 from modules.listener import Listener
 from nebula.ai_factory import AIFactoryRAMI
@@ -29,7 +31,7 @@ def scaler(in_feature, mins, maxs):
     """
     Min-max scaler with clipping.
     """
-    warnings.filterwarnings('error')
+    warnings.filterwarnings("error")
     in_feature = np.array(in_feature)
     mins = np.array(mins)
     maxs = np.array(maxs)
@@ -59,7 +61,8 @@ class Nebula(Listener, AIFactoryRAMI):
         produces an affectual response to it's energy input, which in turn
         interferes with the data generation.
     """
-    def __init__(self, eda):  #, speed=1):
+
+    def __init__(self, eda):  # , speed=1):
         """
         Parameters
         ----------
@@ -67,14 +70,14 @@ class Nebula(Listener, AIFactoryRAMI):
             General tempo/ feel of Nebula's response (0.5 ~ moderate fast,
             1 ~ moderato, 2 ~ presto).
         """
-        print('Building engine server')
+        print("Building engine server")
         Listener.__init__(self)
 
         # Set global vars
         # self.hivemind.running = True
 
         # Build the AI factory and pass it the data dict
-        AIFactoryRAMI.__init__(self)  #, speed)
+        AIFactoryRAMI.__init__(self)  # , speed)
 
         # Own Bitalino
         self.BITALINO_CONNECTED = config.data_logging
@@ -88,7 +91,7 @@ class Nebula(Listener, AIFactoryRAMI):
         """
         Starts the server / AI threads and gets the data rolling.
         """
-        print('Starting the Nebula director')
+        print("Starting the Nebula director")
         # Declare all threads
         t1 = Thread(target=self.make_data)
         t2 = Thread(target=self.snd_listen)
@@ -132,9 +135,11 @@ class Nebula(Listener, AIFactoryRAMI):
                 # Update raw EDA buffer
                 eda_2d = np.array(eda_raw)[:, np.newaxis]
                 self.hivemind.eda_buffer_raw = np.append(
-                    self.hivemind.eda_buffer_raw, eda_2d, axis=1)
+                    self.hivemind.eda_buffer_raw, eda_2d, axis=1
+                )
                 self.hivemind.eda_buffer_raw = np.delete(
-                    self.hivemind.eda_buffer_raw, 0, axis=1)
+                    self.hivemind.eda_buffer_raw, 0, axis=1
+                )
 
                 # Detrend on the buffer time window
                 eda_detrend = signal.detrend(self.hivemind.eda_buffer_raw)
@@ -149,10 +154,12 @@ class Nebula(Listener, AIFactoryRAMI):
 
                 # Update normalised EDA buffer
                 eda_2d = eda_norm[:, np.newaxis]
-                self.hivemind.eda_buffer = np.append(self.hivemind.eda_buffer,
-                                                     eda_2d, axis=1)
-                self.hivemind.eda_buffer = np.delete(self.hivemind.eda_buffer,
-                                                     0, axis=1)
+                self.hivemind.eda_buffer = np.append(
+                    self.hivemind.eda_buffer, eda_2d, axis=1
+                )
+                self.hivemind.eda_buffer = np.delete(
+                    self.hivemind.eda_buffer, 0, axis=1
+                )
             else:
                 # Random data if no bitalino
                 self.hivemind.eda_buffer = np.random.uniform(size=(1, 50))
@@ -168,4 +175,3 @@ class Nebula(Listener, AIFactoryRAMI):
     #     """
     #     if self.BITALINO_CONNECTED:
     #         self.eda.close()
-

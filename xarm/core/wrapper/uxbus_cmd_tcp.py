@@ -20,10 +20,10 @@ TX2_BUS_FLAG_MIN = 1  # cmd序号 起始值
 TX2_BUS_FLAG_MAX = 5000  # cmd序号 最大值
 
 
-def debug_log_datas(datas, label=''):
-    print('{}:'.format(label), end=' ')
+def debug_log_datas(datas, label=""):
+    print("{}:".format(label), end=" ")
     for i in range(len(datas)):
-        print('{:x}'.format(datas[i]).zfill(2), end=' ')
+        print("{:x}".format(datas[i]).zfill(2), end=" ")
         # print('0x{}'.format('{:x}'.format(datas[i]).zfill(2)), end=' ')
         # print(hex(rx_data[i]), end=',')
     print()
@@ -52,9 +52,9 @@ class UxbusCmdTcp(UxbusCmd):
         if self.prot_flag != prot_flag or self.TX2_PROT_CON != prot_flag:
             self.prot_flag = prot_flag
             self.TX2_PROT_CON = prot_flag
-            print('change prot_flag to {}'.format(self.prot_flag))
+            print("change prot_flag to {}".format(self.prot_flag))
         return 0
-    
+
     def get_prot_flag(self):
         return self.prot_flag
 
@@ -102,12 +102,19 @@ class UxbusCmdTcp(UxbusCmd):
             if rx_data != -1 and len(rx_data) > 7:
                 self._last_comm_time = time.monotonic()
                 if self._debug:
-                    debug_log_datas(rx_data, label='recv({})'.format(funcode))
+                    debug_log_datas(rx_data, label="recv({})".format(funcode))
                 code = self.check_xbus_prot(rx_data, funcode)
-                if code in [0, XCONF.UxbusState.ERR_CODE, XCONF.UxbusState.WAR_CODE, XCONF.UxbusState.STATE_NOT_READY]:
+                if code in [
+                    0,
+                    XCONF.UxbusState.ERR_CODE,
+                    XCONF.UxbusState.WAR_CODE,
+                    XCONF.UxbusState.STATE_NOT_READY,
+                ]:
                     ret[0] = code
                     num = (convert.bytes_to_u16(rx_data[4:6]) - 2) if num == -1 else num
-                    ret = ret[:num + 1] if len(ret) <= num + 1 else [ret[0]] * (num + 1)
+                    ret = (
+                        ret[: num + 1] if len(ret) <= num + 1 else [ret[0]] * (num + 1)
+                    )
                     length = len(rx_data) - 8
                     for i in range(num):
                         if i >= length:
@@ -134,7 +141,7 @@ class UxbusCmdTcp(UxbusCmd):
                 send_data += bytes([datas[i]])
         self.arm_port.flush()
         if self._debug:
-            debug_log_datas(send_data, label='send({})'.format(funcode))
+            debug_log_datas(send_data, label="send({})".format(funcode))
         ret = self.arm_port.write(send_data)
         if ret != 0:
             return -1

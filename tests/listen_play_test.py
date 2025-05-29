@@ -1,6 +1,7 @@
 from modules.listener import Listener
 from nebula.hivemind import DataBorg
 import logging
+
 logging.basicConfig(level=logging.DEBUG)
 
 db = DataBorg()

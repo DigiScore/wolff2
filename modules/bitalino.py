@@ -7,6 +7,7 @@
 
 *Last Modified on Thur Jun 25 2015*
 """
+
 __author__ = "Pedro Gonçalves & Carlos Azevedo"
 __credits__ = [
     "Carlos Azevedo",
@@ -119,7 +120,9 @@ class BITalino(object):
             self.serial = True
         elif macAddress.count(":") == 1:
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.socket.connect((macAddress.split(":")[0], int(macAddress.split(":")[1])))
+            self.socket.connect(
+                (macAddress.split(":")[0], int(macAddress.split(":")[1]))
+            )
             self.wifi = True
             self.serial = False
         else:
@@ -195,7 +198,12 @@ class BITalino(object):
             if (
                 len(analogChannels) == 0
                 or len(analogChannels) > 6
-                or any([item not in range(6) or type(item) != int for item in analogChannels])
+                or any(
+                    [
+                        item not in range(6) or type(item) != int
+                        for item in analogChannels
+                    ]
+                )
             ):
                 raise Exception(ExceptionCode.INVALID_PARAMETER)
 
@@ -406,7 +414,9 @@ class BITalino(object):
         if not self.isBitalino2 and not self.started:
             raise Exception(ExceptionCode.DEVICE_NOT_IN_ACQUISITION)
         else:
-            digitalArray = [0 for i in range(arraySize)] if digitalArray is None else digitalArray
+            digitalArray = (
+                [0 for i in range(arraySize)] if digitalArray is None else digitalArray
+            )
             if isinstance(digitalArray, list):
                 digitalArray = digitalArray
             elif isinstance(digitalArray, tuple):
@@ -499,9 +509,13 @@ class BITalino(object):
                             decodedData[-3] >> 2
                         )
                     if nChannels > 1:
-                        dataAcquired[sample, 6] = ((decodedData[-3] & 0x03) << 8) | decodedData[-4]
+                        dataAcquired[sample, 6] = (
+                            (decodedData[-3] & 0x03) << 8
+                        ) | decodedData[-4]
                     if nChannels > 2:
-                        dataAcquired[sample, 7] = (decodedData[-5] << 2) | (decodedData[-6] >> 6)
+                        dataAcquired[sample, 7] = (decodedData[-5] << 2) | (
+                            decodedData[-6] >> 6
+                        )
                     if nChannels > 3:
                         dataAcquired[sample, 8] = ((decodedData[-6] & 0x3F) << 4) | (
                             decodedData[-7] >> 4

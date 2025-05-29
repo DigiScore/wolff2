@@ -46,7 +46,7 @@ class DataBorg:
             self.mic_in: float = random()
             """Percept input stream from client e.g. live mic level"""
 
-            with open('./nebula/models/audio2core_minmax.pickle', 'rb') as f:
+            with open("./nebula/models/audio2core_minmax.pickle", "rb") as f:
                 audio_mins, audio_maxs = pickle.load(f)
             self.audio_mins: list = audio_mins
             self.audio_maxs: list = audio_maxs
@@ -102,7 +102,6 @@ class DataBorg:
             self.design_decision: str = " "
             """Logs the current design decision"""
 
-
             ######################
             # Robot vars
             ######################
@@ -133,7 +132,7 @@ class DataBorg:
             self.__dict__ = DataBorg.__hivemind
 
     def randomiser(self):
-        """ Blitz's the DataBorg dict with random numbers"""
+        """Blitz's the DataBorg dict with random numbers"""
         self.master_stream = random()
         self.mic_in = random()
         self.rnd_poetry = random()

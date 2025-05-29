@@ -8,7 +8,7 @@ target_file = "scripted_test.py"
 source_list = logs_for_script.temp_gesture_capture_list
 print(source_list)
 
-with open(target_file, 'w') as f:
+with open(target_file, "w") as f:
     for inst in source_list:
         print(f"sleep({inst[0]})")
         f.write(f"sleep({inst[0]})\n")
@@ -25,7 +25,6 @@ with open(target_file, 'w') as f:
         print(f"command: {command}")
 
 f.close()
-
 
 
 #

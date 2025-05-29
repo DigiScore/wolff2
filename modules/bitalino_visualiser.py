@@ -17,8 +17,8 @@ import config
 # id d1 d2 d3 d4 x y z eda hr bth
 # 0	0	0	0	0	494	603	529	684	31	27
 
-class BitalinoVisualiser:
 
+class BitalinoVisualiser:
     def __init__(self, raw_file_path, bitalino_images_path):
         # make all variables
         self.figures_path = bitalino_images_path
@@ -31,8 +31,7 @@ class BitalinoVisualiser:
         df = pd.DataFrame(json.loads(open(raw_file_path).read()))
 
         # each row of x and y is a list; explode the values in the lists to separate rows
-        df = df.explode(["date", "x", "y", "z",
-                         "eda"], ignore_index=True)
+        df = df.explode(["date", "x", "y", "z", "eda"], ignore_index=True)
 
         # get date and time
         df["date"] = pd.to_datetime(df["date"])
@@ -53,7 +52,7 @@ class BitalinoVisualiser:
         zs = z.rolling(self.xyz_smoothing_window).sum()
 
         # Visualise biosignals
-        plt.rcParams['figure.figsize'] = self.figsize_xy
+        plt.rcParams["figure.figsize"] = self.figsize_xy
 
         eda_signals, eda_info = nk.eda_process(eda, sampling_rate=self.sampling_rate)
         nk.eda_plot(eda_signals, eda_info)
@@ -193,6 +192,9 @@ class BitalinoVisualiser:
             ax=ax1,
         )
 
+
 if __name__ == "__main__":
-    test = BitalinoVisualiser('../data/1732271846.9152355/bitalino/Bitalino_2024_11_22_1037.json',
-                              '../data/1732271846.9152355/bitalino/images')
+    test = BitalinoVisualiser(
+        "../data/1732271846.9152355/bitalino/Bitalino_2024_11_22_1037.json",
+        "../data/1732271846.9152355/bitalino/images",
+    )

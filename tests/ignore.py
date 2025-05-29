@@ -15,7 +15,6 @@ midfinal.tracks.append(trackfinal)
 notes = []
 
 for msg in midsource:
-
     print(msg)
 
 notes.append(msg)

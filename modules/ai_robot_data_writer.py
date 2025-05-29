@@ -12,7 +12,6 @@ import config
 
 
 class AIRobotDataWriter:
-
     def __init__(self, master_path):
         self.hivemind = DataBorg()
 
@@ -26,10 +25,11 @@ class AIRobotDataWriter:
         self.hivemind = DataBorg()
         self.samplerate = config.samplerate
 
-        self.data_file_path = Path(f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json")
+        self.data_file_path = Path(
+            f"{self.ai_robot_path}/AI_Robot_{self.hivemind.session_date}.json"
+        )
         self.data_file = open(self.data_file_path, "a")
         self.data_file.write("[")
-
 
     def json_update(self):
         """
@@ -55,7 +55,7 @@ class AIRobotDataWriter:
         }
         json_object = json.dumps(json_dict)
         self.data_file.write(json_object)
-        self.data_file.write(',\n')
+        self.data_file.write(",\n")
 
     def terminate_data_writer(self):
         """
@@ -86,12 +86,13 @@ class AIRobotDataWriter:
         self.terminate_data_writer()
 
     def process_and_plot(self):
-        AI_visualiser(raw_file_path=self.data_file_path,
-                      ai_robot_images_path=self.ai_robot_images)
+        AI_visualiser(
+            raw_file_path=self.data_file_path, ai_robot_images_path=self.ai_robot_images
+        )
 
     def makenewdir(self, path):
         try:
-           path.mkdir(parents=True)
-           # os.makedirs(path)
+            path.mkdir(parents=True)
+            # os.makedirs(path)
         except OSError:
             print(f"Path Error - unable to create Directory {path}")

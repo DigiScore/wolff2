@@ -14,16 +14,21 @@ from .uxbus_cmd import UxbusCmd
 from ..config.x_config import XCONF
 
 
-def debug_log_datas(datas, label=''):
-    print('{}:'.format(label), end=' ')
+def debug_log_datas(datas, label=""):
+    print("{}:".format(label), end=" ")
     for i in range(len(datas)):
-        print('{:x}'.format(datas[i]).zfill(2), end=' ')
+        print("{:x}".format(datas[i]).zfill(2), end=" ")
         # print(hex(rx_data[i]), end=',')
     print()
 
 
 class UxbusCmdSer(UxbusCmd):
-    def __init__(self, arm_port, fromid=XCONF.SerialConf.UXBUS_DEF_FROMID, toid=XCONF.SerialConf.UXBUS_DEF_TOID):
+    def __init__(
+        self,
+        arm_port,
+        fromid=XCONF.SerialConf.UXBUS_DEF_FROMID,
+        toid=XCONF.SerialConf.UXBUS_DEF_TOID,
+    ):
         super(UxbusCmdSer, self).__init__()
         self.arm_port = arm_port
         self.fromid = fromid
@@ -41,7 +46,7 @@ class UxbusCmdSer(UxbusCmd):
 
     def set_prot_flag(self, prot_flag):
         return 0
-    
+
     def get_prot_flag(self):
         return 0
 
@@ -68,7 +73,7 @@ class UxbusCmdSer(UxbusCmd):
             rx_data = self.arm_port.read(remaining)
             if rx_data != -1 and len(rx_data) > 5:
                 if self._debug:
-                    debug_log_datas(rx_data, label='recv')
+                    debug_log_datas(rx_data, label="recv")
                 ret[0] = self.check_xbus_prot(rx_data)
                 num = rx_data[2] if num == -1 else num
                 length = len(rx_data) - 4
@@ -87,5 +92,5 @@ class UxbusCmdSer(UxbusCmd):
         send_data += crc16.crc_modbus(send_data)
         self.arm_port.flush()
         if self._debug:
-            debug_log_datas(send_data, label='send')
+            debug_log_datas(send_data, label="send")
         return self.arm_port.write(send_data)

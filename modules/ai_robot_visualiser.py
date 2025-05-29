@@ -8,8 +8,8 @@ import json
 # example of data
 # {"date": "2024-11-21T12:22:33.275471", "master_stream": " ", "mic_in": 4.482421875e-05, "rnd_poetry": 0.3010769531419044, "flow2core": 0.4151631397097578, "core2flow": 0.6335565511568154, "audio2core": 0.21971498619599966, "audio2flow": 0.6035721781171628, "flow2audio": 3.6552383224169296e-10, "eda2flow": 0.9998352258886954, "design decision": " ", "interrupt": false, "x": 0.423767, "y": 0.591036, "z": 0.28214708994709},
 
-class AI_visualiser:
 
+class AI_visualiser:
     def __init__(self, raw_file_path, ai_robot_images_path):
         # variables
         self.ai_robot_images_path = ai_robot_images_path
@@ -19,9 +19,26 @@ class AI_visualiser:
         df = pd.DataFrame(json.loads(open(raw_file_path).read()))
 
         # each row of x and y is a list; explode the values in the lists to separate rows
-        df = df.explode(["date", "master_stream", "mic_in", "rnd_poetry", "flow2core", "core2flow",
-                         "audio2core", "audio2flow", "flow2audio", "eda2flow",
-                         "design decision", "interrupt", "x", "y", "z"], ignore_index=True)
+        df = df.explode(
+            [
+                "date",
+                "master_stream",
+                "mic_in",
+                "rnd_poetry",
+                "flow2core",
+                "core2flow",
+                "audio2core",
+                "audio2flow",
+                "flow2audio",
+                "eda2flow",
+                "design decision",
+                "interrupt",
+                "x",
+                "y",
+                "z",
+            ],
+            ignore_index=True,
+        )
 
         # get date and time
         df["date"] = pd.to_datetime(df["date"])
@@ -78,6 +95,9 @@ class AI_visualiser:
 
         plt.savefig(f"{self.ai_robot_images_path}/ai_plot")
 
+
 if __name__ == "__main__":
-    test = AI_visualiser('../data/1732271846.9152355/ai_robot/AI_Robot_2024_11_22_1037.json',
-                         '../data/1732271846.9152355/ai_robot/images')
+    test = AI_visualiser(
+        "../data/1732271846.9152355/ai_robot/AI_Robot_2024_11_22_1037.json",
+        "../data/1732271846.9152355/ai_robot/images",
+    )

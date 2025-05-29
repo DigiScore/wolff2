@@ -8,12 +8,12 @@ from pathlib import Path
 
 from nebula.hivemind import DataBorg
 from modules.bitalino_visualiser import BitalinoVisualiser
+
 # from modules.pupil_labs_network import PupilLabs
 import config
 
 
 class BiodataDataWriter:
-
     def __init__(self, master_path):
         # make all dirs for data logging
         self.bitalino_path = Path(f"{master_path}/bitalino")
@@ -25,7 +25,9 @@ class BiodataDataWriter:
         self.hivemind = DataBorg()
         self.samplerate = config.samplerate
 
-        self.data_file_path = Path(f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json")
+        self.data_file_path = Path(
+            f"{self.bitalino_path}/Bitalino_{self.hivemind.session_date}.json"
+        )
         self.data_file = open(self.data_file_path, "a")
         self.data_file.write("[")
 
@@ -51,7 +53,7 @@ class BiodataDataWriter:
         }
         json_object = json.dumps(json_dict)
         self.data_file.write(json_object)
-        self.data_file.write(',\n')
+        self.data_file.write(",\n")
 
     def terminate_data_writer(self):
         """
@@ -99,9 +101,9 @@ class BiodataDataWriter:
             path.mkdir(parents=True)
             # os.mkdir(path)
         except OSError:
-            print(f"Path Error - unable to create Directory {path} as it might already exist.")
+            print(
+                f"Path Error - unable to create Directory {path} as it might already exist."
+            )
 
     def _test_running(self):
         self.hivemind.running = True
-
-

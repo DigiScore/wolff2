@@ -3,8 +3,14 @@ import time
 # from brainflow.board_shim import BoardShim, BrainFlowInputParams, BoardIds, BrainFlowPresets
 # from brainflow.data_filter import DataFilter
 
-from brainflow.board_shim import BoardIds, BoardShim, BrainFlowInputParams, BrainFlowPresets
+from brainflow.board_shim import (
+    BoardIds,
+    BoardShim,
+    BrainFlowInputParams,
+    BrainFlowPresets,
+)
 from brainflow.board_shim import BrainFlowError
+
 
 def main():
     BoardShim.enable_dev_board_logger()

@@ -16,7 +16,7 @@ class BrainbitReader:
 
         # Set it logging
         BoardShim.disable_board_logger()
-        logging.info('BrainBit reader ready')
+        logging.info("BrainBit reader ready")
         self.brain_bit = False
 
     def start(self):

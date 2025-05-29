@@ -24,11 +24,11 @@ def scaler(name, f_train, f_test):
     mins = f_train.min(axis=(0, 2))
 
     if name is not None:
-        checkpoint_folder = '../../models/'
+        checkpoint_folder = "../../models/"
         if not os.path.isdir(checkpoint_folder):
             os.mkdir(checkpoint_folder)
-        checkpoint_file = f'{checkpoint_folder}{name}_minmax.pickle'
-        with open(checkpoint_file, 'wb') as f:
+        checkpoint_file = f"{checkpoint_folder}{name}_minmax.pickle"
+        with open(checkpoint_file, "wb") as f:
             pickle.dump([mins, maxs], f)
 
     maxs = maxs[np.newaxis, :, np.newaxis]
@@ -38,8 +38,9 @@ def scaler(name, f_train, f_test):
     return f_train, f_test
 
 
-def train_feature2feature(feature_in_name, feature_out_name, lr,
-                          n_epochs=50, batch_size=4):
+def train_feature2feature(
+    feature_in_name, feature_out_name, lr, n_epochs=50, batch_size=4
+):
     """
     Train deep learning model to predict a feature from another and save it
     along with the validation MSE loss graph.
@@ -65,7 +66,7 @@ def train_feature2feature(feature_in_name, feature_out_name, lr,
     """
 
     # Load feature
-    model_name = f'{feature_in_name}2{feature_out_name}'
+    model_name = f"{feature_in_name}2{feature_out_name}"
     print(model_name)
     feature_in = get_all(feature_in_name, TSLIDE)
     feature_out = get_all(feature_out_name, TSLIDE)
@@ -88,12 +89,12 @@ def train_feature2feature(feature_in_name, feature_out_name, lr,
 
     # Load training set
     dataset_train = DatasetFromNumPy(f_in_train, f_out_train)
-    train_loader = DataLoader(dataset=dataset_train, batch_size=batch_size,
-                              shuffle=True)
+    train_loader = DataLoader(
+        dataset=dataset_train, batch_size=batch_size, shuffle=True
+    )
     # Load validation set
     datanirs_val = DatasetFromNumPy(f_in_val, f_out_val)
-    val_loader = DataLoader(dataset=datanirs_val, batch_size=batch_size,
-                            shuffle=False)
+    val_loader = DataLoader(dataset=datanirs_val, batch_size=batch_size, shuffle=False)
 
     # Instantiate models and hyperparameters
     hourglass = Hourglass(feature_in.shape[1], feature_out.shape[1]).double()
@@ -128,44 +129,44 @@ def train_feature2feature(feature_in_name, feature_out_name, lr,
                 pred = hourglass(x)
                 loss = criterion(pred, y)
                 validation_loss += loss.item()
-            perf = validation_loss / (i+1)
+            perf = validation_loss / (i + 1)
             perfs.append(perf)
 
     # Make checkpoint folder
-    checkpoint_folder = '../../models/'
+    checkpoint_folder = "../../models/"
     if not os.path.isdir(checkpoint_folder):
         os.mkdir(checkpoint_folder)
-    file_path = f'{checkpoint_folder}{model_name}'
+    file_path = f"{checkpoint_folder}{model_name}"
 
     # Plot loss
     fig, ax = plt.subplots(figsize=(6, 5))
     fig.suptitle(f"lr={lr}, n_epochs={n_epochs}, batch_size={batch_size}")
     ax.set(xlabel="Epoch", ylabel="Loss")
     ax.plot(perfs)
-    plt.savefig(f'./{model_name}.png')
+    plt.savefig(f"./{model_name}.png")
 
     # Save model
-    torch.save(hourglass.state_dict(), f'{file_path}.pt')
+    torch.save(hourglass.state_dict(), f"{file_path}.pt")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # 1. For live EEG -> flow
-    train_feature2feature('eeg', 'flow', 0.00005, n_epochs=200, batch_size=32)
+    train_feature2feature("eeg", "flow", 0.00005, n_epochs=200, batch_size=32)
 
     # 2. For predicted flow -> core (current_nnet_x_y_z)
-    train_feature2feature('flow', 'core', 0.00001, n_epochs=300, batch_size=16)
+    train_feature2feature("flow", "core", 0.00001, n_epochs=300, batch_size=16)
 
     # 3. For robot position (current_robot_x_y_z) -> flow
-    train_feature2feature('core', 'flow', 0.00001, n_epochs=80, batch_size=16)
+    train_feature2feature("core", "flow", 0.00001, n_epochs=80, batch_size=16)
 
     # 4. For live sound (amplitude) -> robot position (current_robot_x_y_z)
-    train_feature2feature('audio', 'core', 0.00005, n_epochs=80, batch_size=16)
+    train_feature2feature("audio", "core", 0.00005, n_epochs=80, batch_size=16)
 
     # 5. For live sound (amplitude) -> flow
-    train_feature2feature('audio', 'flow', 0.00005, n_epochs=60, batch_size=16)
+    train_feature2feature("audio", "flow", 0.00005, n_epochs=60, batch_size=16)
 
     # 6. For predicted flow -> sound (amplitude)
-    train_feature2feature('flow', 'audio', 0.00005, n_epochs=50, batch_size=16)
+    train_feature2feature("flow", "audio", 0.00005, n_epochs=50, batch_size=16)
 
     # 7. For live EDA -> flow
-    train_feature2feature('eda', 'flow', 0.00005, n_epochs=200, batch_size=16)
+    train_feature2feature("eda", "flow", 0.00005, n_epochs=200, batch_size=16)

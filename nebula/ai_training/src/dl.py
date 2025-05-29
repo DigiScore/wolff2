@@ -25,7 +25,6 @@ class DatasetFromNumPy(Dataset):
 
 
 class Hourglass(nn.Module):
-
     def __init__(self, n_ch_in, n_ch_out):
         super(Hourglass, self).__init__()
         # Encoder

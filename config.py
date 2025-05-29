@@ -21,7 +21,7 @@ temperature = 0
 
 # [XARM]
 # xarm1_port = '192.168.1.212'
-xarm1_port = '127.0.0.1'
+xarm1_port = "127.0.0.1"
 xarm_x_extents = [-500, 500]  # cartesian coords in mm
 xarm_y_extents = [-500, 500]
 xarm_z_extents = [55, 1000]
@@ -36,17 +36,18 @@ mic_in_logging = False
 # [BITALINO]
 baudrate = 100
 channels = [0, 1, 2, 3]
-mac_address = "00:21:08:35:16:D4"    # "98:D3:B1:FD:3D:1F"   "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
+mac_address = "00:21:08:35:16:D4"  # "98:D3:B1:FD:3D:1F"   "00:21:08:35:17:C0" #"98:D3:B1:FD:3D:1F"  # '/dev/cu.BITalino-3F-AE' (Linux)
 
 # [STREAMING]
-stream_list = ['rnd_poetry',
-               'flow2core',
-               'core2flow',
-               'audio2core',
-               'audio2flow',
-               'flow2audio',
-               'eda2flow']
-
+stream_list = [
+    "rnd_poetry",
+    "flow2core",
+    "core2flow",
+    "audio2core",
+    "audio2flow",
+    "flow2audio",
+    "eda2flow",
+]
 
 
 """

@@ -46,7 +46,7 @@ def get_eda(df):
     """
     array = np.empty(0)
     for _, r in df.iterrows():
-        array = np.append(array, r['hardware']['bitalino'])
+        array = np.append(array, r["hardware"]["bitalino"])
     return array[np.newaxis, :]
 
 
@@ -65,16 +65,16 @@ def get_eeg(df):
         EEG data of the DataFrame.
     """
     array = np.empty((4, 0))
-    keys = ['eeg-T3', 'eeg-T4', 'eeg-O1', 'eeg-O2']
+    keys = ["eeg-T3", "eeg-T4", "eeg-O1", "eeg-O2"]
     for _, r in df.iterrows():
-        values = [[r['hardware']['brainbit'][ch]] for ch in keys]
+        values = [[r["hardware"]["brainbit"][ch]] for ch in keys]
         array = np.append(array, values, axis=1)
-    ch_names = [ch.split('-')[1] for ch in keys]
-    ch_types = [ch.split('-')[0] for ch in keys]
+    ch_names = [ch.split("-")[1] for ch in keys]
+    ch_types = [ch.split("-")[0] for ch in keys]
     info = mne.create_info(ch_names=ch_names, sfreq=10.0, ch_types=ch_types)
     raw = mne.io.RawArray(array, info)
-    iir_params = dict(order=4, ftype='butter', output='sos')
-    raw.filter(*CUTOFF, method='iir', iir_params=iir_params, verbose=False)
+    iir_params = dict(order=4, ftype="butter", output="sos")
+    raw.filter(*CUTOFF, method="iir", iir_params=iir_params, verbose=False)
     # TODO: adapt filtering to match online (epochs instead of raw)
     return raw.get_data()
 
@@ -94,10 +94,10 @@ def get_core(df):
         Core positon data of the DataFrame.
     """
     array = np.empty((2, 0))
-    keys = ['r_shoudler', 'l_shoudler']
+    keys = ["r_shoudler", "l_shoudler"]
     for _, r in df.iterrows():
-        core_x = np.mean([r['hardware']['skeleton'][k]['x'] for k in keys])
-        core_y = np.mean([r['hardware']['skeleton'][k]['x'] for k in keys])
+        core_x = np.mean([r["hardware"]["skeleton"][k]["x"] for k in keys])
+        core_y = np.mean([r["hardware"]["skeleton"][k]["x"] for k in keys])
         values = [[core_x], [core_y]]
         array = np.append(array, values, axis=1)
     return array
@@ -117,15 +117,15 @@ def get_flow(df):
     array : array of shape (1 channels, n_times)
         Flow data of the DataFrame.
     """
-    array = df['flow'].values
+    array = df["flow"].values
     # Replace nan by mean on the session
     array[np.isnan(array)] = np.nanmean(array)
     return array[np.newaxis, :]
 
 
 def get_audio(df):
-    audio_name = '_'.join(df['session'][0]['name'].split('_')[:-1])
-    audio_path = f'../dataset/{audio_name}.wav'
+    audio_name = "_".join(df["session"][0]["name"].split("_")[:-1])
+    audio_path = f"../dataset/{audio_name}.wav"
     print(audio_path)
     rate, data = wf.read(audio_path)
 
@@ -135,7 +135,7 @@ def get_audio(df):
     # Get envelope of audio signal
     hb_data = signal.hilbert(data)
     envolope = np.abs(hb_data)
-    num = int(len(envolope)/rate*10.0)
+    num = int(len(envolope) / rate * 10.0)
     envolope = signal.resample(envolope, num)
     return envolope[np.newaxis, :]
 
@@ -161,14 +161,14 @@ def get_all(feature_name, tslide):
     """
     sfreq = 10.0  # Hz
     sliding_size = int(tslide * sfreq)
-    checkpoint_folder = '../checkpoints/'
-    checkpoint_file = f'{checkpoint_folder}all_{feature_name}.pickle'
+    checkpoint_folder = "../checkpoints/"
+    checkpoint_file = f"{checkpoint_folder}all_{feature_name}.pickle"
 
     if os.path.isfile(checkpoint_file):
-        print('Checkpoint found, loading...')
-        with open(checkpoint_file, 'rb') as f:
+        print("Checkpoint found, loading...")
+        with open(checkpoint_file, "rb") as f:
             all_feature = pickle.load(f)
-        print('Done!')
+        print("Done!")
 
     else:
         dfs = get_dfs()
@@ -177,15 +177,15 @@ def get_all(feature_name, tslide):
         # Loop over all files
         for df in dfs:
             feature = None
-            if feature_name == 'eda':
+            if feature_name == "eda":
                 feature = get_eda(df)
-            elif feature_name == 'eeg':
+            elif feature_name == "eeg":
                 feature = get_eeg(df)
-            elif feature_name == 'core':
+            elif feature_name == "core":
                 feature = get_core(df)
-            elif feature_name == 'flow':
+            elif feature_name == "flow":
                 feature = get_flow(df)
-            elif feature_name == 'audio':
+            elif feature_name == "audio":
                 feature = get_audio(df)
 
             # Create sliding window
@@ -202,16 +202,16 @@ def get_all(feature_name, tslide):
 
         if not os.path.isdir(checkpoint_folder):
             os.mkdir(checkpoint_folder)
-        with open(checkpoint_file, 'wb') as f:
+        with open(checkpoint_file, "wb") as f:
             pickle.dump(all_feature, f)
-        print('Checkpoint saved!')
+        print("Checkpoint saved!")
 
     return all_feature
 
 
-if __name__ == '__main__':
-    all_eda = get_all('eda', 5.0)
-    all_eeg = get_all('eeg', 5.0)
-    all_core = get_all('core', 5.0)
-    all_flow = get_all('flow', 5.0)
-    all_env = get_all('audio', 5.0)
+if __name__ == "__main__":
+    all_eda = get_all("eda", 5.0)
+    all_eeg = get_all("eeg", 5.0)
+    all_core = get_all("core", 5.0)
+    all_flow = get_all("flow", 5.0)
+    all_env = get_all("audio", 5.0)

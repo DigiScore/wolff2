@@ -1,7 +1,7 @@
 from time import sleep
 
-class ScriptedExperiment:
 
+class ScriptedExperiment:
     def __init__(self):
         pass
 
@@ -11,7 +11,12 @@ class ScriptedExperiment:
         sleep(0.10782599449157715)
         self.drawbot.random_pen()
         sleep(19.124422073364258)
-        self.drawbot.arc2D(484.6731731508081, -254.91455764466286, 489.6731731508081, -254.91455764466286)
+        self.drawbot.arc2D(
+            484.6731731508081,
+            -254.91455764466286,
+            489.6731731508081,
+            -254.91455764466286,
+        )
         sleep(0.3409392833709717)
         self.drawbot.dot
         sleep(0.2204124927520752)
@@ -45,7 +50,7 @@ class ScriptedExperiment:
         sleep(0.3471360206604004)
         self.drawbot.go_random_jump()
         sleep(3.769630193710327)
-        self.drawbot.note_head(4),
+        (self.drawbot.note_head(4),)
         sleep(3.6959636211395264)
         self.drawbot.draw_random_char(0.00062333984375)
         sleep(0.5642523765563965)
@@ -71,7 +76,7 @@ class ScriptedExperiment:
         sleep(6.279728651046753)
         self.drawbot.dot
         sleep(0.2949187755584717)
-        self.drawbot.draw_circle( 6, 0)
+        self.drawbot.draw_circle(6, 0)
         sleep(0.10984039306640625)
         self.drawbot.go_draw(33.85, 32.85, False)
         sleep(0.11085629463195801)
@@ -97,7 +102,18 @@ class ScriptedExperiment:
         sleep(0.10831069946289062)
         self.drawbot.random_pen()
         sleep(0.3683357238769531)
-        self.drawbot.squiggle([(4, -7, 2), (-7, -4, 7), (6, -4, -2), (-6, -6, -6), (9, 3, -6), (-3, -9, 5), (4, 2, 6), (8, -3, 6)])
+        self.drawbot.squiggle(
+            [
+                (4, -7, 2),
+                (-7, -4, 7),
+                (6, -4, -2),
+                (-6, -6, -6),
+                (9, 3, -6),
+                (-3, -9, 5),
+                (4, 2, 6),
+                (8, -3, 6),
+            ]
+        )
         sleep(0.10338068008422852)
         self.drawbot.draw_random_char(7.810420121020257)
         sleep(0.10780787467956543)
@@ -139,7 +155,18 @@ class ScriptedExperiment:
         sleep(0.1153249740600586)
         self.drawbot.draw_random_char(0.0006138671875)
         sleep(22.78401517868042)
-        self.drawbot.squiggle([(1, -3, -2), (4, 3, 3), (2, 2, -1), (3, 1, -3), (1, 3, -3), (-2, -4, -2), (1, 4, -1), (2, 3, 1)])
+        self.drawbot.squiggle(
+            [
+                (1, -3, -2),
+                (4, 3, 3),
+                (2, 2, -1),
+                (3, 1, -3),
+                (1, 3, -3),
+                (-2, -4, -2),
+                (1, 4, -1),
+                (2, 3, 1),
+            ]
+        )
         sleep(0.45129990577697754)
         self.drawbot.go_draw(63.215, -293.799)
         sleep(1.088390588760376)
@@ -193,7 +220,12 @@ class ScriptedExperiment:
         sleep(0.10937952995300293)
         self.drawbot.random_pen()
         sleep(10.137719631195068)
-        self.drawbot.arc2D(-144.62993360051632, -81.26317856554454, -146.62993360051632, -76.26317856554454)
+        self.drawbot.arc2D(
+            -144.62993360051632,
+            -81.26317856554454,
+            -146.62993360051632,
+            -76.26317856554454,
+        )
         sleep(5.746857166290283)
         self.drawbot.dot
         sleep(1.2233166694641113)
@@ -217,7 +249,12 @@ class ScriptedExperiment:
         sleep(0.24106502532958984)
         self.drawbot.return_to_coord()
         sleep(0.18549203872680664)
-        self.drawbot.arc2D(55.75916662674752, -286.64614866249065, 64.75916662674751, -292.6461486624906)
+        self.drawbot.arc2D(
+            55.75916662674752,
+            -286.64614866249065,
+            64.75916662674751,
+            -292.6461486624906,
+        )
         sleep(0.10300374031066895)
         self.drawbot.dot
         sleep(0.10847997665405273)
@@ -251,7 +288,18 @@ class ScriptedExperiment:
         sleep(0.11000251770019531)
         self.drawbot.return_to_coord()
         sleep(0.11667037010192871)
-        self.drawbot.squiggle([(5, 5, 2), (-3, 1, -3), (4, 3, -4), (-5, 4, 4), (-3, 6, -4), (2, -2, 2), (5, -4, -1), (2, -5, -3)])
+        self.drawbot.squiggle(
+            [
+                (5, 5, 2),
+                (-3, 1, -3),
+                (4, 3, -4),
+                (-5, 4, 4),
+                (-3, 6, -4),
+                (2, -2, 2),
+                (5, -4, -1),
+                (2, -5, -3),
+            ]
+        )
         sleep(0.10144352912902832)
         self.drawbot.random_pen()
         sleep(0.12680745124816895)
@@ -259,7 +307,9 @@ class ScriptedExperiment:
         sleep(0.10830950736999512)
         self.drawbot.go_draw(291.689285482383, 82.14735725880848)
         sleep(21.705406665802002)
-        self.drawbot.squiggle([(2, -4, -1), (-5, -4, -3), (1, -2, 4), (2, -6, 5), (-5, -2, 5), (-1, 6, 1)])
+        self.drawbot.squiggle(
+            [(2, -4, -1), (-5, -4, -3), (1, -2, 4), (2, -6, 5), (-5, -2, 5), (-1, 6, 1)]
+        )
         sleep(0.40122318267822266)
         self.drawbot.note_head(3)
         sleep(0.4022200107574463)
@@ -295,7 +345,9 @@ class ScriptedExperiment:
         sleep(0.2255251407623291)
         self.drawbot.note_head(9)
         sleep(0.11070942878723145)
-        self.drawbot.squiggle([(4, 3, -2), (3, -4, 1), (4, 2, -3), (4, 2, -2), (-2, 2, -4), (-4, 2, -3)])
+        self.drawbot.squiggle(
+            [(4, 3, -2), (3, -4, 1), (4, 2, -3), (4, 2, -2), (-2, 2, -4), (-4, 2, -3)]
+        )
         sleep(0.29098939895629883)
         self.drawbot.note_head(2)
         sleep(0.29098939895629883)
@@ -313,7 +365,9 @@ class ScriptedExperiment:
         sleep(0.11275005340576172)
         self.drawbot.go_random_jump()
         sleep(4.527878761291504)
-        self.drawbot.squiggle([(6, -2, 8), (4, 6, -3), (2, 7, 5), (8, -2, 4), (4, 7, 1)])
+        self.drawbot.squiggle(
+            [(6, -2, 8), (4, 6, -3), (2, 7, 5), (8, -2, 4), (4, 7, 1)]
+        )
         sleep(4.69010329246521)
         self.drawbot.arc2D(260.427, 254.142, 262.427, 259.142)
         sleep(0.5601630210876465)

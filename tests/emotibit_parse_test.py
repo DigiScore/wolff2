@@ -12,12 +12,45 @@ y_df = pd.read_csv(y_path)
 z_df = pd.read_csv(z_path)
 # print(eda_df.head())
 
-x_df = x_df.explode(["LocalTimestamp", "EmotiBitTimestamp", "PacketNumber", "DataLength",
-                 "TypeTag", "ProtocolVersion", "DataReliability", "MX"], ignore_index=True)
-y_df = y_df.explode(["LocalTimestamp", "EmotiBitTimestamp", "PacketNumber", "DataLength",
-                 "TypeTag", "ProtocolVersion", "DataReliability", "MY"], ignore_index=True)
-z_df = z_df.explode(["LocalTimestamp", "EmotiBitTimestamp", "PacketNumber", "DataLength",
-                 "TypeTag", "ProtocolVersion", "DataReliability", "MZ"], ignore_index=True)
+x_df = x_df.explode(
+    [
+        "LocalTimestamp",
+        "EmotiBitTimestamp",
+        "PacketNumber",
+        "DataLength",
+        "TypeTag",
+        "ProtocolVersion",
+        "DataReliability",
+        "MX",
+    ],
+    ignore_index=True,
+)
+y_df = y_df.explode(
+    [
+        "LocalTimestamp",
+        "EmotiBitTimestamp",
+        "PacketNumber",
+        "DataLength",
+        "TypeTag",
+        "ProtocolVersion",
+        "DataReliability",
+        "MY",
+    ],
+    ignore_index=True,
+)
+z_df = z_df.explode(
+    [
+        "LocalTimestamp",
+        "EmotiBitTimestamp",
+        "PacketNumber",
+        "DataLength",
+        "TypeTag",
+        "ProtocolVersion",
+        "DataReliability",
+        "MZ",
+    ],
+    ignore_index=True,
+)
 
 
 # get date and time
@@ -30,9 +63,9 @@ fig, ax = plt.subplots(1, figsize=(60, 12))
 
 # # plot EDA
 # ax[0].plot(date, eda_df["EA"], label="EDA")
-xs = x_df["MX"]#.rolling(10).sum()
-ys = y_df["MY"]#.rolling(10).sum()
-zs = z_df["MZ"]#.rolling(10).sum()
+xs = x_df["MX"]  # .rolling(10).sum()
+ys = y_df["MY"]  # .rolling(10).sum()
+zs = z_df["MZ"]  # .rolling(10).sum()
 
 # plot robot xyz
 ax.set_title("Robot xyz")
@@ -42,8 +75,6 @@ ax.plot(date, xs, label="x")
 ax.plot(date, ys, label="y")
 ax.plot(date, zs, label="z")
 ax.legend(shadow=True, fancybox=True)
-
-
 
 
 # eda_path = "../data/2024-11-15_12-02-42-015496_EA.csv"
@@ -68,7 +99,6 @@ ax.legend(shadow=True, fancybox=True)
 #
 # eda_signals, eda_info = nk.eda_process(eda_df["EA"], sampling_rate=25)
 # nk.eda_plot(eda_signals, eda_info)
-
 
 
 #

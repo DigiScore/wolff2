@@ -9,7 +9,6 @@ from nebula.hivemind import DataBorg
 from nebula.nebula import Nebula
 
 
-
 class Rami_Main:
     """
     Main script to start a single robot arm digital score work.
@@ -20,13 +19,14 @@ class Rami_Main:
     This script also controls the live mic audio analyser.
     Paramaters are to be modified in config.py.
     """
+
     def __init__(self, eda, master_path):
         art.tprint("RAMI")
         # Build initial dataclass filled with random numbers
         self.hivemind = DataBorg()
 
         # Init the AI factory (inherits AIFactory, Listener)
-        nebula = Nebula(eda=eda)  #, speed=config.speed)
+        nebula = Nebula(eda=eda)  # , speed=config.speed)
 
         # Init Conducter & Gesture management (controls XArm)
         robot = Conducter(speed=config.speed)

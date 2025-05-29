@@ -13,7 +13,6 @@ test.drawbot.command_list_main_loop()
 
 
 def main(mode=999):
-
     while True:
         rnd = uniform(0.1, 0.9)
         print(rnd)
@@ -30,7 +29,6 @@ def main(mode=999):
             case 5:
                 test.high_energy_response()
             case 999:
-
                 choice = randrange(5)
                 match choice:
                     case 0:

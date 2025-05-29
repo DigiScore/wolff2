@@ -19,9 +19,7 @@ pip install -r requirements.txt
 ## Quick Start
 - Connect the robot to the computer (follow XArm instructions for static IP)
 - Connect the BITalino to the computer via bluetooth (passcode 1234)
-- Run Open Signals [LINK](https://support.pluxbiosignals.com/knowledge-base/introducing-opensignals-revolution/)
 - Run clock.py in terminal
-- Record Open Signals
 - Run `main.py`
 
 ## Important operational fields in config.py

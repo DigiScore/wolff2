@@ -20,6 +20,8 @@ try:
     while True:
         data = device.read(nframes)
 
+        device.started
+
         if numpy.mean(data[:, 1]) < 1 : break
 
         EMG = data[:, -1]

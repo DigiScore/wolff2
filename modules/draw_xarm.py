@@ -577,13 +577,13 @@ class Drawbot(XArmAPI):
         self.coords.append((x, y))
         self.set_fence_mode(False)
         self.bot_move_to(
-                x=x,
-                y=y,
-                z=z,
-                speed=self.speed,
-                mvacc=self.mvacc,
-                wait=True,
-            )
+            x=x,
+            y=y,
+            z=z,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=True,
+        )
         self.set_fence_mode(config.xarm_fenced)
 
     def go_random_jump(self):

@@ -1502,16 +1502,16 @@ class Base(BaseObject, Events):
             if error_code != self._error_code or warn_code != self._warn_code:
                 if error_code != self._error_code:
                     self._error_code = error_code
-                    if self._error_code != 0:
-                        pretty_print('ControllerError, code: {}'.format(self._error_code), color='red')
-                    else:
-                        pretty_print('ControllerError had clean', color='blue')
+                    # if self._error_code != 0:
+                    #     pretty_print('ControllerError, code: {}'.format(self._error_code), color='red')
+                    # else:
+                    #     pretty_print('ControllerError had clean', color='blue')
                 if warn_code != self._warn_code:
                     self._warn_code = warn_code
-                    if self._warn_code != 0:
-                        pretty_print('ControllerWarning, code: {}'.format(self._warn_code), color='yellow')
-                    else:
-                        pretty_print('ControllerWarning had clean', color='blue')
+                    # if self._warn_code != 0:
+                    #     pretty_print('ControllerWarning, code: {}'.format(self._warn_code), color='yellow')
+                    # else:
+                    #     pretty_print('ControllerWarning had clean', color='blue')
                 self._report_error_warn_changed_callback()
                 logger.info('OnReport -> err={}, warn={}, state={}, cmdnum={}, mtbrake={}, mtable={}, mode={}'.format(
                     error_code, warn_code, state, cmd_num, mtbrake, mtable, mode
@@ -2085,11 +2085,13 @@ class Base(BaseObject, Events):
         if self._state in [4, 5]:
             self._sleep_finish_time = 0
             if self._is_ready:
-                pretty_print('[set_state], xArm is not ready to move', color='red')
+                ...
+                # pretty_print('[set_state], xArm is not ready to move', color='red')
             self._is_ready = False
         else:
             if not self._is_ready:
-                pretty_print('[set_state], xArm is ready to move', color='green')
+                ...
+                # pretty_print('[set_state], xArm is ready to move', color='green')
             self._is_ready = True
         self.log_api_info('API -> set_state({}) -> code={}, state={}'.format(state, ret[0], self._state), code=ret[0])
         return ret[0]

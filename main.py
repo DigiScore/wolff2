@@ -16,6 +16,15 @@ DATA_LOGGING = config.data_logging
 MAIN_PATH = config.path
 
 
+def makenewdir(timestamp):
+    try:
+        # os.mkdir(timestamp)
+        timestamp.mkdir(parents=True)
+        print(f"Created dir {timestamp}")
+    except OSError:
+        print(f"OS Make error. Could not make {timestamp}")
+
+
 class Main:
     """
     Main kickstarts the RAMI process. If there is datalogging (Bitalino, Pupil)
@@ -104,7 +113,7 @@ class Main:
                         self.master_path = Path(
                             f"{MAIN_PATH}/{self.hivemind.session_date}/WOLFF2_block_{repeat}_performance_{i + 1}_mode_{experiment_mode}"
                         )
-                        self.makenewdir(self.master_path)
+                        makenewdir(self.master_path)
                 else:
                     self.master_path = None
 
@@ -112,7 +121,6 @@ class Main:
                 if self.first_time_through:
                     self.wolff1_main(experiment_mode)
                     self.first_time_through = False
-
                 else:
                     sleep(1)
             self.robot.terminate()
@@ -168,14 +176,6 @@ class Main:
         if DATA_LOGGING:
             aidw.main_loop()
             bdw.main_loop()
-
-    def makenewdir(self, timestamp):
-        try:
-            # os.mkdir(timestamp)
-            timestamp.mkdir(parents=True)
-            print(f"Created dir {timestamp}")
-        except OSError:
-            print(f"OS Make error. Could not make {timestamp}")
 
 
 if __name__ == "__main__":

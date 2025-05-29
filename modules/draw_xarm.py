@@ -2,7 +2,7 @@ import logging
 import math
 import numpy as np
 from enum import Enum
-from random import choice, getrandbits, randrange, uniform
+from random import randrange, uniform, getrandbits
 from threading import Thread
 from time import time, sleep
 
@@ -25,6 +25,7 @@ class Drawbot(XArmAPI):
     """
     Translation class for xArm control and primitive commands of robot arm.
     """
+
     def __init__(self, port):
         self.hivemind = DataBorg()
 
@@ -33,9 +34,17 @@ class Drawbot(XArmAPI):
 
         # Get XArm ready to move
         self.motion_enable(enable=True)
-        self.set_mode(0)
+        self.set_mode(7)
         self.set_state(state=0)
-        self.move_gohome()
+        self.move_gohome(speed=200, wait=True)
+
+        self.set_servo_angle(
+            servo_id=3,
+            angle=-70,
+            speed=randrange(100, 200),
+            is_radian=True,
+            wait=True,
+        )
 
         # set limits
         boundary_limits = [
@@ -44,22 +53,21 @@ class Drawbot(XArmAPI):
             config.xarm_y_extents[1] + config.xarm_irregular_shape_extents,
             config.xarm_y_extents[0] - config.xarm_irregular_shape_extents,
             config.xarm_z_extents[1] + config.xarm_irregular_shape_extents,
-            config.xarm_z_extents[0] - 1]
+            config.xarm_z_extents[0] - 1,
+        ]
         self.set_reduced_tcp_boundary(boundary_limits)
         self.set_fence_mode(False)
 
         # Setup call back for error detection
-        self.register_error_warn_changed_callback(
-            callback=self.callback_error_manager
-        )
+        self.register_error_warn_changed_callback(callback=self.callback_error_manager)
 
         # Init coord params
-        self.z = 158
+        self.z = 112
         self.roll = None
         self.pitch = None
         self.yaw = 0
         self.wait_commands = False
-        self.speed = 150
+        self.speed = 300
         self.mvacc = 150
 
         #
@@ -71,25 +79,33 @@ class Drawbot(XArmAPI):
         sleep(1)
 
         # Roll and pitch with pens
-        self.compass = [[180, 15],  # north
-                        [180, -15],  # south
-                        [195, 0],  # east
-                        [165, 0]]  # west
+        self.compass = [
+            [180, 15],  # north
+            [180, -15],  # south
+            [195, 0],  # east
+            [165, 0],
+        ]  # west
         # Roll and pitch as free dance
-        self.compass_range = [[270, 90],  # roll min-max
-                              [-100, 100]]  # pitch min-max
+        self.compass_range = [
+            [270, 90],  # roll min-max
+            [-100, 100],
+        ]  # pitch min-max
 
         # self.random_pen()
 
         # Make a shared list / dict
-        self.ready_position = [sum(config.xarm_x_extents)/2, 0, self.z + 100]
-        self.draw_position = [sum(config.xarm_x_extents)/2, 0, self.z]
-        self.position_one = [sum(config.xarm_x_extents)/2,
-                             config.xarm_y_extents[0],
-                             self.z]
-        self.position_two = [sum(config.xarm_x_extents)/2,
-                             config.xarm_y_extents[1],
-                             self.z]
+        self.ready_position = [sum(config.xarm_x_extents) / 2, 0, self.z + 100]
+        self.draw_position = [sum(config.xarm_x_extents) / 2, 0, self.z]
+        self.position_one = [
+            sum(config.xarm_x_extents) / 2,
+            config.xarm_y_extents[0],
+            self.z,
+        ]
+        self.position_two = [
+            sum(config.xarm_x_extents) / 2,
+            config.xarm_y_extents[1],
+            self.z,
+        ]
         self.x_extents = config.xarm_x_extents
         self.y_extents = config.xarm_y_extents
         self.z_extents = config.xarm_z_extents
@@ -117,9 +133,9 @@ class Drawbot(XArmAPI):
         """
         Listen to errors, clear alarms and reset to go_random_3d position.
         """
-        logging.debug(f'NUMBER OF CMD IN CACHE: {self.cmd_num}')
+        logging.debug(f"NUMBER OF CMD IN CACHE: {self.cmd_num}")
         logging.debug(f"ITEM: {item}, STATE: {self.get_state()}")
-        error_code = item['error_code']
+        error_code = item["error_code"]
         self.clear_alarms(error_code)
         # If Safety Boundary Limit or Speed Exceeds Limit
         # if error_code == 35 or error_code == 24:
@@ -136,31 +152,38 @@ class Drawbot(XArmAPI):
         while self.hivemind.running:
             if self.hivemind.interrupted:
                 self.clear_commands()
-                logging.info('Clearing command list')
+                logging.info("Clearing command list")
                 self.hivemind.interrupted = False
-
-            sleep(0.05)
 
     def get_normalised_position(self):
         while self.hivemind.running:
             pose = self.position[:3]
 
-            norm_x = ((pose[0] - self.x_extents[0]) / (self.x_extents[1] - self.x_extents[0])) * (1 - 0) + 0
-            norm_y = ((pose[1] - self.y_extents[0]) / (self.y_extents[1] - self.y_extents[0])) * (1 - 0) + 0
-            norm_z = ((pose[2] - self.z_extents[0]) / (self.z_extents[1] - self.z_extents[0])) * (1 - 0) + 0
+            norm_x = (
+                (pose[0] - self.x_extents[0]) / (self.x_extents[1] - self.x_extents[0])
+            ) * (1 - 0) + 0
+            norm_y = (
+                (pose[1] - self.y_extents[0]) / (self.y_extents[1] - self.y_extents[0])
+            ) * (1 - 0) + 0
+            norm_z = (
+                (pose[2] - self.z_extents[0]) / (self.z_extents[1] - self.z_extents[0])
+            ) * (1 - 0) + 0
 
             norm_xyz = (norm_x, norm_y, norm_z)
             norm_xyz = tuple(np.clip(norm_xyz, 0.0, 1.0))
             norm_xy_2d = np.array(norm_xyz[:2])[:, np.newaxis]
 
             self.hivemind.current_robot_x_y_z = norm_xyz
-            self.hivemind.current_robot_x_y = np.append(self.hivemind.current_robot_x_y, norm_xy_2d, axis=1)
-            self.hivemind.current_robot_x_y = np.delete(self.hivemind.current_robot_x_y, 0, axis=1)
+            self.hivemind.current_robot_x_y = np.append(
+                self.hivemind.current_robot_x_y, norm_xy_2d, axis=1
+            )
+            self.hivemind.current_robot_x_y = np.delete(
+                self.hivemind.current_robot_x_y, 0, axis=1
+            )
 
             sleep(0.1)
 
-    def safety_position_check(self,
-                              pose: tuple) -> tuple:
+    def safety_position_check(self, pose: tuple) -> tuple:
         """
         Check that generated move does not exceed defined extents, if it does,
         adjust to remain inside
@@ -217,7 +240,7 @@ class Drawbot(XArmAPI):
     #     logging.debug(f'Rnd result = {result}')
     #     return result
 
-    def clear_alarms_script(self, error_code = None) -> None:
+    def clear_alarms_script(self, error_code=None) -> None:
         """
         Clear the alarms logs and warnings.
         """
@@ -240,7 +263,7 @@ class Drawbot(XArmAPI):
         #         # self.go_random_3d()
         #         # self.return_to_coord()
 
-    def clear_alarms(self, error_code = None) -> None:
+    def clear_alarms(self, error_code=None) -> None:
         """
         Clear the alarms logs and warnings.
         """
@@ -287,8 +310,8 @@ class Drawbot(XArmAPI):
         Get the robot pose.
         """
         pose = self.last_used_position
-        logging.debug(f'POSITION: {self.position[:3]}')
-        logging.debug(f'LAST_USED: {pose[:3]}')
+        logging.debug(f"POSITION: {self.position[:3]}")
+        logging.debug(f"LAST_USED: {pose[:3]}")
         return pose
 
     def set_speed(self, arm_speed):
@@ -303,73 +326,207 @@ class Drawbot(XArmAPI):
     ###########################################################################
     # Low level functions for communicating direct to xArm primitives. All the
     # notation functions below need to call these.
-    def arc(self,
-            pose1: list = None,
-            pose2: list = None,
-            percent: int = 100,
-            speed: int = 100,
-            mvacc: int = 100,
-            wait: bool = False):
+    def arc(
+        self,
+        pose1: list = None,
+        pose2: list = None,
+        percent: int = 100,
+        speed: int = 100,
+        mvacc: int = 100,
+        wait: bool = False,
+    ):
         """
         Draw an arc define by the current pose and 2 other poses.Calls xarm
         move_circle, pose = [x, y, z, roll, pitch, yaw] in catesian
         coordinates.
         """
-        logging.info('Arc / circle')
-        self.move_circle(pose1=pose1,
-                         pose2=pose2,
-                         percent=percent,
-                         speed=speed,
-                         mvacc=mvacc,
-                         wait=True)
+        logging.info("Arc / circle")
+        self.move_circle(
+            pose1=pose1,
+            pose2=pose2,
+            percent=percent,
+            speed=speed,
+            mvacc=mvacc,
+            wait=True,
+        )
         pose = self.position[:3]
         self.bot_move_to(*pose)  # for updating cache last used position
 
-    def bot_move_to(self,
-                    x: float = None,
-                    y: float = None,
-                    z: float = None,
-                    speed: int = 100,
-                    mvacc: int = 100,
-                    wait: bool = False,
-                    relative: bool = False):
+    def random_servos(self):
+        if bool(getrandbits(1)):
+            if bool(getrandbits(1)):
+                angle = randrange(-30, 30)
+                self.set_only_check_type(3)
+                code = self.set_servo_angle(
+                    servo_id=1,
+                    angle=angle,
+                    speed=randrange(100, 200),
+                    wait=True,
+                    radius=0.0
+                )
+                if code == 0:
+                    self.set_only_check_type(0)
+                    self.set_servo_angle(
+                        servo_id=1,
+                        angle=angle,
+                        speed=randrange(100, 200),
+                        wait=True,
+                        radius=0.0
+                    )
+
+            if bool(getrandbits(1)):
+                angle = randrange(-10, 1)
+                self.set_only_check_type(3)
+                code = self.set_servo_angle(
+                    servo_id=2,
+                    angle=angle,
+                    speed=randrange(100, 200),
+                    wait=True,
+                    radius=0.0
+                )
+                if code == 0:
+                    self.set_only_check_type(0)
+                    self.set_servo_angle(
+                        servo_id=2,
+                        angle=angle,
+                        speed=randrange(100, 200),
+                        wait=True,
+                        radius=0.0
+                    )
+
+            if bool(getrandbits(1)):
+                angle = randrange(-25, 0)
+                self.set_only_check_type(3)
+                code = self.set_servo_angle(
+                    servo_id=3,
+                    angle=angle,
+                    speed=randrange(100, 200),
+                    wait=True,
+                    radius=0.0
+                )
+                if code == 0:
+                    self.set_only_check_type(0)
+                    self.set_servo_angle(
+                        servo_id=3,
+                        angle=angle,
+                        speed=randrange(100, 200),
+                        wait=True,
+                        radius=0.0
+                    )
+
+            if bool(getrandbits(1)):
+                angle = randrange(-2, 0)
+                self.set_only_check_type(3)
+                code = self.set_servo_angle(
+                    servo_id=4,
+                    angle=angle,
+                    speed=randrange(100, 200),
+                    wait=True,
+                    radius=0.0
+                )
+                if code == 0:
+                    self.set_only_check_type(0)
+                    self.set_servo_angle(
+                        servo_id=4,
+                        angle=angle,
+                        speed=randrange(100, 200),
+                        wait=True,
+                        radius=0.0
+                    )
+
+            if bool(getrandbits(1)):
+                angle = randrange(-3, 1)
+                self.set_only_check_type(3)
+                code = self.set_servo_angle(
+                    servo_id=5,
+                    angle=angle,
+                    speed=randrange(100, 200),
+                    wait=True,
+                    radius=0.0
+                )
+                if code == 0:
+                    self.set_only_check_type(0)
+                    self.set_servo_angle(
+                        servo_id=5,
+                        angle=angle,
+                        speed=randrange(100, 200),
+                        wait=True,
+                        radius=0.0
+                    )
+
+    def bot_move_to(
+        self,
+        x: float = None,
+        y: float = None,
+        z: float = None,
+        speed: int = 100,
+        mvacc: int = 100,
+        wait: bool = False,
+        relative: bool = False,
+    ):
         """
         Move to the position (x, y, z) at a given speed and acceleration.
         """
-        self.set_position(x=x,
-                          y=y,
-                          z=z,
-                          roll=self.roll,
-                          pitch=self.pitch,
-                          yaw=self.yaw,
-                          speed=speed,
-                          mvacc=mvacc,
-                          wait=wait,
-                          relative=relative,
-                          # motion_type=2
-                          )
+        if x < 200:
+            x = randrange(200, 300)
 
-    def tool_move(self,
-                  abs_angle: int,
-                  speed: int = 100,
-                  mvacc: int = 100,
-                  wait: bool = False):
+        if y < 60:
+            y = randrange(80, 150)
+
+        if bool(getrandbits(1)):
+            self.random_servos()
+        self.set_only_check_type(3)
+        code = self.set_position(
+            x=x,
+            y=y,
+            z=z,
+            roll=self.roll,
+            pitch=self.pitch,
+            yaw=self.yaw,
+            speed=speed,
+            mvacc=mvacc,
+            wait=wait,
+            relative=relative,
+            motion_type=2,
+        )
+        if code == 0:
+            self.set_only_check_type(0)
+            self.set_position(
+                x=x,
+                y=y,
+                z=z,
+                roll=self.roll,
+                pitch=self.pitch,
+                yaw=self.yaw,
+                speed=speed,
+                mvacc=mvacc,
+                wait=wait,
+                relative=relative,
+                motion_type=2,
+            )
+        else:
+            return
+
+    def tool_move(
+        self, abs_angle: int, speed: int = 100, mvacc: int = 100, wait: bool = False
+    ):
         """
         Moves the tool to an absolute angle.
         """
-        self.set_servo_angle(servo_id=6,
-                             angle=abs_angle,
-                             speed=speed,
-                             mvacc=mvacc,
-                             wait=wait,
-                             relative=False)
+        self.set_servo_angle(
+            servo_id=6,
+            angle=abs_angle,
+            speed=speed,
+            mvacc=mvacc,
+            wait=wait,
+            relative=False,
+        )
 
     def random_pen(self):
         # if config.xarm_multi_pen:
         #     random_pen = choice(self.compass)
         # else:
-        random_pen = [uniform(*self.compass_range[0]),
-                      uniform(*self.compass_range[1])]
+        random_pen = [uniform(*self.compass_range[0]), uniform(*self.compass_range[1])]
         self.roll, self.pitch = random_pen
 
     def move_y(self):
@@ -382,19 +539,24 @@ class Drawbot(XArmAPI):
 
         # Get current y-value
         x, y, z = self.get_pose()[:3]
-        newy = ((elapsed * (self.y_extents[1] - self.y_extents[0])) / (self.duration_of_piece)) + self.y_extents[1]
+        newy = (
+            (elapsed * (self.y_extents[1] - self.y_extents[0]))
+            / (self.duration_of_piece)
+        ) + self.y_extents[1]
 
         # Check x-axis is in range
         if x <= config.xarm_x_extents[0] or x >= config.xarm_x_extents[1]:
             x = (config.xarm_x_extents[1] - config.xarm_x_extents[0]) / 2
 
-        logging.info(f'Move x:{round(x)} y:{round(newy)} z:{round(z)}')
-        self.bot_move_to(x=x,
-                         y=newy,
-                         z=self.z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=self.wait_commands)
+        logging.info(f"Move x:{round(x)} y:{round(newy)} z:{round(z)}")
+        self.bot_move_to(
+            x=x,
+            y=newy,
+            z=self.z,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
     def go_position_ready(self):
         """
@@ -402,12 +564,7 @@ class Drawbot(XArmAPI):
         """
         x, y, z = self.ready_position
         self.set_fence_mode(False)
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=True)
+        self.bot_move_to(x=x, y=y, z=z, speed=self.speed, mvacc=self.mvacc, wait=True)
         self.set_fence_mode(config.xarm_fenced)
 
     def go_position_one_two(self):
@@ -423,12 +580,7 @@ class Drawbot(XArmAPI):
         """
         x, y, z = self.draw_position
         self.set_fence_mode(False)
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=True)
+        self.bot_move_to(x=x, y=y, z=z, speed=self.speed, mvacc=self.mvacc, wait=True)
         self.set_fence_mode(config.xarm_fenced)
 
     def home(self):
@@ -436,13 +588,11 @@ class Drawbot(XArmAPI):
         Go directly to the home position.
         """
         self.set_fence_mode(False)
-        # self.bot_move_to(x=180, y=0, z=500, wait=True)
-        # self.move_gohome(wait=True)
         self.motion_enable(enable=True)
-        self.set_mode(0)
+        self.set_mode(7)
         self.set_state(state=0)
 
-        self.move_gohome()
+        self.lets_go_home()
         self.set_fence_mode(config.xarm_fenced)
         self.set_mode(7)
         self.set_state(0)
@@ -452,17 +602,16 @@ class Drawbot(XArmAPI):
         Go to an x and y position with the pen touching the paper.
         """
         self.coords.append((x, y))
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=self.z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=self.wait_commands)
+        self.bot_move_to(
+            x=x,
+            y=y,
+            z=self.z,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
-    def go_draw_up(self,
-                   x: float,
-                   y: float,
-                   wait: bool = False):
+    def go_draw_up(self, x: float, y: float, wait: bool = False):
         """
         Lift the pen up, go to an x and y position, then lower the pen.
         """
@@ -471,28 +620,29 @@ class Drawbot(XArmAPI):
         self.coords.append((x, y))
 
         # Jump off page
-        self.bot_move_to(x=old_x,
-                         y=old_y,
-                         z=self.z + jump_height,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=wait)
+        self.bot_move_to(
+            x=old_x,
+            y=old_y,
+            z=self.z + jump_height,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=wait,
+        )
 
         # Move to new position
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=self.z + jump_height,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=wait)
+        self.bot_move_to(
+            x=x,
+            y=y,
+            z=self.z + jump_height,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=wait,
+        )
 
         # Put pen on paper
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=self.z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=wait)
+        self.bot_move_to(
+            x=x, y=y, z=self.z, speed=self.speed, mvacc=self.mvacc, wait=wait
+        )
 
     def go_random_draw(self):
         """
@@ -503,13 +653,14 @@ class Drawbot(XArmAPI):
         y = uniform(config.xarm_y_extents[0], config.xarm_y_extents[1])
 
         self.coords.append((x, y))
-        print("Random draw pos x:", round(x, 2), " y:", round(y, 2))
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=self.z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=self.wait_commands)
+        self.bot_move_to(
+            x=x,
+            y=y,
+            z=self.z,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
     def go_random_3d(self):
         """
@@ -521,15 +672,22 @@ class Drawbot(XArmAPI):
 
         self.random_pen()
 
+        if x < 200:
+            x = randrange(200, 300)
+
+        if y < 60:
+            y = randrange(80, 150)
+
         self.coords.append((x, y))
-        print(f"Random 3D pos x: {round(x, 2)}, y: {round(y, 2)}, z: {round(z, 2)}")
         self.set_fence_mode(False)
-        self.bot_move_to(x=x,
-                         y=y,
-                         z=z,
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=True)
+        self.bot_move_to(
+                x=x,
+                y=y,
+                z=z,
+                speed=self.speed,
+                mvacc=self.mvacc,
+                wait=True,
+            )
         self.set_fence_mode(config.xarm_fenced)
 
     def go_random_jump(self):
@@ -541,7 +699,6 @@ class Drawbot(XArmAPI):
         y = uniform(config.xarm_y_extents[0], config.xarm_y_extents[1])
 
         self.coords.append((x, y))
-        print("Random draw pos above page x:", x, " y:", y)
         self.go_draw_up(x=x, y=y)
 
     def position_move_by(self, dx, dy, dz, wait=False):
@@ -549,20 +706,21 @@ class Drawbot(XArmAPI):
         Increment the robot cartesian position by x, y, z. Check that the arm
         isn't going out of x, y, z extents.
         """
-
         pose = self.get_pose()[:3]
 
         new_pose = [pose[0] + dx, pose[1] + dy, pose[2] + dz]
         new_corrected_pose = self.safety_position_check(new_pose)
-        logging.debug(f'NEW_CORRECTED: {new_corrected_pose}')
+        logging.debug(f"NEW_CORRECTED: {new_corrected_pose}")
 
         self.coords.append(new_corrected_pose[:2])
-        self.bot_move_to(x=new_corrected_pose[0],
-                         y=new_corrected_pose[1],
-                         z=new_corrected_pose[2],
-                         speed=self.speed,
-                         mvacc=self.mvacc,
-                         wait=self.wait_commands)
+        self.bot_move_to(
+            x=new_corrected_pose[0],
+            y=new_corrected_pose[1],
+            z=new_corrected_pose[2],
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
     ###########################################################################
     # Notation functions
@@ -586,12 +744,14 @@ class Drawbot(XArmAPI):
         for arc in arc_list:
             _, dx, dy = arc[0], arc[1], arc[2]
 
-            self.arc(pose1=[x + dx, y, self.z, self.roll, self.pitch, self.yaw],
-                     pose2=[x + dx, y + dy, self.z, self.roll, self.pitch, self.yaw],
-                     percent=randrange(40, 90),
-                     speed=self.speed,
-                     mvacc=self.mvacc,
-                     wait=True)
+            self.arc(
+                pose1=[x + dx, y, self.z, self.roll, self.pitch, self.yaw],
+                pose2=[x + dx, y + dy, self.z, self.roll, self.pitch, self.yaw],
+                percent=randrange(40, 90),
+                speed=self.speed,
+                mvacc=self.mvacc,
+                wait=True,
+            )
 
             x, y = self.position[:2]
 
@@ -611,19 +771,18 @@ class Drawbot(XArmAPI):
             Size of the note in mm.
         """
         x, y = self.get_pose()[:2]
-        self.arc(pose1=[x + size, y, self.z, self.roll, self.pitch, self.yaw],
-                 pose2=[x, y + size, self.z, self.roll, self.pitch, self.yaw],
-                 percent=100,
-                 speed=self.speed,
-                 mvacc=self.mvacc,
-                 wait=self.wait_commands)
+        self.arc(
+            pose1=[x + size, y, self.z, self.roll, self.pitch, self.yaw],
+            pose2=[x, y + size, self.z, self.roll, self.pitch, self.yaw],
+            percent=100,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
-    def arc2D(self,
-              pose1_x: int,
-              pose1_y: int,
-              pose2_x: int,
-              pose2_y: int,
-              wait: bool = False):
+    def arc2D(
+        self, pose1_x: int, pose1_y: int, pose2_x: int, pose2_y: int, wait: bool = False
+    ):
         """
         Simplified arc function for drawing 2D arcs on the x, y axis.
             Pose 1 x and y determine the coordinates of the first point.
@@ -635,12 +794,14 @@ class Drawbot(XArmAPI):
         pose2 = [pose1_x, current_y + dx, self.z, self.roll, self.pitch, self.yaw]
         rnd_percent = randrange(40, 90)
 
-        self.arc(pose1=pose1,
-                 pose2=pose2,
-                 percent=rnd_percent,
-                 speed=self.speed,
-                 mvacc=self.mvacc,
-                 wait=self.wait_commands)
+        self.arc(
+            pose1=pose1,
+            pose2=pose2,
+            percent=rnd_percent,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
     def draw_square(self, size):
         """
@@ -659,20 +820,13 @@ class Drawbot(XArmAPI):
         local_pos = [(size, 0), (size, size), (0, size)]
 
         for i in range(len(local_pos)):
-            next_pos = [
-                x + local_pos[i][0],
-                y + local_pos[i][1]
-            ]
-            self.go_draw(x=next_pos[0],
-                         y=next_pos[1],
-                         wait=self.wait_commands)
+            next_pos = [x + local_pos[i][0], y + local_pos[i][1]]
+            self.go_draw(x=next_pos[0], y=next_pos[1], wait=self.wait_commands)
 
             square.append(next_pos)
             self.coords.append(next_pos)
 
-        self.go_draw(x=x,
-                     y=y,
-                     wait=self.wait_commands)
+        self.go_draw(x=x, y=y, wait=self.wait_commands)
 
         self.squares.append(square)
 
@@ -693,29 +847,16 @@ class Drawbot(XArmAPI):
         rand_type = randrange(0, 2)
         if rand_type == 0:
             # Right angle triangle
-            local_pos = [
-                (0, 0),
-                (-size, 0),
-                (-size, size)
-            ]
+            local_pos = [(0, 0), (-size, 0), (-size, size)]
 
         elif rand_type == 1:
             # Isosceles triangle
-            local_pos = [
-                (0, 0),
-                (-size * 2, - size / 2),
-                (- size * 2, size / 2)
-            ]
+            local_pos = [(0, 0), (-size * 2, -size / 2), (-size * 2, size / 2)]
 
         for i in range(len(local_pos)):
             # Next vertex to go to in world space
-            next_pos = [
-                pos[0] + local_pos[i][0],
-                pos[1] + local_pos[i][1]
-            ]
-            self.go_draw(x=next_pos[0],
-                         y=next_pos[1],
-                         wait=self.wait_commands)
+            next_pos = [pos[0] + local_pos[i][0], pos[1] + local_pos[i][1]]
+            self.go_draw(x=next_pos[0], y=next_pos[1], wait=self.wait_commands)
 
             triangle.append(next_pos)
             self.coords.append(next_pos)
@@ -724,7 +865,9 @@ class Drawbot(XArmAPI):
         self.go_draw(x=pos[0], y=pos[1], wait=self.wait_commands)
         self.triangles.append(triangle)
 
-    def draw_sunburst(self, r, randomAngle=True):  # draws a sunburst from the robots current position, r = size of lines, num = number of lines
+    def draw_sunburst(
+        self, r, randomAngle=True
+    ):  # draws a sunburst from the robots current position, r = size of lines, num = number of lines
         """
         Draw a sunburst from the pens position. Will draw r number of lines
         coming from the centre point. Can be drawn with lines at random angles
@@ -747,14 +890,14 @@ class Drawbot(XArmAPI):
                 uniform(0, 360),
                 uniform(0, 360),
                 uniform(0, 360),
-                uniform(0, 360)
+                uniform(0, 360),
             ]
             local_pos = [
                 (r * math.sin(random_angles[0]), r * math.cos(random_angles[0])),
                 (r * math.sin(random_angles[1]), r * math.cos(random_angles[1])),
                 (r * math.sin(random_angles[2]), r * math.cos(random_angles[2])),
                 (r * math.sin(random_angles[3]), r * math.cos(random_angles[3])),
-                (r * math.sin(random_angles[4]), r * math.cos(random_angles[4]))
+                (r * math.sin(random_angles[4]), r * math.cos(random_angles[4])),
             ]
         else:
             local_pos = [
@@ -762,7 +905,7 @@ class Drawbot(XArmAPI):
                 (r * math.sin(340), r * math.cos(340)),
                 (r * math.sin(0), r * math.cos(0)),
                 (r * math.sin(20), r * math.cos(20)),
-                (r * math.sin(40), r * math.cos(40))
+                (r * math.sin(40), r * math.cos(40)),
             ]
 
         sunburst = []  # saves all points in this sunburst then saves it to the list of drawn sunbursts
@@ -833,12 +976,14 @@ class Drawbot(XArmAPI):
             pose1 = [x - size, y, self.z, self.roll, self.pitch, self.yaw]
             pose2 = [x, y - size, self.z, self.roll, self.pitch, self.yaw]
 
-        self.arc(pose1=pose1,
-                 pose2=pose2,
-                 percent=100,
-                 speed=self.speed,
-                 mvacc=self.mvacc,
-                 wait=self.wait_commands)
+        self.arc(
+            pose1=pose1,
+            pose2=pose2,
+            percent=100,
+            speed=self.speed,
+            mvacc=self.mvacc,
+            wait=self.wait_commands,
+        )
 
     def draw_char(self, _char, size, wait=False):
         """
@@ -856,19 +1001,20 @@ class Drawbot(XArmAPI):
 
         # Calculate local_pos for each char
         if _char == "A" or _char == "a":
-
             local_pos = [
-                (0, 0),                  # bottom left
-                (size * 2, - size / 2),  # top
-                (0, - size),             # bottom right
-                (size, - size * 0.75),   # mid right
-                (size, - size * 0.25)    # mid left
+                (0, 0),  # bottom left
+                (size * 2, -size / 2),  # top
+                (0, -size),  # bottom right
+                (size, -size * 0.75),  # mid right
+                (size, -size * 0.25),  # mid left
             ]
         elif _char == "B" or _char == "b":
             self.draw_b(size=size, wait=self.wait_commands)
             return None
 
-        elif _char == "C" or _char == "c":  # for characters with curves, defer to specific functions
+        elif (
+            _char == "C" or _char == "c"
+        ):  # for characters with curves, defer to specific functions
             self.draw_c(size=size, wait=self.wait_commands)
             return None
 
@@ -878,23 +1024,23 @@ class Drawbot(XArmAPI):
 
         elif _char == "E" or _char == "e":
             local_pos = [
-                (0, 0),            # bottom right
-                (0, size),         # bottom left
+                (0, 0),  # bottom right
+                (0, size),  # bottom left
                 (size * 2, size),  # top left
-                (size * 2, 0),     # top right
-                (size, 0),         # mid right (jump to here)
-                (size, size)       # mid left
+                (size * 2, 0),  # top right
+                (size, 0),  # mid right (jump to here)
+                (size, size),  # mid left
             ]
 
             jump_num = 4
 
         elif _char == "F" or _char == "f":
             local_pos = [
-                (0, 0),                  # bottom left
-                (size * 2, 0),           # top left
-                (size * 2, - size / 2),  # top right
-                (size, - size / 2),      # mid right (jump to here)
-                (size, 0)                # mid left
+                (0, 0),  # bottom left
+                (size * 2, 0),  # top left
+                (size * 2, -size / 2),  # top right
+                (size, -size / 2),  # mid right (jump to here)
+                (size, 0),  # mid left
             ]
 
             jump_num = 3
@@ -908,12 +1054,7 @@ class Drawbot(XArmAPI):
             return None
 
         elif _char == "Z" or _char == "z":
-            local_pos = [
-                (0, 0),
-                (0, size),
-                (size * 2, 0),
-                (size * 2, size)
-            ]
+            local_pos = [(0, 0), (0, size), (size * 2, 0), (size * 2, size)]
 
         else:
             logging.warning("Input: ", _char, " is not supported by draw_char")
@@ -922,7 +1063,8 @@ class Drawbot(XArmAPI):
         # Draw character
         for i in range(len(local_pos)):
             next_pos = [
-                pos[0] + local_pos[i][0], pos[1] + local_pos[i][1]  # calculate the next world position to draw
+                pos[0] + local_pos[i][0],
+                pos[1] + local_pos[i][1],  # calculate the next world position to draw
             ]
 
             if jump_num != -1:  # for characters that need a jump
@@ -948,21 +1090,27 @@ class Drawbot(XArmAPI):
         char.append("P")
 
         local_pos = [
-            (0, 0),                       # bottom of letter
-            (size * 2, 0),                # top of letter
+            (0, 0),  # bottom of letter
+            (size * 2, 0),  # top of letter
             (size * 0.75, -size * 0.85),  # peak of curve
-            (size * 1.2, 0)               # middle of letter
+            (size * 1.2, 0),  # middle of letter
         ]
 
         world_pos = [
             (pos[0] + local_pos[0][0], pos[1] + local_pos[0][1]),
             (pos[0] + local_pos[1][0], pos[1] + local_pos[1][1]),
             (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1]),
-            (pos[0] + local_pos[3][0], pos[1] + local_pos[3][1])
+            (pos[0] + local_pos[3][0], pos[1] + local_pos[3][1]),
         ]
         self.go_draw(world_pos[1][0], world_pos[1][1])
 
-        self.arc2D(world_pos[2][0], world_pos[2][1], world_pos[3][0], world_pos[3][1], wait=self.wait_commands)
+        self.arc2D(
+            world_pos[2][0],
+            world_pos[2][1],
+            world_pos[3][0],
+            world_pos[3][1],
+            wait=self.wait_commands,
+        )
 
         char.append(world_pos)
         for i in range(len(world_pos)):
@@ -979,11 +1127,11 @@ class Drawbot(XArmAPI):
         char.append("B")
 
         local_pos = [
-            (0, 0),               # 0 bottom left
-            (size * 2, 0),        # 1 top right
+            (0, 0),  # 0 bottom left
+            (size * 2, 0),  # 1 top right
             (size * 1.5, -size),  # 2 peak of top curve
-            (size, 0),            # 3 mid left
-            (size * 0.5, -size)   # 4 peak of bottom curve
+            (size, 0),  # 3 mid left
+            (size * 0.5, -size),  # 4 peak of bottom curve
         ]
 
         world_pos = [
@@ -991,11 +1139,23 @@ class Drawbot(XArmAPI):
             (pos[0] + local_pos[1][0], pos[1] + local_pos[1][1]),
             (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1]),
             (pos[0] + local_pos[3][0], pos[1] + local_pos[3][1]),
-            (pos[0] + local_pos[4][0], pos[1] + local_pos[4][1])
+            (pos[0] + local_pos[4][0], pos[1] + local_pos[4][1]),
         ]
         self.go_draw(world_pos[1][0], world_pos[1][1], wait=self.wait_commands)
-        self.arc2D(world_pos[2][0], world_pos[2][1], world_pos[3][0], world_pos[3][1], wait=self.wait_commands)
-        self.arc2D(world_pos[4][0], world_pos[4][1], world_pos[0][0], world_pos[0][1], wait=self.wait_commands)
+        self.arc2D(
+            world_pos[2][0],
+            world_pos[2][1],
+            world_pos[3][0],
+            world_pos[3][1],
+            wait=self.wait_commands,
+        )
+        self.arc2D(
+            world_pos[4][0],
+            world_pos[4][1],
+            world_pos[0][0],
+            world_pos[0][1],
+            wait=self.wait_commands,
+        )
 
         char.append(world_pos)
         for i in range(len(world_pos)):
@@ -1013,16 +1173,22 @@ class Drawbot(XArmAPI):
 
         local_pos = [
             (size * 0.3, 0),  # 0 bottom of curve
-            (size, size),     # 1 middle of curve
-            (size * 1.7, 0)   # 2 top of curve
+            (size, size),  # 1 middle of curve
+            (size * 1.7, 0),  # 2 top of curve
         ]
 
         world_pos = [
             (pos[0] + local_pos[0][0], pos[1] + local_pos[0][1]),
             (pos[0] + local_pos[1][0], pos[1] + local_pos[1][1]),
-            (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1])
+            (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1]),
         ]
-        self.arc2D(world_pos[1][0], world_pos[1][1], world_pos[2][0], world_pos[2][1], wait=self.wait_commands)
+        self.arc2D(
+            world_pos[1][0],
+            world_pos[1][1],
+            world_pos[2][0],
+            world_pos[2][1],
+            wait=self.wait_commands,
+        )
 
         char.append(world_pos)
         for i in range(len(world_pos)):
@@ -1039,18 +1205,24 @@ class Drawbot(XArmAPI):
         char.append("D")
 
         local_pos = [
-            (0, 0),         # 0 bottom left
+            (0, 0),  # 0 bottom left
             (size * 2, 0),  # 1 top left
-            (size, -size)   # 2 peak of curve
+            (size, -size),  # 2 peak of curve
         ]
 
         world_pos = [
             (pos[0] + local_pos[0][0], pos[1] + local_pos[0][1]),
             (pos[0] + local_pos[1][0], pos[1] + local_pos[1][1]),
-            (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1])
+            (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1]),
         ]
         self.go_draw(world_pos[1][0], world_pos[1][1], wait=self.wait_commands)
-        self.arc2D(world_pos[2][0], world_pos[2][1], world_pos[0][0], world_pos[0][1], wait=self.wait_commands)
+        self.arc2D(
+            world_pos[2][0],
+            world_pos[2][1],
+            world_pos[0][0],
+            world_pos[0][1],
+            wait=self.wait_commands,
+        )
 
         char.append(world_pos)
         for i in range(len(world_pos)):
@@ -1067,12 +1239,11 @@ class Drawbot(XArmAPI):
         char.append("G")
 
         local_pos = [
-            (0, 0),            # 0 top right
-            (- size, size),    # 1 peak of curve
-            (- size * 2, 0),   # 2 bottom right
-            (-size, 0),        # 3 mid right
-            (-size, size / 2)  # 4 center point
-
+            (0, 0),  # 0 top right
+            (-size, size),  # 1 peak of curve
+            (-size * 2, 0),  # 2 bottom right
+            (-size, 0),  # 3 mid right
+            (-size, size / 2),  # 4 center point
         ]
 
         world_pos = [
@@ -1080,9 +1251,15 @@ class Drawbot(XArmAPI):
             (pos[0] + local_pos[1][0], pos[1] + local_pos[1][1]),
             (pos[0] + local_pos[2][0], pos[1] + local_pos[2][1]),
             (pos[0] + local_pos[3][0], pos[1] + local_pos[3][1]),
-            (pos[0] + local_pos[4][0], pos[1] + local_pos[4][1])
+            (pos[0] + local_pos[4][0], pos[1] + local_pos[4][1]),
         ]
-        self.arc2D(world_pos[1][0], world_pos[1][1], world_pos[2][0], world_pos[2][1], wait=self.wait_commands)
+        self.arc2D(
+            world_pos[1][0],
+            world_pos[1][1],
+            world_pos[2][0],
+            world_pos[2][1],
+            wait=self.wait_commands,
+        )
         self.go_draw(world_pos[3][0], world_pos[3][1], wait=self.wait_commands)
         self.go_draw(world_pos[4][0], world_pos[4][1], wait=self.wait_commands)
 
@@ -1109,16 +1286,26 @@ class Drawbot(XArmAPI):
         for i in range(shapes_num):
             type = Shapes(randrange(6))  # generate random shape type
 
-            if type == Shapes.Line:  # if it's a line, add the type and x and y target position
-                local_target_pos = uniform(-20, 20), uniform(-20, 20)  # random change in position
-                shape_group.append((type, local_target_pos))  # add the shape type and its local_pos to the group
+            if (
+                type == Shapes.Line
+            ):  # if it's a line, add the type and x and y target position
+                local_target_pos = (
+                    uniform(-20, 20),
+                    uniform(-20, 20),
+                )  # random change in position
+                shape_group.append(
+                    (type, local_target_pos)
+                )  # add the shape type and its local_pos to the group
 
             else:
                 size = uniform(10, 30)
-                shape_group.append((type, size))  # add the shape type and its size to the group
+                shape_group.append(
+                    (type, size)
+                )  # add the shape type and its size to the group
 
         shape_group.append(
-            (pos[0], pos[1]))  # add the group x and y position to the last index of the shape_group object
+            (pos[0], pos[1])
+        )  # add the group x and y position to the last index of the shape_group object
         self.draw_shape_group(shape_group, 0)  # draw the group with 0 variation of size
 
     def draw_shape_group(self, group, variation=0):
@@ -1127,23 +1314,35 @@ class Drawbot(XArmAPI):
         it to the list of shape groups and sets the last drawn shape group to
         this one.
         """
-        pos = group[len(group) - 1]  # group pos is stored in the last index of the shape group list
+        pos = group[
+            len(group) - 1
+        ]  # group pos is stored in the last index of the shape group list
 
         for i in range(len(group) - 1):  # last element in group is the position
             match group[i][0]:  # [i][0] = shape type
                 case Shapes.Square:
-                    self.draw_square(group[i][1] + variation)  # [i][1] = size (when shape isn't a line)
+                    self.draw_square(
+                        group[i][1] + variation
+                    )  # [i][1] = size (when shape isn't a line)
                 case Shapes.Triangle:
-                    self.draw_triangle(group[i][1] + variation)  # size variation can be added when group is re-drawn
+                    self.draw_triangle(
+                        group[i][1] + variation
+                    )  # size variation can be added when group is re-drawn
                 case Shapes.Sunburst:
                     self.draw_sunburst(group[i][1] + variation)
                 case Shapes.Irregular:
-                    self.draw_irregular_shape(randrange(3, 8))  # irregular shape will always be random
+                    self.draw_irregular_shape(
+                        randrange(3, 8)
+                    )  # irregular shape will always be random
                 case Shapes.Circle:
                     self.draw_circle(group[i][1] + variation)
                 case Shapes.Line:
-                    local_target = group[i][1]  # [i][1] = local_target_pos (when shape is a line)
-                    self.go_draw(pos[0] + local_target[0], pos[1] + local_target[1])  # draw the line
+                    local_target = group[i][
+                        1
+                    ]  # [i][1] = local_target_pos (when shape is a line)
+                    self.go_draw(
+                        pos[0] + local_target[0], pos[1] + local_target[1]
+                    )  # draw the line
                     self.go_draw(pos[0], pos[1])  # go back to original group position
 
             self.shape_groups.append(group)  # add shape_group object to list
@@ -1157,17 +1356,19 @@ class Drawbot(XArmAPI):
         shape_group = self.last_shape_group  # get the last drawn shape group
 
         old_pos = shape_group[
-            len(shape_group) - 1]  # get the position of the previous shape group ( last index in list )
+            len(shape_group) - 1
+        ]  # get the position of the previous shape group ( last index in list )
 
-        new_pos = [
-            old_pos[0] + uniform(-20, 20),
-            old_pos[1] + uniform(-20, 20)
-        ]
+        new_pos = [old_pos[0] + uniform(-20, 20), old_pos[1] + uniform(-20, 20)]
 
-        shape_group[len(shape_group) - 1] = new_pos  # set the shape group position to the new pos with offset
+        shape_group[len(shape_group) - 1] = (
+            new_pos  # set the shape group position to the new pos with offset
+        )
 
         self.go_draw(new_pos[0], new_pos[1])  # go to new position
-        self.draw_shape_group(shape_group, uniform(-3, 3))  # red-draw shape group, set variation param to random, varies sizes when re-drawing shape group
+        self.draw_shape_group(
+            shape_group, uniform(-3, 3)
+        )  # red-draw shape group, set variation param to random, varies sizes when re-drawing shape group
 
     def return_to_coord(self):
         """

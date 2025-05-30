@@ -66,7 +66,6 @@ class Main:
             self.eda.start(BITALINO_BAUDRATE, BITALINO_ACQ_CHANNELS)
             first_eda_data = self.eda.read(1)[0]
             logging.info(f"Data from BITalino = {first_eda_data}")
-
         else:
             self.eda = None
 

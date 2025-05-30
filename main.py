@@ -2,6 +2,7 @@ import logging
 from time import time, sleep
 import art
 from pathlib import Path
+import warnings
 
 import config
 from modules import bitalino_module
@@ -35,6 +36,7 @@ class Main:
     """
 
     def __init__(self):
+        warnings.simplefilter("ignore")
         # Logging for all modules
         logging.basicConfig(level=logging.WARNING)
 

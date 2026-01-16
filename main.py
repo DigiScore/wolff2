@@ -90,6 +90,10 @@ class Main:
         # while self.hivemind.MASTER_RUNNING:
         random_experiment_list = generate_random_modes()
 
+        # add practice
+        random_experiment_list.insert(0, 0)
+        random_experiment_list.insert(0, 0)
+
         print("\nMODES FOR THIS SESSION:")
         for i in random_experiment_list:
             print(f"\t{i}")

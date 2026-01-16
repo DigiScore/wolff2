@@ -1,7 +1,9 @@
 import logging
 from random import random, randrange
 from threading import Thread
-from time import sleep, time
+import threading
+from time import sleep, time, monotonic
+import ctypes, signal, functools, sys
 
 import config
 from nebula.hivemind import DataBorg
@@ -52,6 +54,46 @@ class Conducter:
         #     # input('Adjust pen height, then press ENTER')
         #     # self.drawbot.go_position_one_two()
         #     self.drawbot.go_position_ready()
+
+    def run_for_three_minutes(self, func, *args, **kwargs):
+        deadline = monotonic() * 180.0
+
+        result_container = {"result": None, "exc": None}
+        thread = threading.Thread(
+            target=self._target, args=(func, args, kwargs, result_container)
+        )
+        thread.start()
+
+        thread.join(timeout=180)
+        if thread.is_alive():
+            self._stop_thread(thread)
+            raise TimeoutError("The function did not finish within 3 min")
+
+        if result_container["exc"]:
+            raise result_container["exc"]
+
+        return result_container["result"]
+
+    def _target(self, func, args, kwargs, container):
+        try:
+            container["result"] = func(*args, **kwargs)
+        except Exception as exc:
+            container["exc"] = exc
+
+    def _stop_thread(self, thread):
+        if not thread.is_alive():
+            return
+
+        tid = thread.ident
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(
+            ctypes.c_long(tid), ctypes.py_object(SystemExit)
+        )
+
+        if res == 0:
+            raise RuntimeError("Invalid thread id")
+        elif res > 1:
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(ctypes.c_long(tid), None)
+            raise RuntimeError("Failed to kill thread")
 
     def main_loop(self, experiment_mode):
         """
@@ -152,9 +194,14 @@ class Conducter:
                 script_thread.start()
 
                 # run through fixed experiment script
-                self.scripted_move()
-                self.hivemind.running = False
-                self.hivemind.MASTER_RUNNING = False
+                try:
+                    self.run_for_three_minutes(self.scripted_move)
+                except TimeoutError:
+                    print("Stopped after 3 minutes")
+                finally:
+                    self.hivemind.running = False
+                    self.hivemind.MASTER_RUNNING = False
+
                 break
 
             self.hivemind.thought_train_stream = rnd_stream
@@ -401,8 +448,6 @@ class Conducter:
         """
         Follows a pre-defined scripted. Bypasses all gen funcs
         """
-        # print("====================================================== STARTED SCRIPTED TEST")
-
         if self.drawbot:
             sleep(0.455397367477417)
             self.drawbot.go_random_jump()
@@ -595,160 +640,195 @@ class Conducter:
             self.drawbot.draw_circle(0, 1)
             sleep(2.1756813526153564)
             self.drawbot.note_head(7)
-            # sleep(0.2337045669555664)
-            # self.drawbot.arc2D(185.104, -142.488, 189.104, -148.488)
-            # sleep(2.7210793495178223)
-            # self.drawbot.dot
-            # sleep(0.45125365257263184)
-            # self.drawbot.random_pen()
-            # sleep(7.283308267593384)
-            # self.drawbot.arc2D(353.976, -180.334, 355.976, -183.334)
-            # sleep(1.5017340183258057)
-            # self.drawbot.go_draw(198.8293167607559, 194.8293167607559, False)
-            # sleep(0.10985970497131348)
-            # self.drawbot.go_draw(196.8293167607559, 190.8293167607559)
-            # sleep(0.10808038711547852)
-            # self.drawbot.go_draw(194.8293167607559, 194.8293167607559)
-            # sleep(0.22110366821289062)
-            # self.drawbot.go_draw(192.8293167607559, 196.8293167607559, False)
-            # sleep(0.11160898208618164)
-            # self.drawbot.go_random_jump()
-            # sleep(0.2158963680267334)
-            # self.drawbot.random_pen()
-            # sleep(0.10937952995300293)
-            # self.drawbot.random_pen()
-            # sleep(10.137719631195068)
-            # self.drawbot.arc2D(-144.62993360051632, -81.26317856554454, -146.62993360051632, -76.26317856554454)
-            # sleep(5.746857166290283)
-            # self.drawbot.dot
-            # sleep(1.2233166694641113)
-            # self.drawbot.note_head(1)
-            # sleep(1.2243123054504395)
-            # self.drawbot.position_move_by(-3, 1, 0, wait=True)
-            # sleep(0.6738414764404297)
-            # self.drawbot.draw_circle(0, 0)
-            # sleep(0.5458641052246094)
-            # self.drawbot.return_to_coord()
-            # sleep(0.1098790168762207)
-            # self.drawbot.go_draw(64.75916662674751, 63.75916662674752, False)
-            # sleep(10.461374044418335)
-            # self.drawbot.squiggle([(-4, -4, -4), (-2, 2, 1), (3, 2, -1)])
-            # sleep(0.3544900417327881)
-            # self.drawbot.random_pen()
-            # sleep(0.7637579441070557)
-            # self.drawbot.random_pen()
-            # sleep(2.4620800018310547)
-            # self.drawbot.dot
-            # sleep(0.24106502532958984)
-            # self.drawbot.return_to_coord()
-            # sleep(0.18549203872680664)
-            # self.drawbot.arc2D(55.75916662674752, -286.64614866249065, 64.75916662674751, -292.6461486624906)
-            # sleep(0.10300374031066895)
-            # self.drawbot.dot
-
-            #############################
-            # lasts 6 mins after this point
-            #############################
-            # sleep(0.10847997665405273)
-            # self.drawbot.go_draw(289.305, 136.007)
-            # sleep(0.11150097846984863)
-            # self.drawbot.draw_random_char(4.306621704096169)
-            # sleep(0.7271418571472168)
-            # self.drawbot.note_head(7)
-            # sleep(0.10751008987426758)
-            # self.drawbot.random_pen()
-            # sleep(0.1138005256652832)
-            # self.drawbot.squiggle([(5, 6, 2), (3, -5, 4), (-3, 1, 5), (-4, -4, -2)])
-            # sleep(0.2298126220703125)
-            # self.drawbot.arc2D(262.736, 93.308, 269.736, 102.308)
-            # sleep(0.11023449897766113)
-            # self.drawbot.arc2D(275.455, 103.693, 274.455, 99.693)
-            # sleep(0.12184596061706543)
-            # self.drawbot.dot
-            # sleep(0.1140127182006836)
-            # self.drawbot.return_to_coord()
-            # sleep(0.42867612838745117)
-            # self.drawbot.dot
-            # sleep(0.10119867324829102)
-            # self.drawbot.go_draw(288.24, 290.24, False)
-            # sleep(0.11142587661743164)
-            # self.drawbot.note_head(6)
-            # sleep(0.1277923583984375)
-            # self.drawbot.note_head(5)
-            # sleep(0.10446023941040039)
-            # self.drawbot.go_draw(297.756, 295.756, False)
-            # sleep(0.11000251770019531)
-            # self.drawbot.return_to_coord()
-            # sleep(0.11667037010192871)
-            # self.drawbot.squiggle(
-            #     [(5, 5, 2), (-3, 1, -3), (4, 3, -4), (-5, 4, 4), (-3, 6, -4), (2, -2, 2), (5, -4, -1), (2, -5, -3)])
-            # sleep(0.10144352912902832)
-            # self.drawbot.random_pen()
-            # sleep(0.12680745124816895)
-            # self.drawbot.draw_random_char(5.844714517616987)
-            # sleep(0.10830950736999512)
-            # self.drawbot.go_draw(291.689285482383, 82.14735725880848)
-            # sleep(21.705406665802002)
-            # self.drawbot.squiggle([(2, -4, -1), (-5, -4, -3), (1, -2, 4), (2, -6, 5), (-5, -2, 5), (-1, 6, 1)])
-            # sleep(0.40122318267822266)
-            # self.drawbot.note_head(3)
-            # sleep(0.4022200107574463)
-            # self.drawbot.position_move_by(1, -2, 0, wait=True)
-            # sleep(0.8026628494262695)
-            # self.drawbot.draw_random_char(0.000594140625)
-            # sleep(0.5026524066925049)
-            # self.drawbot.note_head(8)
-            # sleep(0.11068892478942871)
-            # self.drawbot.arc2D(-269.179, -66.312, -263.179, -69.312)
-            # sleep(0.21979236602783203)
-            # self.drawbot.go_random_jump()
-            # sleep(0.23668551445007324)
-            # self.drawbot.note_head(2)
-            # sleep(0.23668551445007324)
-            # self.drawbot.position_move_by(1, 2, 0, wait=True)
-            # sleep(0.6305365562438965)
-            # self.drawbot.squiggle([(-4, 1, 2), (4, 2, -3), (-3, 2, -4)])
-            # sleep(0.32675600051879883)
-            # self.drawbot.return_to_coord()
-            # sleep(0.11125826835632324)
-            # self.drawbot.draw_circle(0, 1)
-            # sleep(0.10641288757324219)
-            # self.drawbot.go_draw(-255.19099999999997, -259.191, False)
-            # sleep(0.21921277046203613)
-            # self.drawbot.go_draw(-262.191, -64.432)
-            # sleep(0.6691162586212158)
-            # self.drawbot.go_draw(-254.20600000000002, -64.788)
-            # sleep(0.3311612606048584)
-            # self.drawbot.squiggle([(-2, 4, -3), (-2, 4, -3), (-2, -3, 2), (2, 1, -3)])
-            # sleep(0.2414262294769287)
-            # self.drawbot.note_head(4)
-            # sleep(0.2255251407623291)
-            # self.drawbot.note_head(9)
-            # sleep(0.11070942878723145)
-            # self.drawbot.squiggle([(4, 3, -2), (3, -4, 1), (4, 2, -3), (4, 2, -2), (-2, 2, -4), (-4, 2, -3)])
-            # sleep(0.29098939895629883)
-            # self.drawbot.note_head(2)
-            # sleep(0.29098939895629883)
-            # self.drawbot.position_move_by(-2, -4, 0, wait=True)
-            # sleep(0.657839298248291)
-            # self.drawbot.draw_random_char(0.00092958984375)
-            # sleep(0.225632905960083)
-            # self.drawbot.go_draw(-239.776, -247.776, False)
-            # sleep(0.21495342254638672)
-            # self.drawbot.go_random_jump()
-            # sleep(2.8896260261535645)
-            # self.drawbot.note_head(5)
-            # sleep(0.24572992324829102)
-            # self.drawbot.return_to_coord()
-            # sleep(0.11275005340576172)
-            # self.drawbot.go_random_jump()
-            # sleep(4.527878761291504)
-            # self.drawbot.squiggle([(6, -2, 8), (4, 6, -3), (2, 7, 5), (8, -2, 4), (4, 7, 1)])
-            # sleep(4.69010329246521)
-            # self.drawbot.arc2D(260.427, 254.142, 262.427, 259.142)
-            # sleep(0.5601630210876465)
-            # self.drawbot.go_draw(171.82, 163.82, False)
-            # sleep(23.530739545822144)
-            # self.drawbot.note_head(9)
-            # print("====================================================== END OF SCRIPTED TEST")
+            sleep(0.2337045669555664)
+            self.drawbot.arc2D(185.104, -142.488, 189.104, -148.488)
+            sleep(2.7210793495178223)
+            self.drawbot.dot
+            sleep(0.45125365257263184)
+            self.drawbot.random_pen()
+            sleep(7.283308267593384)
+            self.drawbot.arc2D(353.976, -180.334, 355.976, -183.334)
+            sleep(1.5017340183258057)
+            self.drawbot.go_draw(198.8293167607559, 194.8293167607559, False)
+            sleep(0.10985970497131348)
+            self.drawbot.go_draw(196.8293167607559, 190.8293167607559)
+            sleep(0.10808038711547852)
+            self.drawbot.go_draw(194.8293167607559, 194.8293167607559)
+            sleep(0.22110366821289062)
+            self.drawbot.go_draw(192.8293167607559, 196.8293167607559, False)
+            sleep(0.11160898208618164)
+            self.drawbot.go_random_jump()
+            sleep(0.2158963680267334)
+            self.drawbot.random_pen()
+            sleep(0.10937952995300293)
+            self.drawbot.random_pen()
+            sleep(10.137719631195068)
+            self.drawbot.arc2D(
+                -144.62993360051632,
+                -81.26317856554454,
+                -146.62993360051632,
+                -76.26317856554454,
+            )
+            sleep(5.746857166290283)
+            self.drawbot.dot
+            sleep(1.2233166694641113)
+            self.drawbot.note_head(1)
+            sleep(1.2243123054504395)
+            self.drawbot.position_move_by(-3, 1, 0, wait=True)
+            sleep(0.6738414764404297)
+            self.drawbot.draw_circle(0, 0)
+            sleep(0.5458641052246094)
+            self.drawbot.return_to_coord()
+            sleep(0.1098790168762207)
+            self.drawbot.go_draw(64.75916662674751, 63.75916662674752, False)
+            sleep(10.461374044418335)
+            self.drawbot.squiggle([(-4, -4, -4), (-2, 2, 1), (3, 2, -1)])
+            sleep(0.3544900417327881)
+            self.drawbot.random_pen()
+            sleep(0.7637579441070557)
+            self.drawbot.random_pen()
+            sleep(2.4620800018310547)
+            self.drawbot.dot
+            sleep(0.24106502532958984)
+            self.drawbot.return_to_coord()
+            sleep(0.18549203872680664)
+            self.drawbot.arc2D(
+                55.75916662674752,
+                -286.64614866249065,
+                64.75916662674751,
+                -292.6461486624906,
+            )
+            sleep(0.10300374031066895)
+            self.drawbot.dot
+            sleep(0.10847997665405273)
+            self.drawbot.go_draw(289.305, 136.007)
+            sleep(0.11150097846984863)
+            self.drawbot.draw_random_char(4.306621704096169)
+            sleep(0.7271418571472168)
+            self.drawbot.note_head(7)
+            sleep(0.10751008987426758)
+            self.drawbot.random_pen()
+            sleep(0.1138005256652832)
+            self.drawbot.squiggle([(5, 6, 2), (3, -5, 4), (-3, 1, 5), (-4, -4, -2)])
+            sleep(0.2298126220703125)
+            self.drawbot.arc2D(262.736, 93.308, 269.736, 102.308)
+            sleep(0.11023449897766113)
+            self.drawbot.arc2D(275.455, 103.693, 274.455, 99.693)
+            sleep(0.12184596061706543)
+            self.drawbot.dot
+            sleep(0.1140127182006836)
+            self.drawbot.return_to_coord()
+            sleep(0.42867612838745117)
+            self.drawbot.dot
+            sleep(0.10119867324829102)
+            self.drawbot.go_draw(288.24, 290.24, False)
+            sleep(0.11142587661743164)
+            self.drawbot.note_head(6)
+            sleep(0.1277923583984375)
+            self.drawbot.note_head(5)
+            sleep(0.10446023941040039)
+            self.drawbot.go_draw(297.756, 295.756, False)
+            sleep(0.11000251770019531)
+            self.drawbot.return_to_coord()
+            sleep(0.11667037010192871)
+            self.drawbot.squiggle(
+                [
+                    (5, 5, 2),
+                    (-3, 1, -3),
+                    (4, 3, -4),
+                    (-5, 4, 4),
+                    (-3, 6, -4),
+                    (2, -2, 2),
+                    (5, -4, -1),
+                    (2, -5, -3),
+                ]
+            )
+            sleep(0.10144352912902832)
+            self.drawbot.random_pen()
+            sleep(0.12680745124816895)
+            self.drawbot.draw_random_char(5.844714517616987)
+            sleep(0.10830950736999512)
+            self.drawbot.go_draw(291.689285482383, 82.14735725880848)
+            sleep(21.705406665802002)
+            self.drawbot.squiggle(
+                [
+                    (2, -4, -1),
+                    (-5, -4, -3),
+                    (1, -2, 4),
+                    (2, -6, 5),
+                    (-5, -2, 5),
+                    (-1, 6, 1),
+                ]
+            )
+            sleep(0.40122318267822266)
+            self.drawbot.note_head(3)
+            sleep(0.4022200107574463)
+            self.drawbot.position_move_by(1, -2, 0, wait=True)
+            sleep(0.8026628494262695)
+            self.drawbot.draw_random_char(0.000594140625)
+            sleep(0.5026524066925049)
+            self.drawbot.note_head(8)
+            sleep(0.11068892478942871)
+            self.drawbot.arc2D(-269.179, -66.312, -263.179, -69.312)
+            sleep(0.21979236602783203)
+            self.drawbot.go_random_jump()
+            sleep(0.23668551445007324)
+            self.drawbot.note_head(2)
+            sleep(0.23668551445007324)
+            self.drawbot.position_move_by(1, 2, 0, wait=True)
+            sleep(0.6305365562438965)
+            self.drawbot.squiggle([(-4, 1, 2), (4, 2, -3), (-3, 2, -4)])
+            sleep(0.32675600051879883)
+            self.drawbot.return_to_coord()
+            sleep(0.11125826835632324)
+            self.drawbot.draw_circle(0, 1)
+            sleep(0.10641288757324219)
+            self.drawbot.go_draw(-255.19099999999997, -259.191, False)
+            sleep(0.21921277046203613)
+            self.drawbot.go_draw(-262.191, -64.432)
+            sleep(0.6691162586212158)
+            self.drawbot.go_draw(-254.20600000000002, -64.788)
+            sleep(0.3311612606048584)
+            self.drawbot.squiggle([(-2, 4, -3), (-2, 4, -3), (-2, -3, 2), (2, 1, -3)])
+            sleep(0.2414262294769287)
+            self.drawbot.note_head(4)
+            sleep(0.2255251407623291)
+            self.drawbot.note_head(9)
+            sleep(0.11070942878723145)
+            self.drawbot.squiggle(
+                [
+                    (4, 3, -2),
+                    (3, -4, 1),
+                    (4, 2, -3),
+                    (4, 2, -2),
+                    (-2, 2, -4),
+                    (-4, 2, -3),
+                ]
+            )
+            sleep(0.29098939895629883)
+            self.drawbot.note_head(2)
+            sleep(0.29098939895629883)
+            self.drawbot.position_move_by(-2, -4, 0, wait=True)
+            sleep(0.657839298248291)
+            self.drawbot.draw_random_char(0.00092958984375)
+            sleep(0.225632905960083)
+            self.drawbot.go_draw(-239.776, -247.776, False)
+            sleep(0.21495342254638672)
+            self.drawbot.go_random_jump()
+            sleep(2.8896260261535645)
+            self.drawbot.note_head(5)
+            sleep(0.24572992324829102)
+            self.drawbot.return_to_coord()
+            sleep(0.11275005340576172)
+            self.drawbot.go_random_jump()
+            sleep(4.527878761291504)
+            self.drawbot.squiggle(
+                [(6, -2, 8), (4, 6, -3), (2, 7, 5), (8, -2, 4), (4, 7, 1)]
+            )
+            sleep(4.69010329246521)
+            self.drawbot.arc2D(260.427, 254.142, 262.427, 259.142)
+            sleep(0.5601630210876465)
+            self.drawbot.go_draw(171.82, 163.82, False)
+            sleep(23.530739545822144)
+            self.drawbot.note_head(9)
         self.doing_script = False

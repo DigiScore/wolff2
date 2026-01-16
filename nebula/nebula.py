@@ -112,35 +112,39 @@ class Nebula(Listener, AIFactoryRAMI):
             t4.start()
 
     def restart_bitalino(self):
-        warnings.simplefilter("ignore")
-        while True:
-            sleep(120)
-            self.bitalino_on = False
-            with warnings.catch_warnings():
-                try:
-                    warnings.filterwarnings("ignore", category=DeprecationWarning)
-                    self.eda.stop()
-                    self.eda.close()
-                except OSError:
-                    warnings.filterwarnings("ignore", category=DeprecationWarning)
-                    ...
-                bitalino_ok = false
-                while not bitalino_ok:
+        if config.data_logging:
+            warnings.simplefilter("ignore")
+            while True:
+                sleep(120)
+                self.bitalino_on = False
+                with warnings.catch_warnings():
                     try:
                         warnings.filterwarnings("ignore", category=DeprecationWarning)
-                        self.eda = bitalino_module.BITalino(config.mac_address)
-                        bitalino_ok = True
+                        self.eda.stop()
+                        self.eda.close()
                     except OSError:
                         warnings.filterwarnings("ignore", category=DeprecationWarning)
                         ...
-                try:
-                    warnings.filterwarnings("ignore", category=DeprecationWarning)
-                    self.eda.start(config.baudrate, config.channels)
-                    self.bitalino_on = True
-                except OSError:
-                    warnings.filterwarnings("ignore", category=DeprecationWarning)
-                    ...
-
+                    bitalino_ok = false
+                    while not bitalino_ok:
+                        try:
+                            warnings.filterwarnings(
+                                "ignore", category=DeprecationWarning
+                            )
+                            self.eda = bitalino_module.BITalino(config.mac_address)
+                            bitalino_ok = True
+                        except OSError:
+                            warnings.filterwarnings(
+                                "ignore", category=DeprecationWarning
+                            )
+                            ...
+                    try:
+                        warnings.filterwarnings("ignore", category=DeprecationWarning)
+                        self.eda.start(config.baudrate, config.channels)
+                        self.bitalino_on = True
+                    except OSError:
+                        warnings.filterwarnings("ignore", category=DeprecationWarning)
+                        ...
 
     def human_input(self):
         """
@@ -206,7 +210,9 @@ class Nebula(Listener, AIFactoryRAMI):
                     try:
                         with warnings.catch_warnings():
                             self.hivemind.eda_buffer = np.random.uniform(size=(1, 50))
-                            warnings.filterwarnings("ignore", category=DeprecationWarning)
+                            warnings.filterwarnings(
+                                "ignore", category=DeprecationWarning
+                            )
                             self.eda.stop()
                             self.eda.close()
                             self.eda.start(config.baudrate, config.channels)

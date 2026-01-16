@@ -9,7 +9,7 @@ experiment_modes = [0, 1]
 xarm_connected = True
 
 # [DATAWRITER]
-data_logging = True
+data_logging = False
 path = "data"
 figsize_xy = (100, 12)
 samplerate = 0.01
